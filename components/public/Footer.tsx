@@ -2,7 +2,6 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { Instagram, Facebook, Youtube } from 'lucide-react'
 
 export function Footer() {
   return (
@@ -26,15 +25,15 @@ export function Footer() {
             <p className="text-sm">contato@nbpsicanalise.com.br</p>
           </div>
 
-          <div className="col-span-1 md:col-span-1 flex items-start gap-4 justify-start md:justify-end">
+          <div className="col-span-1 md:col-span-1 flex items-start gap-4 justify-start md:justify-end text-xs font-bold uppercase tracking-widest">
             <a href="https://instagram.com/nbpsicanalise" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-              <Instagram className="w-5 h-5" />
+              Instagram
             </a>
             <a href="https://facebook.com/nbpsicanalise" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-              <Facebook className="w-5 h-5" />
+              Facebook
             </a>
             <a href="https://youtube.com/@nbpsicanalise" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-              <Youtube className="w-5 h-5" />
+              YouTube
             </a>
           </div>
 

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { X } from 'lucide-react'
+import { X, BookOpen, User, Clock, Award, CheckCircle, Share2, MessageCircle, FileText } from 'lucide-react'
 import { whatsappLink, WHATSAPP_NUMBER, cn } from '@/lib/utils'
 
 interface Curso {
@@ -19,6 +19,7 @@ interface Curso {
   fotos: string[] | null
   fotoDestaque: string | null
   destaque: boolean
+  precoReferencia?: string | null
 }
 
 export function CursoDetail({ curso }: { curso: Curso }) {
@@ -36,93 +37,199 @@ export function CursoDetail({ curso }: { curso: Curso }) {
     `Olá! Tenho interesse em me matricular no curso *${curso.nome}*. Como posso prosseguir com a inscrição?`
   )
 
+  const shareText = `Confira o curso ${curso.nome} no NBP Psicanálise!`
+  const shareUrl = typeof window !== 'undefined' ? window.location.href : ''
+
   return (
-    <>
-      <div className="grid lg:grid-cols-2 gap-12 bg-white p-6 md:p-8 rounded-lg border border-gray-100 shadow-sm">
-        {/* Galeria */}
-        <div className="space-y-3">
-          {/* Foto principal */}
-          <div
-            className="relative aspect-[4/3] rounded-lg overflow-hidden bg-gray-50 cursor-zoom-in"
-            onClick={() => fotos.length > 0 && setLightbox(true)}
-          >
-            {fotos[activePhoto] ? (
-              <img
-                src={fotos[activePhoto]}
-                alt={curso.nome}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-50">
-                Sem foto disponível
-              </div>
-            )}
-            {fotos.length > 1 && (
-              <div className="absolute bottom-3 right-3 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-1 rounded">
-                {activePhoto + 1} / {fotos.length}
-              </div>
-            )}
-          </div>
-
-          {/* Thumbnails */}
-          {fotos.length > 1 && (
-            <div className="grid grid-cols-5 gap-2">
-              {fotos.map((foto, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActivePhoto(i)}
-                  className={cn(
-                    'relative aspect-square rounded overflow-hidden bg-gray-50 transition-all border',
-                    i === activePhoto ? 'border-[#6a5a98] ring-1 ring-[#6a5a98]' : 'border-transparent opacity-60 hover:opacity-100'
-                  )}
-                >
-                  <img src={foto} alt={`${curso.nome} ${i + 1}`} className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
-          )}
+    <div className="space-y-8">
+      {/* Breadcrumb & Header Banner */}
+      <div className="bg-[#5B1A82]/5 border border-[#5B1A82]/10 rounded-2xl p-6 md:p-8">
+        <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
+          <Link href="/" className="hover:text-[#5B1A82] transition-colors">Home</Link>
+          <span>/</span>
+          <Link href="/cursos" className="hover:text-[#5B1A82] transition-colors">Cursos</Link>
+          <span>/</span>
+          <span className="text-gray-700 font-medium capitalize">{curso.categoria}</span>
         </div>
-
-        {/* Detalhes */}
-        <div className="flex flex-col">
-          <div className="mb-2 flex items-center gap-2 flex-wrap">
-            <span className="bg-[#6a5a98] text-white text-[10px] px-2.5 py-0.5 rounded uppercase font-bold tracking-wider">
-              {curso.categoria}
+        
+        <div className="flex flex-wrap gap-2 mb-4">
+          <span className="bg-[#5B1A82] text-white text-[10px] px-2.5 py-0.5 rounded-full uppercase font-bold tracking-wider">
+            {curso.categoria}
+          </span>
+          {curso.destaque && (
+            <span className="bg-amber-500 text-white text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
+              ⭐ Destaque
             </span>
-            {curso.destaque && (
-              <span className="bg-yellow-600/10 text-yellow-600 text-[10px] px-2.5 py-0.5 rounded border border-yellow-600/20 font-bold uppercase tracking-wider">
-                ⭐ Destaque
-              </span>
-            )}
+          )}
+        </div>
+
+        <h1 className="text-2xl md:text-4xl font-extrabold text-gray-900 leading-tight">
+          {curso.nome}
+        </h1>
+      </div>
+
+      {/* Main Grid */}
+      <div className="grid lg:grid-cols-3 gap-8">
+        
+        {/* Left Column (Details) */}
+        <div className="lg:col-span-2 space-y-8">
+          
+          {/* Sub-navigation Menu */}
+          <div className="sticky top-20 z-10 bg-white/80 backdrop-blur-md border-b border-gray-200 py-3 flex gap-6 text-sm font-medium text-gray-500">
+            <a href="#sobre" className="text-[#5B1A82] border-b-2 border-[#5B1A82] pb-3 -mb-[14px]">Mais Informações</a>
+            <a href="#para-quem" className="hover:text-gray-900 transition-colors pb-3">Para Quem</a>
+            <a href="#docente" className="hover:text-gray-900 transition-colors pb-3">Docente</a>
           </div>
 
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 uppercase mt-3 mb-4 font-[family-name:var(--font-heading)]">
-            {curso.nome}
-          </h1>
+          {/* Section: Sobre */}
+          <section id="sobre" className="scroll-mt-32 space-y-4">
+            <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+              <BookOpen className="size-5 text-[#5B1A82]" />
+              Mais Informações
+            </h3>
+            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm leading-relaxed text-gray-700 text-sm whitespace-pre-line">
+              {curso.descricao || "Nenhuma descrição detalhada disponível para este curso no momento."}
+            </div>
+          </section>
 
-          {curso.descricao && (
-            <p className="text-gray-600 text-sm leading-relaxed mb-6 font-light whitespace-pre-line">{curso.descricao}</p>
-          )}
+          {/* Section: Para Quem */}
+          <section id="para-quem" className="scroll-mt-32 space-y-4">
+            <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+              <CheckCircle className="size-5 text-[#5B1A82]" />
+              Para Quem é Este Curso
+            </h3>
+            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm leading-relaxed text-gray-700 text-sm">
+              <p>
+                Este curso é aberto a todos os adultos interessados em explorar as complexidades da psique humana através da lente da psicanálise. 
+                Ideal para psicólogos, terapeutas, estudantes, profissionais de saúde e qualquer pessoa interessada em iniciar ou aprofundar sua jornada de autoconhecimento e formação clínica.
+              </p>
+            </div>
+          </section>
 
-          {/* CTAs */}
-          <div className="mt-auto pt-6 border-t border-gray-150 space-y-3">
-            <a
-              href={waLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full bg-[#6a5a98] hover:bg-[#584885] text-white font-bold py-4 rounded text-sm uppercase tracking-wider transition-colors"
+          {/* Section: Docente */}
+          <section id="docente" className="scroll-mt-32 space-y-4">
+            <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+              <User className="size-5 text-[#5B1A82]" />
+              Docente Responsável
+            </h3>
+            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
+              <div className="flex flex-col md:flex-row gap-6 items-start">
+                <div className="relative size-24 md:size-32 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-200">
+                  <img 
+                    src="https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/47/47_ORG.jpg" 
+                    alt="Aurélio Gonzales"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <h4 className="text-lg font-bold text-gray-900">Aurélio Gonzales</h4>
+                    <p className="text-xs font-semibold text-[#5B1A82] uppercase tracking-wider">
+                      Psicanalista, Professor, Supervisor Clínico e Diretor do NBP
+                    </p>
+                  </div>
+                  <p className="text-gray-600 text-xs leading-relaxed">
+                    Aurélio Gonzales, psicanalista com mais de 12 anos de experiência clínica e didática na psicanálise, 
+                    traz seu conhecimento profundo e atualizado para guiar os alunos nas vivências práticas e estudos teóricos do Núcleo Brasileiro de Psicanálise.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        {/* Right Column (Floating Sticky Card) */}
+        <div className="space-y-6">
+          <div className="sticky top-24 bg-white border border-gray-150 rounded-2xl shadow-md overflow-hidden">
+            {/* Imagem Principal */}
+            <div 
+              className="relative aspect-video bg-gray-100 cursor-zoom-in"
+              onClick={() => fotos.length > 0 && setLightbox(true)}
             >
-              Matricule-se no Curso
-            </a>
+              {fotos[activePhoto] ? (
+                <img 
+                  src={fotos[activePhoto]} 
+                  alt={curso.nome} 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                  Sem imagem disponível
+                </div>
+              )}
+            </div>
 
-            <Link
-              href="/cursos"
-              className="flex items-center justify-center w-full border border-gray-200 text-gray-700 hover:border-[#6a5a98] hover:text-[#6a5a98] font-semibold py-3 rounded text-xs uppercase tracking-wider transition-colors"
-            >
-              Ver mais cursos
-            </Link>
+            {/* Preço e Botão */}
+            <div className="p-6 space-y-6">
+              <div className="space-y-1">
+                {curso.precoReferencia ? (
+                  <div>
+                    <span className="text-xs text-gray-500 block">Preço do Curso</span>
+                    <span className="text-3xl font-black text-gray-900">
+                      R$ {parseFloat(curso.precoReferencia).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    </span>
+                    <span className="text-xs text-gray-500 ml-1">à vista</span>
+                  </div>
+                ) : (
+                  <div>
+                    <span className="text-xs text-gray-500 block">Investimento</span>
+                    <span className="text-2xl font-extrabold text-[#5B1A82]">Sob Consulta</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Botão de Matrícula */}
+              <a
+                href={waLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full bg-[#5B1A82] hover:bg-[#481469] text-white font-bold py-4 px-6 rounded-xl text-sm uppercase tracking-wider transition-colors shadow-lg shadow-[#5B1A82]/20"
+              >
+                <MessageCircle className="size-5 fill-current" />
+                Matricule-se no Curso
+              </a>
+
+              {/* Atributos */}
+              <div className="border-t border-gray-100 pt-6 space-y-3">
+                <div className="flex items-center gap-3 text-xs text-gray-600">
+                  <Clock className="size-4 text-[#5B1A82]" />
+                  <span>Acesso imediato de 365 dias após inscrição</span>
+                </div>
+                <div className="flex items-center gap-3 text-xs text-gray-600">
+                  <Award className="size-4 text-[#5B1A82]" />
+                  <span>Certificado oficial inclusivo emitido pelo NBP</span>
+                </div>
+                <div className="flex items-center gap-3 text-xs text-gray-600">
+                  <FileText className="size-4 text-[#5B1A82]" />
+                  <span>Aulas gravadas com material de leitura complementar</span>
+                </div>
+              </div>
+
+              {/* Compartilhar */}
+              <div className="border-t border-gray-100 pt-4 flex items-center justify-between">
+                <span className="text-xs font-semibold text-gray-600">Compartilhar:</span>
+                <div className="flex gap-2">
+                  <a 
+                    href={`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`}
+                    target="_blank"
+                    className="p-2 text-gray-400 hover:text-green-600 transition-colors"
+                  >
+                    <MessageCircle className="size-4" />
+                  </a>
+                  <a 
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                    target="_blank"
+                    className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                  >
+                    <Share2 className="size-4" />
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
 
       {/* Lightbox */}
@@ -159,6 +266,6 @@ export function CursoDetail({ curso }: { curso: Curso }) {
           )}
         </div>
       )}
-    </>
+    </div>
   )
 }

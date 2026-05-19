@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     getConfig('gsc_api_key'),
   ])
 
-  const base = (siteUrl ?? 'https://twixeventos.com').replace(/\/$/, '')
+  const base = (siteUrl ?? 'https://nbpsicanalise.com.br').replace(/\/$/, '')
 
   // Montar lista de URLs do sitemap
   const body = await req.json().catch(() => ({}))

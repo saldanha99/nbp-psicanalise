@@ -2,7 +2,7 @@
 
 import { whatsappLink, WHATSAPP_NUMBER } from '@/lib/utils'
 
-const message = 'Olá! Estou no site da Twix Eventos e gostaria de mais informações'
+const message = 'Olá! Estou no site do NBP Psicanálise e gostaria de tirar dúvidas sobre as formações.'
 
 function WhatsAppIcon() {
   return (

@@ -40,8 +40,8 @@ export function Sidebar() {
         {/* Logo */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-brand-border">
           <div className="flex items-baseline gap-1">
-            <span className="text-xl font-black text-brand-accent tracking-tight">TWIX</span>
-            <span className="text-xl font-black text-brand-text tracking-tight">EVENTOS</span>
+            <span className="text-xl font-black text-brand-accent tracking-tight">NBP</span>
+            <span className="text-xl font-black text-brand-text tracking-tight">PSICANÁLISE</span>
           </div>
           <span className="px-1.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-widest bg-brand-accent/10 text-brand-accent border border-brand-accent/30">
             Admin

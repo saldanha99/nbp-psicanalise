@@ -46,7 +46,7 @@ export function LeadModal({ lead, onClose, onUpdate }: Props) {
 
   const waLink = whatsappLink(
     lead.telefone,
-    `Olá ${lead.nome}, tudo bem? Aqui é da Twix Eventos! 🎪`,
+    `Olá ${lead.nome}, tudo bem? Aqui é do NBP Psicanálise! 🎓`,
   )
 
   const handleEnviarInteracao = async () => {

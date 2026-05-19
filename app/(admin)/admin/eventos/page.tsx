@@ -4,7 +4,7 @@ import { getMonitoresAtivos } from '@/lib/db/queries/monitores'
 import { EventosClient } from '@/components/admin/EventosClient'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = { title: 'Agenda de Eventos — Twix Eventos' }
+export const metadata: Metadata = { title: 'Agenda — NBP Psicanálise' }
 export const dynamic = 'force-dynamic'
 
 async function EventosContent() {

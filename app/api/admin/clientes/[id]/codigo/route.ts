@@ -27,14 +27,14 @@ export async function POST(
   if (!cliente) return NextResponse.json({ error: 'Cliente não encontrado' }, { status: 404 })
 
   // Montar URL da área do cliente
-  const siteUrl = (await getConfig('site_url')) ?? 'https://twixeventos.com'
+  const siteUrl = (await getConfig('site_url')) ?? 'https://nbpsicanalise.com.br'
   const urlArea = `${siteUrl.replace(/\/$/, '')}/minha-area`
 
   const mensagem =
     `Olá ${cliente.nome.split(' ')[0]}! 🎉\n\n` +
-    `Seu acesso à *Área do Cliente* Twix Eventos está pronto!\n\n` +
+    `Seu acesso ao portal do aluno *NBP Psicanálise* está pronto!\n\n` +
     `🔑 *Seu código único:* ${codigo}\n\n` +
-    `Acesse agora e acompanhe suas reservas, histórico de festas e seu saldo de cashback:\n` +
+    `Acesse agora para acompanhar seus cursos e matrícula:\n` +
     `👉 ${urlArea}\n\n` +
     `_Guarde este código — ele é a sua chave de acesso._`
 

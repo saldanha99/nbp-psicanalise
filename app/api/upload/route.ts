@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!
     const apiKey = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!
     const apiSecret = process.env.CLOUDINARY_API_SECRET!
-    const folder = 'twix-eventos/cursos'
+    const folder = 'nbp-psicanalise/cursos'
     const timestamp = Math.round(Date.now() / 1000).toString()
     const signature = crypto
       .createHash('sha256')
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
   /* ── 2. Vercel Blob (production default) ── */
   if (hasVercelBlob()) {
     const { put } = await import('@vercel/blob')
-    const blob = await put(`twix-eventos/${filename}`, webpBuffer, {
+    const blob = await put(`nbp-psicanalise/${filename}`, webpBuffer, {
       access: 'public',
       contentType: finalType,
     })

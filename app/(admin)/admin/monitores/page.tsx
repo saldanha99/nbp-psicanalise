@@ -3,7 +3,7 @@ import { getAllMonitores } from '@/lib/db/queries/monitores'
 import { MonitoresClient } from '@/components/admin/MonitoresClient'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = { title: 'Monitores — Twix Eventos' }
+export const metadata: Metadata = { title: 'Monitores — NBP Psicanálise' }
 export const dynamic = 'force-dynamic'
 
 async function MonitoresContent() {

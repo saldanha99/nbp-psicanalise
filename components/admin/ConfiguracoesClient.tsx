@@ -417,14 +417,14 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
           <SectionTitle description="Informações básicas exibidas no site e nos buscadores">Identidade do Site</SectionTitle>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <Field label="Nome do site" required>
-              <Input value={get('site_nome')} onChange={set('site_nome')} placeholder="Twix Eventos" />
+              <Input value={get('site_nome')} onChange={set('site_nome')} placeholder="NBP Psicanálise" />
             </Field>
             <Field label="Telefone / WhatsApp" required>
               <Input value={get('site_telefone')} onChange={set('site_telefone')} placeholder="5512996498725" mono />
             </Field>
           </div>
           <Field label="Descrição curta" hint="Usada como meta description padrão">
-            <Textarea value={get('site_descricao')} onChange={set('site_descricao')} placeholder="Locação de cursos infláveis em São José dos Campos…" />
+            <Textarea value={get('site_descricao')} onChange={set('site_descricao')} placeholder="Formação em Psicanálise com Certificação..." />
           </Field>
           <Field label="Endereço completo">
             <Input value={get('site_endereco')} onChange={set('site_endereco')} placeholder="R. Prof. Roberval Fróes, 390 – SJC/SP" />
@@ -469,18 +469,18 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
         <div className="space-y-5">
           <SectionTitle description="Configure como o site aparece nos resultados de busca">Meta Tags e Indexação</SectionTitle>
           <Field label="Título padrão" hint="Exibido na aba do navegador e no Google. Máx. 60 caracteres">
-            <Input value={get('seo_titulo_padrao')} onChange={set('seo_titulo_padrao')} placeholder="Twix Eventos | Locação de Cursos em São José dos Campos" />
+            <Input value={get('seo_titulo_padrao')} onChange={set('seo_titulo_padrao')} placeholder="NBP Psicanálise | Formação em Psicanálise com Certificação" />
             <p className="text-xs text-brand-muted text-right mt-1">{get('seo_titulo_padrao').length}/60 chars</p>
           </Field>
-          <Field label="Template de título por página" hint="Use %s para o título da página. Ex: %s | Twix Eventos">
-            <Input value={get('seo_template_titulo')} onChange={set('seo_template_titulo')} placeholder="%s | Twix Eventos" mono />
+          <Field label="Template de título por página" hint="Use %s para o título da página. Ex: %s | NBP Psicanálise">
+            <Input value={get('seo_template_titulo')} onChange={set('seo_template_titulo')} placeholder="%s | NBP Psicanálise" mono />
           </Field>
           <Field label="Descrição padrão" hint="Máx. 160 caracteres. Aparece abaixo do título no Google">
-            <Textarea value={get('seo_descricao_padrao')} onChange={set('seo_descricao_padrao')} placeholder="Aluguel de cursos infláveis para festas em SJC…" />
+            <Textarea value={get('seo_descricao_padrao')} onChange={set('seo_descricao_padrao')} placeholder="Formação de psicanalistas clínicos e cursos de especialização..." />
             <p className="text-xs text-brand-muted text-right mt-1">{get('seo_descricao_padrao').length}/160 chars</p>
           </Field>
           <Field label="Palavras-chave" hint="Separadas por vírgula. Ex: cursos infláveis, locação SJC, festa infantil">
-            <Textarea value={get('seo_palavras_chave')} onChange={set('seo_palavras_chave')} placeholder="cursos infláveis, locação, São José dos Campos…" rows={2} />
+            <Textarea value={get('seo_palavras_chave')} onChange={set('seo_palavras_chave')} placeholder="psicanalise, curso de psicanalise, formação psicanalítica..." rows={2} />
           </Field>
 
           <Divider />
@@ -651,16 +651,16 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
         <div className="space-y-5">
           <SectionTitle description="URLs completas dos perfis. Deixe em branco para ocultar o ícone no footer.">Links das Redes Sociais</SectionTitle>
           <Field label="Instagram">
-            <Input value={get('social_instagram')} onChange={set('social_instagram')} placeholder="https://instagram.com/twixeventos" />
+            <Input value={get('social_instagram')} onChange={set('social_instagram')} placeholder="https://instagram.com/nbpsicanalise" />
           </Field>
           <Field label="Facebook">
-            <Input value={get('social_facebook')} onChange={set('social_facebook')} placeholder="https://facebook.com/twixeventos" />
+            <Input value={get('social_facebook')} onChange={set('social_facebook')} placeholder="https://facebook.com/nbpsicanalise" />
           </Field>
           <Field label="YouTube">
-            <Input value={get('social_youtube')} onChange={set('social_youtube')} placeholder="https://youtube.com/@twixeventos" />
+            <Input value={get('social_youtube')} onChange={set('social_youtube')} placeholder="https://youtube.com/@nbpsicanalise" />
           </Field>
           <Field label="TikTok">
-            <Input value={get('social_tiktok')} onChange={set('social_tiktok')} placeholder="https://tiktok.com/@twixeventos" />
+            <Input value={get('social_tiktok')} onChange={set('social_tiktok')} placeholder="https://tiktok.com/@nbpsicanalise" />
           </Field>
           <Field label="Google Maps (link da empresa)" hint="Link do Google Maps para a localização da empresa">
             <Input value={get('social_google_maps')} onChange={set('social_google_maps')} placeholder="https://maps.app.goo.gl/…" />
@@ -704,7 +704,7 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
           </div>
           <Field label="Mensagem de aniversário" hint="Use {nome} para o nome do cliente e {aniversariante} para o nome do aniversariante">
             <Textarea value={get('aniversario_mensagem')} onChange={set('aniversario_mensagem')} rows={4}
-              placeholder="Olá {nome}! A Twix Eventos deseja um feliz aniversário para {aniversariante}! 🎉 Que seja um dia especial!" />
+              placeholder="Olá {nome}! O NBP Psicanálise deseja um feliz aniversário para {aniversariante}! 🎉 Que seja um dia especial!" />
           </Field>
 
           <Divider />
@@ -727,7 +727,7 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
           </div>
           <Field label="Mensagem da pesquisa" hint="Use {nome} para o nome do cliente">
             <Textarea value={get('pesquisa_mensagem')} onChange={set('pesquisa_mensagem')} rows={4}
-              placeholder="Olá {nome}! Esperamos que sua festa tenha sido incrível! Como foi sua experiência com a Twix Eventos? (Responda de 1 a 5)" />
+              placeholder="Olá {nome}! Esperamos que seu curso esteja sendo incrível! Como está sendo sua experiência com o NBP Psicanálise? (Responda de 1 a 5)" />
           </Field>
 
           <div className="bg-blue-500/5 border border-blue-500/20 rounded-xl p-4 text-sm text-brand-muted">
@@ -746,7 +746,7 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
     sitemap: {
       keys: ['site_url', 'sitemap_frequencia', 'sitemap_prioridade', 'sitemap_include_blog', 'gsc_api_key', 'gsc_site_url', 'indexar_automatico'],
       content: (() => {
-        const siteUrl = get('site_url') || 'https://twixeventos.com'
+        const siteUrl = get('site_url') || 'https://nbpsicanalise.com.br'
         const sitemapUrl = `${siteUrl.replace(/\/$/, '')}/sitemap.xml`
 
         const handleIndexar = async () => {
@@ -766,8 +766,8 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
         return (
           <div className="space-y-5">
             <SectionTitle description="URL canônica do site usada no sitemap e nas notificações ao Google">URL do Site</SectionTitle>
-            <Field label="URL base do site" hint="Ex: https://twixeventos.com (sem barra no final)" required>
-              <Input value={get('site_url')} onChange={set('site_url')} placeholder="https://twixeventos.com" mono />
+            <Field label="URL base do site" hint="Ex: https://nbpsicanalise.com.br (sem barra no final)" required>
+              <Input value={get('site_url')} onChange={set('site_url')} placeholder="https://nbpsicanalise.com.br" mono />
             </Field>
 
             <div className="flex items-center gap-2 p-3 bg-brand-surface-2 border border-brand-border rounded-xl">
@@ -824,7 +824,7 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
             <Divider />
             <SectionTitle description="Credenciais do Google Search Console para indexação automática via Indexing API">Google Search Console</SectionTitle>
             <Field label="URL cadastrada no GSC" hint="Deve corresponder exatamente à URL cadastrada no Search Console">
-              <Input value={get('gsc_site_url')} onChange={set('gsc_site_url')} placeholder="https://twixeventos.com" mono />
+              <Input value={get('gsc_site_url')} onChange={set('gsc_site_url')} placeholder="https://nbpsicanalise.com.br" mono />
             </Field>
             <Field
               label="Service Account JSON (chave de API)"
@@ -1013,10 +1013,10 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
           <SectionTitle description="E-mails para notificações automáticas do sistema">Notificações por E-mail</SectionTitle>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <Field label="E-mail do administrador">
-              <Input value={get('email_admin')} onChange={set('email_admin')} placeholder="admin@twixeventos.com" type="email" />
+              <Input value={get('email_admin')} onChange={set('email_admin')} placeholder="admin@nbpsicanalise.com.br" type="email" />
             </Field>
             <Field label="E-mail de notificações" hint="Recebe alertas de novos leads e orçamentos">
-              <Input value={get('email_notificacoes')} onChange={set('email_notificacoes')} placeholder="notificacoes@twixeventos.com" type="email" />
+              <Input value={get('email_notificacoes')} onChange={set('email_notificacoes')} placeholder="notificacoes@nbpsicanalise.com.br" type="email" />
             </Field>
           </div>
 

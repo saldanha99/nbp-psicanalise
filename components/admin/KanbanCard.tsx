@@ -44,7 +44,7 @@ export function KanbanCard({ lead, index, onClick }: Props) {
 
   const waLink = whatsappLink(
     lead.telefone,
-    `Olá ${lead.nome}, tudo bem? Aqui é da Twix Eventos! 🎪`,
+    `Olá ${lead.nome}, tudo bem? Aqui é do NBP Psicanálise! 🎓`,
   )
 
   return (

@@ -25,7 +25,7 @@ export function HeaderClient({ logoUrl, bannerAtivo = 'true', bannerTexto = 'Des
   const [open, setOpen] = React.useState(false);
   const scrolled = useScroll(12);
 
-  const waLink = whatsappLink(WHATSAPP_NUMBER, 'Olá! Gostaria de mais informações sobre a Twix Eventos.');
+  const waLink = whatsappLink(WHATSAPP_NUMBER, 'Olá! Gostaria de mais informações sobre os cursos do NBP.');
 
   React.useEffect(() => {
     if (open) {
@@ -42,7 +42,7 @@ export function HeaderClient({ logoUrl, bannerAtivo = 'true', bannerTexto = 'Des
     <>
       {/* Banner topo */}
       {bannerAtivo === 'true' && (
-        <div className="w-full text-white text-center text-sm font-medium py-2 px-4 z-50 relative" style={{ background: 'linear-gradient(90deg, #1D4ED8 0%, #3B82F6 50%, #1D4ED8 100%)' }}>
+        <div className="w-full text-white text-center text-sm font-medium py-2 px-4 z-50 relative" style={{ background: 'linear-gradient(90deg, #584885 0%, #6a5a98 50%, #584885 100%)' }}>
           {bannerTexto}
         </div>
       )}
@@ -69,16 +69,9 @@ export function HeaderClient({ logoUrl, bannerAtivo = 'true', bannerTexto = 'Des
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 leading-none z-50" onClick={() => setOpen(false)}>
             {logoUrl ? (
-              <img src={logoUrl} alt="Twix Eventos" className="h-10 w-auto object-contain" />
+              <img src={logoUrl} alt="NBP Psicanálise" className="h-10 w-auto object-contain" />
             ) : (
-              <div className="flex flex-col">
-                <span className="font-bold text-xl md:text-2xl uppercase tracking-wider text-brand-accent">
-                  TWIX EVENTOS
-                </span>
-                <span className="text-[10px] md:text-xs text-brand-muted font-medium tracking-widest uppercase">
-                  Locação de Cursos
-                </span>
-              </div>
+              <img src="https://nbpsicanalise.com.br/wp-content/uploads/2021/03/Logo-NBP-Oficial-min.png" alt="NBP Psicanálise" className="h-10 w-auto object-contain" />
             )}
           </Link>
 
@@ -127,7 +120,7 @@ export function HeaderClient({ logoUrl, bannerAtivo = 'true', bannerTexto = 'Des
               href={waLink}
               target="_blank"
               rel="noopener noreferrer"
-              className={cn(buttonVariants({ variant: 'default' }), 'gap-2 ml-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full px-5')}
+              className={cn(buttonVariants({ variant: 'default' }), 'gap-2 ml-2 bg-[#6a5a98] hover:bg-[#584885] text-white rounded-full px-5')}
             >
               <Phone className="size-4" />
               WhatsApp
@@ -199,7 +192,7 @@ export function HeaderClient({ logoUrl, bannerAtivo = 'true', bannerTexto = 'Des
                 href={waLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={cn(buttonVariants({ variant: 'default' }), 'w-full justify-center gap-2 bg-blue-600 hover:bg-blue-700 h-12 rounded-xl text-base')}
+                className={cn(buttonVariants({ variant: 'default' }), 'w-full justify-center gap-2 bg-[#6a5a98] hover:bg-[#584885] h-12 rounded-xl text-base')}
                 onClick={() => setOpen(false)}
               >
                 <Phone className="size-5" />

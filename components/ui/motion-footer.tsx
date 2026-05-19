@@ -146,19 +146,19 @@ MagneticButton.displayName = 'MagneticButton';
 /* ── Marquee ── */
 const MarqueeItem = () => (
   <div className="flex items-center space-x-10 px-6 text-xs font-bold tracking-[0.25em] uppercase">
-    <span>Infláveis</span>
+    <span>Formação em Psicanálise</span>
     <span className="opacity-40">✦</span>
-    <span>Toboágua</span>
+    <span>Cursos Livres</span>
     <span className="opacity-40">✦</span>
-    <span>Canhão de Espuma</span>
+    <span>Seminários Clínicos</span>
     <span className="opacity-40">✦</span>
-    <span>Touro Mecânico</span>
+    <span>Grupos de Estudo</span>
     <span className="opacity-40">✦</span>
-    <span>Batalha de Espuma</span>
+    <span>Supervisão</span>
     <span className="opacity-40">✦</span>
-    <span>Futebol de Sabão</span>
+    <span>Atendimento</span>
     <span className="opacity-40">✦</span>
-    <span>SJC e Vale do Paraíba</span>
+    <span>São Paulo - SP</span>
     <span className="opacity-40">✦</span>
   </div>
 );
@@ -170,7 +170,7 @@ export function TwixFooter() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const linksRef = useRef<HTMLDivElement>(null);
 
-  const waLink = whatsappLink(WHATSAPP_NUMBER, 'Olá! Gostaria de fazer uma reserva na Twix Eventos.');
+  const waLink = whatsappLink(WHATSAPP_NUMBER, 'Olá! Gostaria de mais informações sobre os cursos.');
 
   useEffect(() => {
     if (!wrapperRef.current) return;
@@ -209,7 +209,7 @@ export function TwixFooter() {
             ref={giantTextRef}
             className="twix-footer-giant-text absolute -bottom-[5vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none font-[family-name:var(--font-display)]"
           >
-            TWIX
+            NBP
           </div>
 
           {/* Marquee diagonal */}
@@ -225,7 +225,7 @@ export function TwixFooter() {
               ref={headingRef}
               className="text-5xl md:text-8xl font-black twix-footer-text-glow tracking-tighter mb-10 text-center font-[family-name:var(--font-display)]"
             >
-              Pronto pra reservar?
+              Deseja saber mais?
             </h2>
 
             <div ref={linksRef} className="flex flex-col items-center gap-5 w-full">
@@ -239,7 +239,7 @@ export function TwixFooter() {
                   className="twix-footer-glass-pill px-10 py-5 rounded-full text-foreground font-bold text-sm md:text-base flex items-center gap-3 group"
                 >
                   <Phone className="size-5 text-muted-foreground group-hover:text-foreground transition-colors" />
-                  Reservar via WhatsApp
+                  Falar no WhatsApp
                 </MagneticButton>
                 <MagneticButton
                   as={Link}
@@ -275,14 +275,14 @@ export function TwixFooter() {
           <div className="relative z-20 w-full pb-7 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4">
             {/* Copyright */}
             <div className="text-muted-foreground text-[10px] md:text-xs font-semibold tracking-widest uppercase order-2 md:order-1">
-              © {new Date().getFullYear()} Twix Eventos. Todos os direitos reservados.
+              © {new Date().getFullYear()} NBP Psicanálise. Todos os direitos reservados.
             </div>
 
             {/* Badge "Feito com amor" */}
             <div className="twix-footer-glass-pill px-5 py-2.5 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-default">
               <span className="text-muted-foreground text-[10px] md:text-xs font-bold uppercase tracking-widest">Feito com</span>
               <span className="twix-footer-heartbeat text-sm text-red-500">❤</span>
-              <span className="text-muted-foreground text-[10px] md:text-xs font-bold uppercase tracking-widest">em SJC</span>
+              <span className="text-muted-foreground text-[10px] md:text-xs font-bold uppercase tracking-widest">em SP</span>
             </div>
 
             {/* Redes sociais + voltar ao topo */}

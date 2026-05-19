@@ -1,16 +1,8 @@
 import { getCursosDestaque } from '@/lib/db/queries/cursos'
-import { getConfig } from '@/lib/db/queries/configuracoes'
 import { Header } from '@/components/public/Header'
-import { Hero } from '@/components/public/Hero'
-import { AuthorityBar } from '@/components/public/AuthorityBar'
-import { FeaturedCard3D } from '@/components/public/FeaturedCard3D'
-import { HowItWorks } from '@/components/public/HowItWorks'
-import { FAQAccordion } from '@/components/public/FAQAccordion'
-import { ContactForm } from '@/components/public/ContactForm'
+import { CourseGrid } from '@/components/public/CourseGrid'
 import { Footer } from '@/components/public/Footer'
 import { WhatsAppButton } from '@/components/public/WhatsAppButton'
-import { VideoSection } from '@/components/public/VideoSection'
-import { CinematicHero } from '@/components/ui/cinematic-hero'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
@@ -28,36 +20,18 @@ const jsonLd = {
   name: 'NBP Psicanálise',
   description: 'O Núcleo Brasileiro de Psicanálise oferece cursos e formação na área de Psicanálise.',
   url: 'https://nbpsicanalise.com.br',
-  telephone: '+55-12-99649-8725',
+  telephone: '+55-11-99999-9999',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'R. Prof. Roberval Fróes, 390 – 143C',
-    addressLocality: 'São José dos Campos',
+    streetAddress: 'Tatuapé',
+    addressLocality: 'São Paulo',
     addressRegion: 'SP',
-    postalCode: '12242-460',
     addressCountry: 'BR',
   },
-  openingHours: 'Mo-Su 08:00-22:00',
-  aggregateRating: { '@type': 'AggregateRating', ratingValue: '5.0', reviewCount: '455' },
-}
-
-function pickRandom<T>(arr: T[], n: number): T[] {
-  const copy = [...arr]
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[copy[i], copy[j]] = [copy[j], copy[i]]
-  }
-  return copy.slice(0, n)
 }
 
 export default async function HomePage() {
-  const [allDestaques, videoUrl, heroSlidesRaw] = await Promise.all([
-    getCursosDestaque(),
-    getConfig('video_apresentacao'),
-    getConfig('hero_slides'),
-  ])
-  const destaques = pickRandom(allDestaques, 4)
-  const heroSlides = (() => { try { return JSON.parse(heroSlidesRaw ?? '[]') } catch { return [] } })()
+  const destaques = await getCursosDestaque()
 
   return (
     <>
@@ -66,87 +40,99 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Header />
-      <main className="flex-1">
-        <Hero slides={heroSlides} />
-        <AuthorityBar />
+      <main className="flex-1 bg-[#f9f9f9]">
+        
+        {/* Hero Section Oficial NBP */}
+        <section className="relative w-full bg-white overflow-hidden py-16 md:py-24 border-b border-gray-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center gap-12">
+            
+            <div className="flex-1 text-center md:text-left">
+              <div className="inline-flex items-center gap-2 text-[#6a5a98] text-sm font-semibold uppercase tracking-widest mb-4">
+                <span className="w-8 h-px bg-[#6a5a98]"></span>
+                Núcleo Psicanalítico
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#6a5a98] mb-6 leading-tight font-[family-name:var(--font-display)] uppercase">
+                Núcleo Brasileiro de Psicanálise
+              </h1>
+              <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl leading-relaxed">
+                Somos um núcleo de Psicanálise, com sede na cidade de São Paulo, no bairro Tatuapé. Oferecemos curso de formação para você que deseja tornar-se um profissional da área, e/ou conhecer, aprofundar-se no universo psicanalítico.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center md:justify-start">
+                <Link
+                  href="/cursos"
+                  className="bg-[#6a5a98] hover:bg-[#584885] text-white px-8 py-4 rounded-md font-medium transition-colors w-full sm:w-auto text-center shadow-lg shadow-[#6a5a98]/20"
+                >
+                  Conheça a Formação
+                </Link>
+                <Link
+                  href="/sobre"
+                  className="bg-white border border-[#6a5a98] text-[#6a5a98] hover:bg-[#6a5a98]/5 px-8 py-4 rounded-md font-medium transition-colors w-full sm:w-auto text-center"
+                >
+                  Saiba Mais
+                </Link>
+              </div>
+            </div>
+
+            <div className="flex-1 relative">
+              {/* Imagem oficial extraída do site WP */}
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-black/10">
+                <img 
+                  src="https://nbpsicanalise.com.br/wp-content/uploads/2021/04/curso-formacao-min.png" 
+                  alt="Curso de Formação NBP" 
+                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700"
+                />
+              </div>
+              {/* Decoração sutil de fundo */}
+              <div className="absolute -z-10 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-[#6a5a98]/10 to-transparent rounded-full blur-3xl"></div>
+            </div>
+
+          </div>
+        </section>
 
         {/* Cursos em Destaque */}
-        <section id="cursos" className="py-20 bg-brand-bg relative overflow-hidden">
-          {/* Subtle background glow */}
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] opacity-[0.06] pointer-events-none"
-            style={{ background: 'radial-gradient(ellipse, #3B82F6 0%, transparent 70%)' }}
-          />
-
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-14">
-              <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/25 text-blue-400 text-xs font-semibold uppercase tracking-widest px-4 py-2 rounded-full mb-5">
-                Seleção especial
+        <section id="cursos" className="py-24 bg-[#f9f9f9] relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div className="flex flex-col md:flex-row items-end justify-between mb-12 border-b border-gray-200 pb-6">
+              <div>
+                <div className="inline-flex items-center gap-2 text-[#6a5a98] text-sm font-semibold uppercase tracking-widest mb-3">
+                  Formações em Psicanálise
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 font-[family-name:var(--font-display)] uppercase">
+                  Conheça <span className="text-[#6a5a98]">Nossos Cursos</span>
+                </h2>
               </div>
-              <h2 className="font-[family-name:var(--font-display)] text-4xl lg:text-5xl font-bold text-brand-text uppercase">
-                MAIS <span className="text-brand-accent">ALUGADOS</span>
-              </h2>
-              <p className="text-brand-muted mt-3 max-w-xl mx-auto">
-                Os favoritos dos nossos clientes para fazer qualquer festa inesquecível
-              </p>
+              
+              <Link
+                href="/cursos"
+                className="hidden md:inline-flex items-center gap-2 text-[#6a5a98] hover:text-[#584885] font-semibold transition-colors group"
+              >
+                Ver todos os cursos
+                <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
 
             {destaques.length === 0 ? (
-              <div className="text-center text-brand-muted py-12">
-                Nenhum curso em destaque no momento.
+              <div className="text-center text-gray-500 py-12 bg-white rounded-xl border border-gray-100 shadow-sm">
+                Nenhum curso cadastrado no momento.
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto">
-                {destaques.map((curso, i) => (
-                  <FeaturedCard3D key={curso.id} curso={curso} index={i} />
-                ))}
-              </div>
+              <CourseGrid cursos={destaques} />
             )}
 
-            {/* CTA para catálogo completo */}
-            <div className="mt-12 text-center">
+            <div className="mt-10 text-center md:hidden">
               <Link
                 href="/cursos"
-                className="group inline-flex items-center gap-3 glass hover:border-blue-500/40 hover:bg-blue-500/5 text-brand-text hover:text-blue-400 font-semibold px-8 py-4 rounded-xl transition-all duration-200 text-base"
+                className="inline-flex items-center gap-2 bg-white border border-gray-200 text-[#6a5a98] hover:bg-gray-50 px-6 py-3 rounded-md font-medium transition-colors"
               >
                 Ver catálogo completo
-                <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform duration-200" />
+                <ArrowRight className="size-4" />
               </Link>
-              <p className="text-brand-muted text-sm mt-3">
-                24+ cursos disponíveis no catálogo
-              </p>
             </div>
+
           </div>
         </section>
 
-        <VideoSection videoUrl={videoUrl} />
-        <HowItWorks />
-        <CinematicHero 
-          brandName="NBP Psicanálise"
-          metricValue={1000}
-          tagline1="Mais de 1000 alunos"
-          tagline2="formados e satisfeitos."
-          cardHeading="Excelência Comprovada"
-          cardDescription="O NBP Psicanálise é referência em formação. Nossa metodologia reflete o compromisso com a ética e o estudo aprofundado da mente humana."
-          ctaHeading="Aprofunde seus conhecimentos."
-          ctaDescription="Inscreva-se agora nos melhores cursos de psicanálise e inicie sua jornada conosco."
-        />
-        <FAQAccordion />
-
-        {/* Contato */}
-        <section id="contato" className="py-20 bg-brand-surface border-t border-brand-border">
-          <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="font-[family-name:var(--font-display)] text-4xl lg:text-5xl font-bold text-brand-text uppercase">
-                FAÇA SUA <span className="text-brand-accent">RESERVA</span>
-              </h2>
-              <p className="text-brand-muted mt-3">
-                Preencha o formulário e entraremos em contato pelo WhatsApp
-              </p>
-            </div>
-            <ContactForm />
-          </div>
-        </section>
       </main>
       <Footer />
       <WhatsAppButton />

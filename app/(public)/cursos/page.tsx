@@ -7,8 +7,8 @@ import { CatalogHeader } from '@/components/public/CatalogHeader'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Catálogo de Cursos — Twix Eventos',
-  description: 'Veja todos os cursos infláveis e eletrônicos disponíveis para locação em São José dos Campos. Tobogãs, touro mecânico, canhão de espuma e muito mais!',
+  title: 'Catálogo de Cursos — NBP Psicanálise',
+  description: 'Conheça todos os nossos cursos de formação, especialização e aulas gravadas na área de Psicanálise.',
 }
 
 export const dynamic = 'force-dynamic'

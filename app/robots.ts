@@ -10,7 +10,7 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
     getConfig('robots_indexar'),
   ])
 
-  const base = (siteUrl ?? 'https://twixeventos.com').replace(/\/$/, '')
+  const base = (siteUrl ?? 'https://nbpsicanalise.com.br').replace(/\/$/, '')
   const permitir = indexar !== 'false'
 
   return {

@@ -16,18 +16,18 @@ import { ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Twix Eventos | Locação de Cursos Infláveis em São José dos Campos',
-  description: 'Aluguel de cursos infláveis e eletrônicos para festas e eventos em São José dos Campos. +455 avaliações 5 estrelas. Tobogã, touro mecânico, canhão de espuma e muito mais!',
+  title: 'NBP Psicanálise | Cursos e Formação',
+  description: 'O Núcleo Brasileiro de Psicanálise oferece cursos, formação e eventos focados no estudo contínuo e aprofundado da Psicanálise.',
 }
 
 export const dynamic = 'force-dynamic'
 
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
-  name: 'Twix Eventos',
-  description: 'Locação de cursos infláveis e eletrônicos para eventos em São José dos Campos',
-  url: 'https://twixeventos.com',
+  '@type': 'EducationalOrganization',
+  name: 'NBP Psicanálise',
+  description: 'O Núcleo Brasileiro de Psicanálise oferece cursos e formação na área de Psicanálise.',
+  url: 'https://nbpsicanalise.com.br',
   telephone: '+55-12-99649-8725',
   address: {
     '@type': 'PostalAddress',
@@ -122,14 +122,14 @@ export default async function HomePage() {
         <VideoSection videoUrl={videoUrl} />
         <HowItWorks />
         <CinematicHero 
-          brandName="Twix Eventos"
-          metricValue={455}
-          tagline1="Mais de 455 clientes"
-          tagline2="nos deram 5 estrelas."
+          brandName="NBP Psicanálise"
+          metricValue={1000}
+          tagline1="Mais de 1000 alunos"
+          tagline2="formados e satisfeitos."
           cardHeading="Excelência Comprovada"
-          cardDescription="A Twix Eventos é referência em diversão e segurança. Nossas avaliações no Google refletem o compromisso que temos com cada detalhe do seu evento."
-          ctaHeading="Sua festa merece o melhor."
-          ctaDescription="Garanta agora os melhores cursos com quem entende de diversão em São José dos Campos."
+          cardDescription="O NBP Psicanálise é referência em formação. Nossa metodologia reflete o compromisso com a ética e o estudo aprofundado da mente humana."
+          ctaHeading="Aprofunde seus conhecimentos."
+          ctaDescription="Inscreva-se agora nos melhores cursos de psicanálise e inicie sua jornada conosco."
         />
         <FAQAccordion />
 

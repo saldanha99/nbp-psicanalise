@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getConfig('sitemap_include_blog'),
   ])
 
-  const base = (siteUrl ?? 'https://twixeventos.com').replace(/\/$/, '')
+  const base = (siteUrl ?? 'https://nbpsicanalise.com.br').replace(/\/$/, '')
   const freq = (frequencia ?? 'weekly') as MetadataRoute.Sitemap[0]['changeFrequency']
   const prio = parseFloat(prioridade ?? '0.8')
   const agora = new Date()

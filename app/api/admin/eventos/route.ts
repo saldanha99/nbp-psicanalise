@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth/config'
 import { getAllEventos, createEvento } from '@/lib/db/queries/eventos'
-import { eventoSchema } from '@/lib/validations/toy'
+import { eventoSchema } from '@/lib/validations/course'
 
 export async function GET() {
   const session = await auth()
@@ -18,10 +18,10 @@ export async function POST(request: Request) {
     const body = await request.json()
     const data = eventoSchema.parse(body)
     const checklistPadrao = [
-      { id: '1', texto: 'Brinquedos carregados no veículo', concluido: false },
+      { id: '1', texto: 'Cursos carregados no veículo', concluido: false },
       { id: '2', texto: 'Ferramentas e extensões separadas', concluido: false },
       { id: '3', texto: 'Chegar 2h antes do evento', concluido: false },
-      { id: '4', texto: 'Montar e testar todos os brinquedos', concluido: false },
+      { id: '4', texto: 'Montar e testar todos os cursos', concluido: false },
       { id: '5', texto: 'Confirmar energia disponível (110v/220v)', concluido: false },
       { id: '6', texto: 'Registrar foto da montagem concluída', concluido: false },
     ]

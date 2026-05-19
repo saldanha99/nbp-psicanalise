@@ -5,10 +5,10 @@ import { useLenis } from 'lenis/react'
 import { Package } from 'lucide-react'
 
 interface CatalogHeaderProps {
-  totalToys: number
+  totalCourses: number
 }
 
-export function CatalogHeader({ totalToys }: CatalogHeaderProps) {
+export function CatalogHeader({ totalCourses }: CatalogHeaderProps) {
   const [scrollY, setScrollY] = useState(0)
   
   useLenis(({ scroll }) => {
@@ -58,7 +58,7 @@ export function CatalogHeader({ totalToys }: CatalogHeaderProps) {
         >
           CATÁLOGO DE <br/>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-500">
-            BRINQUEDOS
+            CURSOS
           </span>
         </h1>
 
@@ -69,7 +69,7 @@ export function CatalogHeader({ totalToys }: CatalogHeaderProps) {
             opacity: Math.max(0, 1 - scrollY / 300)
           }}
         >
-          {totalToys} opções incríveis prontas para transformar sua festa.
+          {totalCourses} opções incríveis prontas para transformar sua festa.
         </p>
       </div>
     </div>

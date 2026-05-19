@@ -6,14 +6,14 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Sobre Nós — Twix Eventos',
-  description: 'Conheça a Twix Eventos: empresa fundada em 2015, especializada em locação de brinquedos infláveis em São José dos Campos com +455 avaliações 5 estrelas.',
+  description: 'Conheça a Twix Eventos: empresa fundada em 2015, especializada em locação de cursos infláveis em São José dos Campos com +455 avaliações 5 estrelas.',
 }
 
 const diferenciais = [
   { icon: '⭐', titulo: '+455 Avaliações 5 Estrelas', desc: 'Somos a empresa mais bem avaliada do Vale do Paraíba no Google.' },
   { icon: '🎯', titulo: 'Desde 2015', desc: 'Mais de 10 anos de experiência em eventos corporativos, aniversários e festas escolares.' },
   { icon: '🔧', titulo: 'Montagem Profissional', desc: 'Chegamos 1 a 2 horas antes do evento para montar, testar e garantir tudo perfeito.' },
-  { icon: '🛡️', titulo: 'Revisados e Higienizados', desc: 'Todos os brinquedos passam por revisão e higienização completa antes de cada locação.' },
+  { icon: '🛡️', titulo: 'Revisados e Higienizados', desc: 'Todos os cursos passam por revisão e higienização completa antes de cada locação.' },
   { icon: '👷', titulo: 'Monitor de Segurança', desc: 'A locação inclui profissional treinado para supervisionar durante todo o evento.' },
   { icon: '📱', titulo: 'Atendimento 24h', desc: 'WhatsApp, telefone ou email — estamos sempre disponíveis para você.' },
 ]
@@ -31,7 +31,7 @@ export default function SobrePage() {
             </h1>
             <p className="text-brand-muted text-lg mt-6 max-w-2xl mx-auto leading-relaxed">
               Fundada em 2015 em São José dos Campos, somos especialistas em transformar festas e eventos
-              em momentos inesquecíveis com os melhores brinquedos infláveis e eletrônicos da região.
+              em momentos inesquecíveis com os melhores cursos infláveis e eletrônicos da região.
             </p>
           </div>
         </section>

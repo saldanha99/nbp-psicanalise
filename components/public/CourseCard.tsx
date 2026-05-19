@@ -7,8 +7,8 @@ import { cn } from '@/lib/utils'
 import { useCart } from '@/lib/store/cart'
 import { useEffect, useState } from 'react'
 
-interface ToyCardProps {
-  brinquedo: {
+interface CourseCardProps {
+  curso: {
     id: string
     nome: string
     slug: string
@@ -31,8 +31,8 @@ const CATEGORY_LABELS: Record<string, string> = {
   aquaticos: 'Aquático',
 }
 
-export function ToyCard({ brinquedo }: ToyCardProps) {
-  const { id, nome, slug, categoria, faixaEtaria, capacidade, fotos, fotoDestaque, destaque } = brinquedo
+export function CourseCard({ curso }: CourseCardProps) {
+  const { id, nome, slug, categoria, faixaEtaria, capacidade, fotos, fotoDestaque, destaque } = curso
   const { add, remove, has, open } = useCart()
   const [mounted, setMounted] = useState(false)
 
@@ -63,7 +63,7 @@ export function ToyCard({ brinquedo }: ToyCardProps) {
       )}
     >
       {/* Imagem */}
-      <Link href={`/brinquedos/${slug}`} className="relative aspect-[4/3] bg-brand-surface-2 overflow-hidden block">
+      <Link href={`/cursos/${slug}`} className="relative aspect-[4/3] bg-brand-surface-2 overflow-hidden block">
         {imageSrc ? (
           <Image
             src={imageSrc}
@@ -103,7 +103,7 @@ export function ToyCard({ brinquedo }: ToyCardProps) {
 
       {/* Conteúdo */}
       <div className="flex flex-col gap-3 p-4 flex-1">
-        <Link href={`/brinquedos/${slug}`}>
+        <Link href={`/cursos/${slug}`}>
           <h3 className="text-brand-text font-bold text-base leading-snug group-hover:text-brand-accent transition-colors">
             {nome}
           </h3>
@@ -122,7 +122,7 @@ export function ToyCard({ brinquedo }: ToyCardProps) {
 
         <div className="mt-auto flex gap-2">
           <Link
-            href={`/brinquedos/${slug}`}
+            href={`/cursos/${slug}`}
             className="flex-1 inline-flex items-center justify-center border border-brand-border text-brand-text hover:border-brand-accent hover:text-brand-accent font-semibold text-sm px-3 py-2.5 rounded-lg transition-colors"
           >
             Ver detalhes

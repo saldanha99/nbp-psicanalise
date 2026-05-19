@@ -49,7 +49,7 @@ interface Metrics {
   receitaMes: number
   taxaConversao: number
   leadsPerdidosMes: number
-  topBrinquedo: { nome: string; total: number } | null
+  topCurso: { nome: string; total: number } | null
   topMonitor:   { nome: string; total: number } | null
   proximosEventos: {
     id: string; nomeCliente: string; dataEvento: string
@@ -57,7 +57,7 @@ interface Metrics {
   }[]
   leadsPorStatus:   { status: string; total: number }[]
   origemLeads:      { origem: string; total: number }[]
-  topBrinquedos:    { nome: string; total: number }[]
+  topCursos:    { nome: string; total: number }[]
 }
 interface ChartData { mes: number; receita: number; festas: number }
 interface LeadAlerta { id: string; nome: string; status: string; ultimaInteracao: Date }
@@ -353,7 +353,7 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
   const receitaMesAnt = receitaAnual.find(d => d.mes === mesAtual - 1)?.receita ?? 0
   const trendReceita  = metrics.receitaMes > receitaMesAnt ? 'up' : metrics.receitaMes < receitaMesAnt ? 'down' : 'neutral'
   const totalLeads    = metrics.leadsPorStatus.reduce((s, d) => s + d.total, 0)
-  const maxBrinquedo  = Math.max(...(metrics.topBrinquedos.map(b => b.total)), 1)
+  const maxCurso  = Math.max(...(metrics.topCursos.map(b => b.total)), 1)
 
   const eventoStatusChip = (status: string) => {
     const cfg = STATUS_CFG[status]
@@ -460,7 +460,7 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
         </div>
       </FadeIn>
 
-      {/* ── Funil + Top Brinquedos + Origem ── */}
+      {/* ── Funil + Top Cursos + Origem ── */}
       <FadeIn delay={180}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
@@ -470,15 +470,15 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
             <LeadFunnel data={metrics.leadsPorStatus} />
           </Card>
 
-          {/* Top brinquedos */}
+          {/* Top cursos */}
           <Card>
-            <CardHeader title="Top Brinquedos" sub="Mais alugados no período" />
-            {metrics.topBrinquedos.length === 0 ? (
+            <CardHeader title="Top Cursos" sub="Mais alugados no período" />
+            {metrics.topCursos.length === 0 ? (
               <p className="text-brand-muted text-sm text-center py-6">Sem dados ainda</p>
             ) : (
               <div className="space-y-2.5">
-                {metrics.topBrinquedos.map((b, i) => {
-                  const pct = Math.round((b.total / maxBrinquedo) * 100)
+                {metrics.topCursos.map((b, i) => {
+                  const pct = Math.round((b.total / maxCurso) * 100)
                   return (
                     <div key={b.nome}>
                       <div className="flex items-center justify-between mb-1">
@@ -512,14 +512,14 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
             <CardHeader title="Origem dos Leads" sub="Últimos 90 dias" />
             <OrigemDonut data={metrics.origemLeads} />
             <div className="mt-4 pt-4 border-t border-brand-border grid grid-cols-2 gap-2">
-              {metrics.topBrinquedo && (
+              {metrics.topCurso && (
                 <div className="bg-brand-surface-2 rounded-xl p-3 border border-brand-border">
                   <div className="flex items-center gap-1.5 mb-1">
                     <Trophy className="size-3 text-yellow-400" />
                     <span className="text-brand-muted text-[10px] uppercase tracking-wider">Top Brinq.</span>
                   </div>
-                  <p className="text-brand-text text-xs font-bold leading-tight line-clamp-2">{metrics.topBrinquedo.nome}</p>
-                  <p className="text-brand-muted text-[10px] mt-0.5">{metrics.topBrinquedo.total} eventos</p>
+                  <p className="text-brand-text text-xs font-bold leading-tight line-clamp-2">{metrics.topCurso.nome}</p>
+                  <p className="text-brand-muted text-[10px] mt-0.5">{metrics.topCurso.total} eventos</p>
                 </div>
               )}
               {metrics.topMonitor && (

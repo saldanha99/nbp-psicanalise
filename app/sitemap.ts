@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { db } from '@/lib/db'
-import { brinquedos } from '@/lib/db/schema'
+import { cursos } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { getConfig } from '@/lib/db/queries/configuracoes'
 
@@ -23,23 +23,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // ── Páginas estáticas ──────────────────────────────────────────
   const estaticas: MetadataRoute.Sitemap = [
     { url: base,               lastModified: agora, changeFrequency: 'daily',   priority: 1.0  },
-    { url: `${base}/brinquedos`, lastModified: agora, changeFrequency: 'daily', priority: 0.95 },
+    { url: `${base}/cursos`, lastModified: agora, changeFrequency: 'daily', priority: 0.95 },
     { url: `${base}/sobre`,    lastModified: agora, changeFrequency: 'monthly', priority: 0.6  },
     { url: `${base}/contato`,    lastModified: agora, changeFrequency: 'monthly', priority: 0.7  },
     { url: `${base}/bio`,        lastModified: agora, changeFrequency: 'weekly',  priority: 0.65 },
     { url: `${base}/minha-area`, lastModified: agora, changeFrequency: 'monthly', priority: 0.5  },
   ]
 
-  // ── Brinquedos (páginas individuais) ──────────────────────────
-  let brinquedosUrls: MetadataRoute.Sitemap = []
+  // ── Cursos (páginas individuais) ──────────────────────────
+  let cursosUrls: MetadataRoute.Sitemap = []
   try {
     const lista = await db
-      .select({ slug: brinquedos.slug, updatedAt: brinquedos.updatedAt })
-      .from(brinquedos)
-      .where(eq(brinquedos.ativo, true))
+      .select({ slug: cursos.slug, updatedAt: cursos.updatedAt })
+      .from(cursos)
+      .where(eq(cursos.ativo, true))
 
-    brinquedosUrls = lista.map(b => ({
-      url: `${base}/brinquedos/${b.slug}`,
+    cursosUrls = lista.map(b => ({
+      url: `${base}/cursos/${b.slug}`,
       lastModified: b.updatedAt,
       changeFrequency: freq,
       priority: prio,
@@ -57,5 +57,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // blogUrls = posts.map(p => ({ url: `${base}/blog/${p.slug}`, ... }))
   }
 
-  return [...estaticas, ...brinquedosUrls, ...blogUrls]
+  return [...estaticas, ...cursosUrls, ...blogUrls]
 }

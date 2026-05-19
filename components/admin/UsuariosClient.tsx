@@ -27,7 +27,7 @@ const ROLES: Record<Role, { label: string; cor: string; icon: React.ReactNode }>
 const PERMISSOES_LABELS: Record<string, string> = {
   dashboard: 'Dashboard',
   leads: 'Leads / CRM',
-  brinquedos: 'Brinquedos',
+  cursos: 'Cursos',
   eventos: 'Eventos',
   monitores: 'Monitores',
   financeiro: 'Financeiro',
@@ -36,8 +36,8 @@ const PERMISSOES_LABELS: Record<string, string> = {
 }
 
 const ROLE_PERMISSOES: Record<Role, string[]> = {
-  admin: ['dashboard', 'leads', 'brinquedos', 'eventos', 'monitores', 'financeiro', 'usuarios', 'configuracoes'],
-  operador: ['dashboard', 'leads', 'brinquedos', 'eventos', 'monitores'],
+  admin: ['dashboard', 'leads', 'cursos', 'eventos', 'monitores', 'financeiro', 'usuarios', 'configuracoes'],
+  operador: ['dashboard', 'leads', 'cursos', 'eventos', 'monitores'],
   financeiro: ['dashboard', 'financeiro', 'eventos'],
   viewer: ['dashboard'],
 }

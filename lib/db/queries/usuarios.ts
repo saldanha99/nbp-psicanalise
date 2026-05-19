@@ -8,12 +8,12 @@ export const ROLES: Record<UsuarioRole, { label: string; cor: string; permissoes
   admin: {
     label: 'Administrador',
     cor: '#EF4444',
-    permissoes: ['dashboard', 'leads', 'brinquedos', 'eventos', 'monitores', 'financeiro', 'usuarios', 'configuracoes'],
+    permissoes: ['dashboard', 'leads', 'cursos', 'eventos', 'monitores', 'financeiro', 'usuarios', 'configuracoes'],
   },
   operador: {
     label: 'Operador',
     cor: '#3B82F6',
-    permissoes: ['dashboard', 'leads', 'brinquedos', 'eventos', 'monitores'],
+    permissoes: ['dashboard', 'leads', 'cursos', 'eventos', 'monitores'],
   },
   financeiro: {
     label: 'Financeiro',

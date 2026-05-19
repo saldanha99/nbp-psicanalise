@@ -18,17 +18,17 @@ const faqs = [
   {
     question: 'Como funciona o pagamento e a entrada?',
     answer:
-      'Confirmamos a reserva com apenas 10% de entrada via PIX ou transferência. O restante é pago no dia do evento, antes da montagem dos brinquedos.',
+      'Confirmamos a reserva com apenas 10% de entrada via PIX ou transferência. O restante é pago no dia do evento, antes da montagem dos cursos.',
   },
   {
-    question: 'Os brinquedos são seguros para crianças?',
+    question: 'Os cursos são seguros para crianças?',
     answer:
-      'Sim! Todos os nossos brinquedos passam por inspeção e manutenção regulares. A equipe chega 2 horas antes para montar tudo com segurança e sempre acompanha o evento quando necessário.',
+      'Sim! Todos os nossos cursos passam por inspeção e manutenção regulares. A equipe chega 2 horas antes para montar tudo com segurança e sempre acompanha o evento quando necessário.',
   },
   {
     question: 'O que está incluído no aluguel?',
     answer:
-      'O aluguel inclui entrega, montagem, desmontagem e retirada dos brinquedos. Também fornecemos os equipamentos de proteção quando aplicável.',
+      'O aluguel inclui entrega, montagem, desmontagem e retirada dos cursos. Também fornecemos os equipamentos de proteção quando aplicável.',
   },
   {
     question: 'E se chover no dia do evento?',
@@ -36,9 +36,9 @@ const faqs = [
       'Em caso de chuva, trabalhamos junto com o cliente para reagendar o evento para outra data disponível sem custo adicional. A sua satisfação é nossa prioridade.',
   },
   {
-    question: 'Posso alugar mais de um brinquedo ao mesmo tempo?',
+    question: 'Posso alugar mais de um curso ao mesmo tempo?',
     answer:
-      'Claro! Você pode combinar quantos brinquedos quiser, sujeito à disponibilidade. Inclusive, alugar mais de um item pode ter condições especiais de preço.',
+      'Claro! Você pode combinar quantos cursos quiser, sujeito à disponibilidade. Inclusive, alugar mais de um item pode ter condições especiais de preço.',
   },
   {
     question: 'Quanto tempo antes vocês chegam para montar?',

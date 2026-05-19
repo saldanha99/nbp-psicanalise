@@ -217,15 +217,15 @@ export function LeadModal({ lead, onClose, onUpdate }: Props) {
               </InfoRow>
             )}
 
-            {lead.brinquedosInteresse && lead.brinquedosInteresse.length > 0 && (
+            {lead.cursosInteresse && lead.cursosInteresse.length > 0 && (
               <div className="flex gap-2 items-start">
                 <span className="text-zinc-500 mt-0.5">
                   <Package size={14} />
                 </span>
                 <div className="flex flex-col gap-1">
-                  <span className="text-xs text-zinc-500">Brinquedos</span>
+                  <span className="text-xs text-zinc-500">Cursos</span>
                   <div className="flex flex-wrap gap-1">
-                    {lead.brinquedosInteresse.map((b) => (
+                    {lead.cursosInteresse.map((b) => (
                       <span
                         key={b}
                         className="px-2 py-0.5 rounded-md bg-zinc-800 text-zinc-300 text-xs"

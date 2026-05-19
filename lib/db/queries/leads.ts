@@ -64,13 +64,13 @@ export const getLeadsCrmStats = async () => {
 
   const bCount: Record<string, number> = {}
   for (const lead of all) {
-    for (const b of lead.brinquedosInteresse ?? []) {
+    for (const b of lead.cursosInteresse ?? []) {
       bCount[b] = (bCount[b] ?? 0) + 1
     }
   }
-  const topBrinquedo = Object.entries(bCount).sort(([, a], [, b]) => b - a)[0]?.[0] ?? null
+  const topCurso = Object.entries(bCount).sort(([, a], [, b]) => b - a)[0]?.[0] ?? null
   const origens = [...new Set(all.map(l => l.origem).filter(Boolean))]
-  const todosBrinquedos = [...new Set(all.flatMap(l => l.brinquedosInteresse ?? []))]
+  const todosCursos = [...new Set(all.flatMap(l => l.cursosInteresse ?? []))]
 
-  return { total, convertidos, perdidos, taxaConversao, valorConvertido, valorPerdido, topBrinquedo, origens, todosBrinquedos }
+  return { total, convertidos, perdidos, taxaConversao, valorConvertido, valorPerdido, topCurso, origens, todosCursos }
 }

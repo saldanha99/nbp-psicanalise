@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import type { Metadata } from 'next'
-import { getKpisMes, getReceitaPorMes, getRankingBrinquedosMes, getOrigemClientesMes, getEventosMes } from '@/lib/db/queries/financeiro'
+import { getKpisMes, getReceitaPorMes, getRankingCursosMes, getOrigemClientesMes, getEventosMes } from '@/lib/db/queries/financeiro'
 import { getLancamentosMes } from '@/lib/db/queries/lancamentos'
 import { FinanceiroClient } from '@/components/admin/FinanceiroClient'
 
@@ -15,7 +15,7 @@ async function FinanceiroContent() {
   const [kpis, eventos, ranking, origens, receitaAnual, lancamentos] = await Promise.all([
     getKpisMes(mes, ano),
     getEventosMes(mes, ano),
-    getRankingBrinquedosMes(mes, ano),
+    getRankingCursosMes(mes, ano),
     getOrigemClientesMes(mes, ano),
     getReceitaPorMes(ano),
     getLancamentosMes(mes, ano),
@@ -27,7 +27,7 @@ async function FinanceiroContent() {
       anoInicial={ano}
       kpisInicial={kpis}
       eventosInicial={eventos as Parameters<typeof FinanceiroClient>[0]['eventosInicial']}
-      rankingBrinquedosInicial={ranking}
+      rankingCursosInicial={ranking}
       origensInicial={origens}
       receitaAnual={receitaAnual}
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

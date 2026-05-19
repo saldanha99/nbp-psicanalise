@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getKpisMes, getRankingBrinquedosMes, getOrigemClientesMes, getEventosMes } from '@/lib/db/queries/financeiro'
+import { getKpisMes, getRankingCursosMes, getOrigemClientesMes, getEventosMes } from '@/lib/db/queries/financeiro'
 
 export async function GET(req: NextRequest) {
   const mes = parseInt(req.nextUrl.searchParams.get('mes') ?? '1')
@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   const [kpis, eventos, ranking, origens] = await Promise.all([
     getKpisMes(mes, ano),
     getEventosMes(mes, ano),
-    getRankingBrinquedosMes(mes, ano),
+    getRankingCursosMes(mes, ano),
     getOrigemClientesMes(mes, ano),
   ])
 

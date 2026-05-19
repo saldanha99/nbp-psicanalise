@@ -8,7 +8,7 @@ export const leadSchema = z.object({
   horarioEvento:       z.string().optional(),
   enderecoEvento:      z.string().optional(),
   regiaoEvento:        z.string().optional(),
-  brinquedosInteresse: z.array(z.string()).default([]),
+  cursosInteresse: z.array(z.string()).default([]),
   mensagem:            z.string().optional(),
   origem:              z.string().default('site'),
 })
@@ -23,7 +23,7 @@ export const updateLeadSchema = z.object({
   prioridade:    z.enum(['normal', 'alta', 'urgente']).optional(),
   dataEvento:    z.string().optional(),
   enderecoEvento: z.string().optional(),
-  brinquedosInteresse: z.array(z.string()).optional(),
+  cursosInteresse: z.array(z.string()).optional(),
 })
 
 export type UpdateLeadInput = z.infer<typeof updateLeadSchema>

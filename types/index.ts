@@ -1,4 +1,4 @@
-export type Brinquedo = {
+export type Curso = {
   id: string
   nome: string
   slug: string
@@ -26,7 +26,7 @@ export type Lead = {
   dataEvento: string | null
   horarioEvento: string | null
   enderecoEvento: string | null
-  brinquedosInteresse: string[] | null
+  cursosInteresse: string[] | null
   mensagem: string | null
   origem: string
   status: string
@@ -84,7 +84,7 @@ export type Evento = {
   horarioInicio: string
   horarioFim: string | null
   enderecoCompleto: string
-  brinquedosContratados: string[] | null
+  cursosContratados: string[] | null
   valorTotal: string | null
   valorSinalRecebido: string | null
   checklistMontagem: ChecklistItem[]

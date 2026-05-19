@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Contato — Twix Eventos',
-  description: 'Entre em contato com a Twix Eventos para reservar brinquedos infláveis em São José dos Campos. WhatsApp, email ou formulário.',
+  description: 'Entre em contato com a Twix Eventos para reservar cursos infláveis em São José dos Campos. WhatsApp, email ou formulário.',
 }
 
 export default function ContatoPage() {
@@ -42,7 +42,7 @@ export default function ContatoPage() {
               <div className="bg-brand-surface border border-brand-border rounded-xl p-6">
                 <h2 className="text-brand-text font-bold mb-3">Como Reservar</h2>
                 <ol className="space-y-2 text-brand-muted text-sm">
-                  <li>1. Escolha o(s) brinquedo(s) do catálogo</li>
+                  <li>1. Escolha o(s) curso(s) do catálogo</li>
                   <li>2. Entre em contato via WhatsApp</li>
                   <li>3. Confirme a data e endereço</li>
                   <li>4. Pague apenas 10% de entrada para garantir</li>

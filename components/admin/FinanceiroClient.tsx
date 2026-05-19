@@ -30,9 +30,9 @@ const STATUS_EVT: Record<string, string> = {
 interface Kpis {
   totalFaturado: number
   totalFestas: number
-  brinquedosAlugados: number
+  cursosAlugados: number
   ticketMedioFestas: number
-  ticketMedioBrinquedos: number
+  ticketMedioCursos: number
 }
 
 interface Evento {
@@ -50,7 +50,7 @@ interface Evento {
   statusPagamento: string
 }
 
-interface Brinquedo {
+interface Curso {
   nome: string
   alugados: number
   receita: number
@@ -81,7 +81,7 @@ interface Props {
   mesInicial: number
   kpisInicial: Kpis
   eventosInicial: Evento[]
-  rankingBrinquedosInicial: Brinquedo[]
+  rankingCursosInicial: Curso[]
   origensInicial: Origem[]
   receitaAnual: ChartAnual[]
   lancamentosInicial: Lancamento[]
@@ -125,14 +125,14 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
 
 export function FinanceiroClient({
   anoInicial, mesInicial,
-  kpisInicial, eventosInicial, rankingBrinquedosInicial, origensInicial,
+  kpisInicial, eventosInicial, rankingCursosInicial, origensInicial,
   receitaAnual, lancamentosInicial,
 }: Props) {
   const [mes, setMes] = useState(mesInicial)
   const [ano, setAno] = useState(anoInicial)
   const [kpis, setKpis] = useState(kpisInicial)
   const [eventos, setEventos] = useState(eventosInicial)
-  const [ranking, setRanking] = useState(rankingBrinquedosInicial)
+  const [ranking, setRanking] = useState(rankingCursosInicial)
   const [origens, setOrigens] = useState(origensInicial)
   const [lancamentos, setLancamentos] = useState(lancamentosInicial)
   const [loading, setLoading] = useState(false)
@@ -248,9 +248,9 @@ export function FinanceiroClient({
       <div className={cn('grid grid-cols-2 lg:grid-cols-5 gap-3 transition-opacity duration-200', loading && 'opacity-50')}>
         <KpiCard titulo="Total Faturado" valor={kpis.totalFaturado} icone={<DollarSign className="size-4" />} cor="#34D399" prefix="R$ " decimals={0} />
         <KpiCard titulo="Total de Festas" valor={kpis.totalFestas} icone={<CalendarDays className="size-4" />} cor="#818CF8" />
-        <KpiCard titulo="Brinquedos Alugados" valor={kpis.brinquedosAlugados} icone={<Package className="size-4" />} cor="#60A5FA" />
+        <KpiCard titulo="Cursos Alugados" valor={kpis.cursosAlugados} icone={<Package className="size-4" />} cor="#60A5FA" />
         <KpiCard titulo="Ticket / Festa" valor={kpis.ticketMedioFestas} icone={<TrendingUp className="size-4" />} cor="#F59E0B" prefix="R$ " decimals={0} />
-        <KpiCard titulo="Ticket / Brinquedo" valor={kpis.ticketMedioBrinquedos} icone={<TrendingUp className="size-4" />} cor="#EC4899" prefix="R$ " decimals={0} />
+        <KpiCard titulo="Ticket / Curso" valor={kpis.ticketMedioCursos} icone={<TrendingUp className="size-4" />} cor="#EC4899" prefix="R$ " decimals={0} />
       </div>
 
       {/* Charts row */}
@@ -307,9 +307,9 @@ export function FinanceiroClient({
 
       {/* Ranking + Events row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Brinquedo ranking */}
+        {/* Curso ranking */}
         <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
-          <h2 className="text-brand-text font-semibold mb-1">Ranking de Brinquedos</h2>
+          <h2 className="text-brand-text font-semibold mb-1">Ranking de Cursos</h2>
           <p className="text-brand-muted text-xs mb-4">{MESES[mes - 1]} {ano}</p>
           {ranking.length === 0 ? (
             <p className="text-brand-muted text-sm text-center py-8">Sem dados</p>

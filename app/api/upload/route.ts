@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!
     const apiKey = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!
     const apiSecret = process.env.CLOUDINARY_API_SECRET!
-    const folder = 'twix-eventos/brinquedos'
+    const folder = 'twix-eventos/cursos'
     const timestamp = Math.round(Date.now() / 1000).toString()
     const signature = crypto
       .createHash('sha256')
@@ -85,10 +85,10 @@ export async function POST(req: NextRequest) {
   if (process.env.NODE_ENV !== 'production') {
     const { writeFile, mkdir } = await import('fs/promises')
     const { join } = await import('path')
-    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'brinquedos')
+    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'cursos')
     await mkdir(uploadsDir, { recursive: true })
     await writeFile(join(uploadsDir, filename), webpBuffer)
-    return NextResponse.json({ url: `/uploads/brinquedos/${filename}`, originalSize: raw.length, finalSize: webpBuffer.length })
+    return NextResponse.json({ url: `/uploads/cursos/${filename}`, originalSize: raw.length, finalSize: webpBuffer.length })
   }
 
   /* ── Nenhum storage configurado em produção ── */

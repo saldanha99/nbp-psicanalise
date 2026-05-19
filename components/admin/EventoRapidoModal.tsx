@@ -64,7 +64,7 @@ export function EventoRapidoModal({ lead, onSuccess, onCancel }: Props) {
       const payload = {
         ...data,
         leadId: lead.id,
-        brinquedosContratados: lead.brinquedosInteresse ?? [],
+        cursosContratados: lead.cursosInteresse ?? [],
         valorTotal:   data.valorTotal?.trim() || null,
         valorEntrada: data.valorEntrada?.trim() || null,
         horarioFim:   data.horarioFim?.trim() || null,
@@ -124,11 +124,11 @@ export function EventoRapidoModal({ lead, onSuccess, onCancel }: Props) {
 
         {/* Body */}
         <form onSubmit={handleSubmit(onSubmit)} className="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
-          {/* Brinquedos do lead */}
-          {(lead.brinquedosInteresse?.length ?? 0) > 0 && (
+          {/* Cursos do lead */}
+          {(lead.cursosInteresse?.length ?? 0) > 0 && (
             <div className="rounded-xl border p-3 flex flex-wrap gap-1.5" style={{ borderColor: 'var(--brand-border)', backgroundColor: 'var(--brand-surface-2)' }}>
-              <span className="text-xs text-brand-muted w-full mb-1">Brinquedos do interesse:</span>
-              {lead.brinquedosInteresse!.map(b => (
+              <span className="text-xs text-brand-muted w-full mb-1">Cursos do interesse:</span>
+              {lead.cursosInteresse!.map(b => (
                 <span key={b} className="px-2 py-0.5 rounded-md text-xs font-medium bg-brand-accent/15 text-brand-accent border border-brand-accent/25">
                   {b}
                 </span>

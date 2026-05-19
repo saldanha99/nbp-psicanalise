@@ -74,10 +74,10 @@ export async function getReservasCliente(clienteId: string) {
       ) AS cashback_ganho,
       COALESCE(
         (SELECT string_agg(b.nome, ', ')
-         FROM brinquedos b
-         WHERE b.id = ANY(e.brinquedos_contratados)),
+         FROM cursos b
+         WHERE b.id = ANY(e.cursos_contratados)),
         ''
-      ) AS brinquedos_nomes
+      ) AS cursos_nomes
     FROM eventos e
     WHERE e.telefone_cliente = ${cliente.telefone}
        OR e.telefone_cliente ILIKE ${cliente.telefone.replace(/\D/g, '')}
@@ -97,7 +97,7 @@ export async function getReservasCliente(clienteId: string) {
     status_pagamento: string
     observacoes: string | null
     cashback_ganho: number
-    brinquedos_nomes: string
+    cursos_nomes: string
   }[]
 }
 

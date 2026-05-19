@@ -8,10 +8,10 @@ import { toast } from 'sonner'
 import { slugify, CATEGORIAS } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { ImageUpload } from './ImageUpload'
-import type { Brinquedo } from '@/types'
+import type { Curso } from '@/types'
 
 interface Props {
-  brinquedo?: Brinquedo
+  curso?: Curso
   onSuccess?: () => void
 }
 
@@ -35,8 +35,8 @@ type FormData = z.infer<typeof schema>
 
 const CATEGORIAS_FORM = CATEGORIAS.filter((c) => c.value !== 'todos')
 
-export function ToyForm({ brinquedo, onSuccess }: Props) {
-  const isEditing = !!brinquedo
+export function CourseForm({ curso, onSuccess }: Props) {
+  const isEditing = !!curso
 
   const {
     register,
@@ -48,19 +48,19 @@ export function ToyForm({ brinquedo, onSuccess }: Props) {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      nome: brinquedo?.nome ?? '',
-      slug: brinquedo?.slug ?? '',
-      categoria: brinquedo?.categoria ?? '',
-      faixaEtaria: brinquedo?.faixaEtaria ?? '',
-      capacidade: brinquedo?.capacidade ?? '',
-      dimensoes: brinquedo?.dimensoes ?? '',
-      energia: brinquedo?.energia ?? '',
-      descricao: brinquedo?.descricao ?? '',
-      precoReferencia: brinquedo?.precoReferencia ?? '',
-      ativo: brinquedo?.ativo ?? true,
-      destaque: brinquedo?.destaque ?? false,
-      fotos: brinquedo?.fotos ?? [],
-      fotoDestaque: brinquedo?.fotoDestaque ?? null,
+      nome: curso?.nome ?? '',
+      slug: curso?.slug ?? '',
+      categoria: curso?.categoria ?? '',
+      faixaEtaria: curso?.faixaEtaria ?? '',
+      capacidade: curso?.capacidade ?? '',
+      dimensoes: curso?.dimensoes ?? '',
+      energia: curso?.energia ?? '',
+      descricao: curso?.descricao ?? '',
+      precoReferencia: curso?.precoReferencia ?? '',
+      ativo: curso?.ativo ?? true,
+      destaque: curso?.destaque ?? false,
+      fotos: curso?.fotos ?? [],
+      fotoDestaque: curso?.fotoDestaque ?? null,
     },
   })
 
@@ -74,8 +74,8 @@ export function ToyForm({ brinquedo, onSuccess }: Props) {
 
   const onSubmit = async (data: FormData) => {
     const url = isEditing
-      ? `/api/admin/brinquedos/${brinquedo.id}`
-      : '/api/admin/brinquedos'
+      ? `/api/admin/cursos/${curso.id}`
+      : '/api/admin/cursos'
     const method = isEditing ? 'PATCH' : 'POST'
 
     // Limpa campos opcionais para evitar erro no banco
@@ -98,10 +98,10 @@ export function ToyForm({ brinquedo, onSuccess }: Props) {
         throw new Error(body?.message ?? 'Erro ao salvar')
       }
 
-      toast.success(isEditing ? 'Brinquedo atualizado!' : 'Brinquedo criado!')
+      toast.success(isEditing ? 'Curso atualizado!' : 'Curso criado!')
       onSuccess?.()
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Erro ao salvar brinquedo')
+      toast.error(err instanceof Error ? err.message : 'Erro ao salvar curso')
     }
   }
 
@@ -211,7 +211,7 @@ export function ToyForm({ brinquedo, onSuccess }: Props) {
         <textarea
           {...register('descricao')}
           rows={4}
-          placeholder="Descreva o brinquedo, suas características e diferenciais..."
+          placeholder="Descreva o curso, suas características e diferenciais..."
           className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500 resize-none"
         />
       </div>
@@ -268,7 +268,7 @@ export function ToyForm({ brinquedo, onSuccess }: Props) {
             ? 'Salvando...'
             : isEditing
               ? 'Salvar alterações'
-              : 'Criar brinquedo'}
+              : 'Criar curso'}
         </Button>
       </div>
     </form>

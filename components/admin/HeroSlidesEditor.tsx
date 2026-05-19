@@ -30,12 +30,12 @@ function newSlide(): HeroSlide {
     overlay: 40,
     titulo: 'DIVERSÃO',
     tituloDestaque: 'INESQUECÍVEL',
-    subtitulo: 'Transforme seu evento com a melhor seleção de brinquedos infláveis e eletrônicos.',
-    badge: 'Locação de Brinquedos em SJC',
+    subtitulo: 'Transforme seu evento com a melhor seleção de cursos infláveis e eletrônicos.',
+    badge: 'Locação de Cursos em SJC',
     ctaTexto: 'Reservar Agora',
     ctaLink: '',
     ctaTexto2: 'Ver Catálogo',
-    ctaLink2: '/brinquedos',
+    ctaLink2: '/cursos',
     ativo: true,
   }
 }
@@ -326,7 +326,7 @@ export function HeroSlidesEditor({ initialSlidesJson, onChange }: Props) {
 
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs text-brand-muted">Badge / etiqueta (opcional)</label>
-                    <input type="text" value={slide.badge} onChange={e => update(slide.id, { badge: e.target.value })} placeholder="Locação de Brinquedos em SJC" className={inputCls} />
+                    <input type="text" value={slide.badge} onChange={e => update(slide.id, { badge: e.target.value })} placeholder="Locação de Cursos em SJC" className={inputCls} />
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
@@ -366,7 +366,7 @@ export function HeroSlidesEditor({ initialSlidesJson, onChange }: Props) {
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-xs text-brand-muted">Botão 2 — link</label>
-                      <input type="text" value={slide.ctaLink2} onChange={e => update(slide.id, { ctaLink2: e.target.value })} placeholder="/brinquedos" className={inputCls} />
+                      <input type="text" value={slide.ctaLink2} onChange={e => update(slide.id, { ctaLink2: e.target.value })} placeholder="/cursos" className={inputCls} />
                     </div>
                   </div>
                 </div>

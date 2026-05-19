@@ -13,7 +13,7 @@ const NAV_ITEMS = [
   { href: '/admin',               label: 'Dashboard',        icon: LayoutDashboard, exact: true },
   { href: '/admin/leads',         label: 'Leads / CRM',      icon: Users },
   { href: '/admin/clientes',      label: 'Clientes',         icon: Contact },
-  { href: '/admin/brinquedos',    label: 'Brinquedos',       icon: Package },
+  { href: '/admin/cursos',    label: 'Cursos',       icon: Package },
   { href: '/admin/eventos',       label: 'Eventos',          icon: Calendar },
   { href: '/admin/monitores',     label: 'Monitores',        icon: UserCheck },
   { href: '/admin/financeiro',    label: 'Financeiro',       icon: DollarSign },

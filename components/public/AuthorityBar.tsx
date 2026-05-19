@@ -1,7 +1,7 @@
 export function AuthorityBar() {
   const stats = [
     { value: '+455', label: 'Avaliações Google', suffix: '⭐' },
-    { value: '+24',  label: 'Brinquedos Disponíveis', suffix: '' },
+    { value: '+24',  label: 'Cursos Disponíveis', suffix: '' },
     { value: 'Desde 2015', label: 'Anos de Experiência', suffix: '' },
     { value: 'SJC',  label: 'e Vale do Paraíba', suffix: '' },
   ]

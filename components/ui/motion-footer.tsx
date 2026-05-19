@@ -243,7 +243,7 @@ export function TwixFooter() {
                 </MagneticButton>
                 <MagneticButton
                   as={Link}
-                  href="/brinquedos"
+                  href="/cursos"
                   className="twix-footer-glass-pill px-10 py-5 rounded-full text-foreground font-bold text-sm md:text-base flex items-center gap-3 group"
                 >
                   <BookOpen className="size-5 text-muted-foreground group-hover:text-foreground transition-colors" />
@@ -254,7 +254,7 @@ export function TwixFooter() {
               {/* Links rápidos */}
               <div className="flex flex-wrap justify-center gap-3 md:gap-4 w-full mt-1">
                 {[
-                  { href: '/brinquedos', label: 'Brinquedos' },
+                  { href: '/cursos', label: 'Cursos' },
                   { href: '/sobre', label: 'Sobre nós' },
                   { href: '/#contato', label: 'Contato' },
                 ].map(({ href, label }) => (

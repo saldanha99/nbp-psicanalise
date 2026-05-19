@@ -18,7 +18,7 @@ interface Reserva {
   horario_inicio: string; horario_fim: string | null
   endereco_completo: string; valor_total: string | null
   status: string; status_pagamento: string
-  cashback_ganho: number; brinquedos_nomes: string
+  cashback_ganho: number; cursos_nomes: string
 }
 interface CashbackItem {
   id: string; tipo: string; valor: number
@@ -165,8 +165,8 @@ function ReservaCard({ reserva, delay = 0 }: { reserva: Reserva; delay?: number 
             {' · '}{reserva.endereco_completo.slice(0, 45)}{reserva.endereco_completo.length > 45 ? '…' : ''}
           </p>
 
-          {reserva.brinquedos_nomes && (
-            <p className="text-white/30 text-xs mt-1 line-clamp-1">🎪 {reserva.brinquedos_nomes}</p>
+          {reserva.cursos_nomes && (
+            <p className="text-white/30 text-xs mt-1 line-clamp-1">🎪 {reserva.cursos_nomes}</p>
           )}
 
           <div className="flex items-center gap-3 mt-2.5 flex-wrap">
@@ -404,9 +404,9 @@ export function AreaClienteDashboard({ cliente, reservas, historicoCashback, his
                 </div>
                 <p className="text-white font-semibold">Nenhuma reserva ainda</p>
                 <p className="text-white/40 text-sm mt-1">Faça sua primeira reserva e ganhe cashback!</p>
-                <Link href="/brinquedos"
+                <Link href="/cursos"
                   className="inline-flex items-center gap-2 mt-5 bg-brand-accent text-white font-bold px-6 py-3 rounded-2xl hover:bg-brand-accent-hover transition-colors">
-                  Ver brinquedos <ChevronRight className="size-4" />
+                  Ver cursos <ChevronRight className="size-4" />
                 </Link>
               </div>
             )}

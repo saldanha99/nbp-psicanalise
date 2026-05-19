@@ -100,7 +100,7 @@ export function ReservationDrawer() {
           dataEvento: form.dataEvento || undefined,
           regiaoEvento: form.regiaoEvento || undefined,
           mensagem: form.mensagem || undefined,
-          brinquedosInteresse: items.map(i => i.nome),
+          cursosInteresse: items.map(i => i.nome),
           origem: 'carrinho',
         }),
       })
@@ -165,7 +165,7 @@ export function ReservationDrawer() {
               {items.length === 0 ? (
                 <div className="text-center py-12 text-brand-muted">
                   <ShoppingCartEmpty />
-                  <p className="mt-3 text-sm">Nenhum brinquedo no orçamento</p>
+                  <p className="mt-3 text-sm">Nenhum curso no orçamento</p>
                   <button onClick={close} className="mt-4 text-brand-accent text-sm underline">
                     Ver catálogo
                   </button>
@@ -271,9 +271,9 @@ export function ReservationDrawer() {
                 />
               </div>
 
-              {/* Brinquedos resumo */}
+              {/* Cursos resumo */}
               <div className="bg-brand-surface-2 rounded-xl p-3">
-                <p className="text-brand-muted text-xs font-medium mb-2">Brinquedos no orçamento:</p>
+                <p className="text-brand-muted text-xs font-medium mb-2">Cursos no orçamento:</p>
                 <div className="flex flex-wrap gap-1.5">
                   {items.map(i => (
                     <span key={i.id} className="bg-brand-accent/20 text-brand-accent text-xs px-2.5 py-1 rounded-full border border-brand-accent/30">

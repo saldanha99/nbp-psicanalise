@@ -35,9 +35,9 @@ export function KanbanCard({ lead, index, onClick }: Props) {
 
   const semInteracao = differenceInHours(new Date(), new Date(lead.ultimaInteracao)) > 48
 
-  const brinquedos = lead.brinquedosInteresse ?? []
-  const brinquedosVisiveis = brinquedos.slice(0, 2)
-  const brinquedosExtras = brinquedos.length - 2
+  const cursos = lead.cursosInteresse ?? []
+  const cursosVisiveis = cursos.slice(0, 2)
+  const cursosExtras = cursos.length - 2
 
   const origemLabel = ORIGEM_LABEL[lead.origem] ?? lead.origem
   const origemColor = ORIGEM_COLOR[lead.origem] ?? ORIGEM_COLOR['outro']
@@ -113,10 +113,10 @@ export function KanbanCard({ lead, index, onClick }: Props) {
               )}
             </div>
 
-            {/* Brinquedos */}
-            {brinquedos.length > 0 && (
+            {/* Cursos */}
+            {cursos.length > 0 && (
               <div className="flex flex-wrap gap-1">
-                {brinquedosVisiveis.map((b) => (
+                {cursosVisiveis.map((b) => (
                   <span
                     key={b}
                     className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-brand-surface-2 text-brand-muted truncate max-w-[100px]"
@@ -124,9 +124,9 @@ export function KanbanCard({ lead, index, onClick }: Props) {
                     {b}
                   </span>
                 ))}
-                {brinquedosExtras > 0 && (
+                {cursosExtras > 0 && (
                   <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-brand-surface-2 text-brand-muted">
-                    +{brinquedosExtras} mais
+                    +{cursosExtras} mais
                   </span>
                 )}
               </div>

@@ -5,9 +5,9 @@ import {
 import { relations } from 'drizzle-orm'
 
 // ============================================
-// brinquedos
+// cursos
 // ============================================
-export const brinquedos = pgTable('brinquedos', {
+export const cursos = pgTable('cursos', {
   id:              uuid('id').primaryKey().defaultRandom(),
   nome:            text('nome').notNull(),
   slug:            text('slug').notNull().unique(),
@@ -27,9 +27,9 @@ export const brinquedos = pgTable('brinquedos', {
   createdAt:       timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt:       timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 }, (t) => [
-  index('idx_brinquedos_ativo').on(t.ativo),
-  index('idx_brinquedos_destaque').on(t.destaque, t.ordemDestaque),
-  index('idx_brinquedos_categoria').on(t.categoria),
+  index('idx_cursos_ativo').on(t.ativo),
+  index('idx_cursos_destaque').on(t.destaque, t.ordemDestaque),
+  index('idx_cursos_categoria').on(t.categoria),
 ])
 
 // ============================================
@@ -44,7 +44,7 @@ export const leads = pgTable('leads', {
   horarioEvento:       text('horario_evento'),
   enderecoEvento:      text('endereco_evento'),
   regiaoEvento:        text('regiao_evento'),
-  brinquedosInteresse: text('brinquedos_interesse').array().default([]),
+  cursosInteresse: text('cursos_interesse').array().default([]),
   mensagem:            text('mensagem'),
   origem:              text('origem').default('site').notNull(),
   status:              text('status').default('novo').notNull(),
@@ -109,7 +109,7 @@ export const eventos = pgTable('eventos', {
   horarioFim:            time('horario_fim'),
   enderecoCompleto:      text('endereco_completo').notNull(),
   regiaoEvento:          text('regiao_evento'),
-  brinquedosContratados: uuid('brinquedos_contratados').array().default([]),
+  cursosContratados: uuid('cursos_contratados').array().default([]),
   // Financeiro
   valorTotal:            decimal('valor_total', { precision: 10, scale: 2 }),
   valorEntrada:          decimal('valor_entrada', { precision: 10, scale: 2 }).default('0'),

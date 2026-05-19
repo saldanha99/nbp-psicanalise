@@ -424,7 +424,7 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
             </Field>
           </div>
           <Field label="Descrição curta" hint="Usada como meta description padrão">
-            <Textarea value={get('site_descricao')} onChange={set('site_descricao')} placeholder="Locação de brinquedos infláveis em São José dos Campos…" />
+            <Textarea value={get('site_descricao')} onChange={set('site_descricao')} placeholder="Locação de cursos infláveis em São José dos Campos…" />
           </Field>
           <Field label="Endereço completo">
             <Input value={get('site_endereco')} onChange={set('site_endereco')} placeholder="R. Prof. Roberval Fróes, 390 – SJC/SP" />
@@ -469,18 +469,18 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
         <div className="space-y-5">
           <SectionTitle description="Configure como o site aparece nos resultados de busca">Meta Tags e Indexação</SectionTitle>
           <Field label="Título padrão" hint="Exibido na aba do navegador e no Google. Máx. 60 caracteres">
-            <Input value={get('seo_titulo_padrao')} onChange={set('seo_titulo_padrao')} placeholder="Twix Eventos | Locação de Brinquedos em São José dos Campos" />
+            <Input value={get('seo_titulo_padrao')} onChange={set('seo_titulo_padrao')} placeholder="Twix Eventos | Locação de Cursos em São José dos Campos" />
             <p className="text-xs text-brand-muted text-right mt-1">{get('seo_titulo_padrao').length}/60 chars</p>
           </Field>
           <Field label="Template de título por página" hint="Use %s para o título da página. Ex: %s | Twix Eventos">
             <Input value={get('seo_template_titulo')} onChange={set('seo_template_titulo')} placeholder="%s | Twix Eventos" mono />
           </Field>
           <Field label="Descrição padrão" hint="Máx. 160 caracteres. Aparece abaixo do título no Google">
-            <Textarea value={get('seo_descricao_padrao')} onChange={set('seo_descricao_padrao')} placeholder="Aluguel de brinquedos infláveis para festas em SJC…" />
+            <Textarea value={get('seo_descricao_padrao')} onChange={set('seo_descricao_padrao')} placeholder="Aluguel de cursos infláveis para festas em SJC…" />
             <p className="text-xs text-brand-muted text-right mt-1">{get('seo_descricao_padrao').length}/160 chars</p>
           </Field>
-          <Field label="Palavras-chave" hint="Separadas por vírgula. Ex: brinquedos infláveis, locação SJC, festa infantil">
-            <Textarea value={get('seo_palavras_chave')} onChange={set('seo_palavras_chave')} placeholder="brinquedos infláveis, locação, São José dos Campos…" rows={2} />
+          <Field label="Palavras-chave" hint="Separadas por vírgula. Ex: cursos infláveis, locação SJC, festa infantil">
+            <Textarea value={get('seo_palavras_chave')} onChange={set('seo_palavras_chave')} placeholder="cursos infláveis, locação, São José dos Campos…" rows={2} />
           </Field>
 
           <Divider />
@@ -553,7 +553,7 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
             </div>
           </div>
           <Field label="Mensagem padrão" hint="Texto pré-preenchido ao abrir o WhatsApp">
-            <Textarea value={get('whatsapp_mensagem_padrao')} onChange={set('whatsapp_mensagem_padrao')} placeholder="Olá! Gostaria de reservar um brinquedo para meu evento." rows={2} />
+            <Textarea value={get('whatsapp_mensagem_padrao')} onChange={set('whatsapp_mensagem_padrao')} placeholder="Olá! Gostaria de reservar um curso para meu evento." rows={2} />
           </Field>
 
           <Divider />
@@ -638,7 +638,7 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
             <Input value={get('hero_titulo')} onChange={set('hero_titulo')} placeholder="DIVERSÃO GARANTIDA PARA O SEU EVENTO" />
           </Field>
           <Field label="Subtítulo / descrição">
-            <Textarea value={get('hero_subtitulo')} onChange={set('hero_subtitulo')} placeholder="Mais de 24 brinquedos infláveis e eletrônicos para festas…" rows={2} />
+            <Textarea value={get('hero_subtitulo')} onChange={set('hero_subtitulo')} placeholder="Mais de 24 cursos infláveis e eletrônicos para festas…" rows={2} />
           </Field>
         </div>
       ),
@@ -801,7 +801,7 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
                   <option value="never">Nunca (never)</option>
                 </select>
               </Field>
-              <Field label="Prioridade padrão" hint="Valor entre 0.0 e 1.0 para páginas de brinquedos">
+              <Field label="Prioridade padrão" hint="Valor entre 0.0 e 1.0 para páginas de cursos">
                 <select
                   value={get('sitemap_prioridade') || '0.8'}
                   onChange={e => set('sitemap_prioridade')(e.target.value)}
@@ -840,7 +840,7 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
             <div className="flex items-center justify-between p-4 bg-brand-surface-2 rounded-xl border border-brand-border">
               <div>
                 <p className="text-brand-text text-sm font-medium">Indexação automática</p>
-                <p className="text-brand-muted text-xs">Notifica o Google automaticamente quando um brinquedo é criado ou editado</p>
+                <p className="text-brand-muted text-xs">Notifica o Google automaticamente quando um curso é criado ou editado</p>
               </div>
               <Toggle value={get('indexar_automatico') || 'false'} onChange={set('indexar_automatico')} label="Indexação automática" />
             </div>
@@ -993,7 +993,7 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
 
     /* ── SISTEMA ── */
     sistema: {
-      keys: ['sla_followup_horas', 'email_admin', 'email_notificacoes', 'eventos_antecedencia_dias', 'max_brinquedos_orcamento'],
+      keys: ['sla_followup_horas', 'email_admin', 'email_notificacoes', 'eventos_antecedencia_dias', 'max_cursos_orcamento'],
       content: (
         <div className="space-y-5">
           <SectionTitle description="Parâmetros operacionais do sistema de CRM e gestão">Alertas e SLA</SectionTitle>
@@ -1004,8 +1004,8 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
             <Field label="Antecedência de eventos (dias)" hint="Dias antes do evento para alertas no dashboard">
               <Input value={get('eventos_antecedencia_dias')} onChange={set('eventos_antecedencia_dias')} placeholder="7" type="number" />
             </Field>
-            <Field label="Máx. brinquedos por orçamento" hint="Limite de itens no carrinho de cotação">
-              <Input value={get('max_brinquedos_orcamento')} onChange={set('max_brinquedos_orcamento')} placeholder="10" type="number" />
+            <Field label="Máx. cursos por orçamento" hint="Limite de itens no carrinho de cotação">
+              <Input value={get('max_cursos_orcamento')} onChange={set('max_cursos_orcamento')} placeholder="10" type="number" />
             </Field>
           </div>
 

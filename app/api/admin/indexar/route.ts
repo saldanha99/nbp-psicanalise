@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth/config'
 import { getConfig } from '@/lib/db/queries/configuracoes'
 import { db } from '@/lib/db'
-import { brinquedos } from '@/lib/db/schema'
+import { cursos } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 
 // Envia URLs para a Indexing API do Google usando a chave de serviço configurada
@@ -75,16 +75,16 @@ export async function POST(req: NextRequest) {
   if (urls.length === 0) {
     // Se não especificado, indexar todas as URLs conhecidas
     const lista = await db
-      .select({ slug: brinquedos.slug })
-      .from(brinquedos)
-      .where(eq(brinquedos.ativo, true))
+      .select({ slug: cursos.slug })
+      .from(cursos)
+      .where(eq(cursos.ativo, true))
 
     urls = [
       base,
-      `${base}/brinquedos`,
+      `${base}/cursos`,
       `${base}/sobre`,
       `${base}/contato`,
-      ...lista.map(b => `${base}/brinquedos/${b.slug}`),
+      ...lista.map(b => `${base}/cursos/${b.slug}`),
     ]
   }
 

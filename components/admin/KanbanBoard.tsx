@@ -19,9 +19,9 @@ interface CrmStats {
   taxaConversao: number
   valorConvertido: number
   valorPerdido: number
-  topBrinquedo: string | null
+  topCurso: string | null
   origens: string[]
-  todosBrinquedos: string[]
+  todosCursos: string[]
 }
 
 interface Props {
@@ -51,7 +51,7 @@ export function KanbanBoard({ initialLeads, stats }: Props) {
   // Filtros
   const [search, setSearch] = useState('')
   const [origemFiltro, setOrigemFiltro] = useState('')
-  const [brinquedoFiltro, setBrinquedoFiltro] = useState('')
+  const [cursoFiltro, setCursoFiltro] = useState('')
 
   // Confirmado → evento modal
   const [confirmarLead, setConfirmarLead] = useState<Lead | null>(null)
@@ -108,13 +108,13 @@ export function KanbanBoard({ initialLeads, stats }: Props) {
     return leads.filter(l => {
       const matchSearch = !search || l.nome.toLowerCase().includes(search.toLowerCase()) || l.telefone.includes(search)
       const matchOrigem = !origemFiltro || l.origem === origemFiltro
-      const matchBrinquedo = !brinquedoFiltro || (l.brinquedosInteresse ?? []).includes(brinquedoFiltro)
-      return matchSearch && matchOrigem && matchBrinquedo
+      const matchCurso = !cursoFiltro || (l.cursosInteresse ?? []).includes(cursoFiltro)
+      return matchSearch && matchOrigem && matchCurso
     })
-  }, [leads, search, origemFiltro, brinquedoFiltro])
+  }, [leads, search, origemFiltro, cursoFiltro])
 
   const columns = buildColumns(filteredLeads)
-  const temFiltro = !!(search || origemFiltro || brinquedoFiltro)
+  const temFiltro = !!(search || origemFiltro || cursoFiltro)
 
   const patchLeadStatus = useCallback(async (leadId: string, novoStatus: string, motivo?: string) => {
     const body: Record<string, string> = { status: novoStatus }
@@ -265,11 +265,11 @@ export function KanbanBoard({ initialLeads, stats }: Props) {
         />
       </div>
 
-      {stats.topBrinquedo && (
+      {stats.topCurso && (
         <div className="mb-4 flex items-center gap-2 px-3 py-2 rounded-xl border text-sm" style={{ borderColor: 'var(--brand-border)', backgroundColor: 'var(--brand-surface-2)' }}>
           <Package size={14} className="text-brand-accent flex-shrink-0" />
-          <span className="text-brand-muted">Brinquedo que mais gera leads:</span>
-          <span className="font-semibold text-brand-text">{stats.topBrinquedo}</span>
+          <span className="text-brand-muted">Curso que mais gera leads:</span>
+          <span className="font-semibold text-brand-text">{stats.topCurso}</span>
         </div>
       )}
 
@@ -295,17 +295,17 @@ export function KanbanBoard({ initialLeads, stats }: Props) {
         </select>
 
         <select
-          value={brinquedoFiltro}
-          onChange={e => setBrinquedoFiltro(e.target.value)}
+          value={cursoFiltro}
+          onChange={e => setCursoFiltro(e.target.value)}
           className="rounded-lg border px-3 py-2 text-sm text-brand-text bg-brand-surface border-brand-border focus:outline-none focus:border-brand-accent"
         >
-          <option value="">Todos os brinquedos</option>
-          {stats.todosBrinquedos.map(b => <option key={b} value={b}>{b}</option>)}
+          <option value="">Todos os cursos</option>
+          {stats.todosCursos.map(b => <option key={b} value={b}>{b}</option>)}
         </select>
 
         {temFiltro && (
           <button
-            onClick={() => { setSearch(''); setOrigemFiltro(''); setBrinquedoFiltro('') }}
+            onClick={() => { setSearch(''); setOrigemFiltro(''); setCursoFiltro('') }}
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-red-400 border border-red-500/30 hover:bg-red-500/10 transition-colors"
           >
             <X size={13} /> Limpar

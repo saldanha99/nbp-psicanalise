@@ -7,7 +7,7 @@ import { Plus, Check, ShoppingCart, X } from 'lucide-react'
 import { whatsappLink, WHATSAPP_NUMBER, cn } from '@/lib/utils'
 import { useCart } from '@/lib/store/cart'
 
-interface Brinquedo {
+interface Curso {
   id: string
   nome: string
   slug: string
@@ -22,7 +22,7 @@ interface Brinquedo {
   destaque: boolean
 }
 
-export function BrinquedoDetail({ brinquedo }: { brinquedo: Brinquedo }) {
+export function CursoDetail({ curso }: { curso: Curso }) {
   const { add, remove, has, open } = useCart()
   const [mounted, setMounted] = useState(false)
   const [activePhoto, setActivePhoto] = useState(0)
@@ -33,37 +33,37 @@ export function BrinquedoDetail({ brinquedo }: { brinquedo: Brinquedo }) {
     setMounted(true) // eslint-disable-line react-hooks/set-state-in-effect
   }, [])
 
-  const inCart = mounted && has(brinquedo.id)
+  const inCart = mounted && has(curso.id)
 
-  const fotos = brinquedo.fotos?.length
-    ? brinquedo.fotos
-    : brinquedo.fotoDestaque
-    ? [brinquedo.fotoDestaque]
+  const fotos = curso.fotos?.length
+    ? curso.fotos
+    : curso.fotoDestaque
+    ? [curso.fotoDestaque]
     : []
 
   const waLink = whatsappLink(
     WHATSAPP_NUMBER,
-    `Olá! Tenho interesse em alugar o *${brinquedo.nome}* para um evento. Poderia me passar mais informações?`
+    `Olá! Tenho interesse em alugar o *${curso.nome}* para um evento. Poderia me passar mais informações?`
   )
 
   const specs = [
-    { label: 'Faixa Etária', value: brinquedo.faixaEtaria },
-    { label: 'Capacidade',   value: brinquedo.capacidade },
-    { label: 'Dimensões',    value: brinquedo.dimensoes },
-    { label: 'Energia',      value: brinquedo.energia ?? 'Não requer' },
-    { label: 'Categoria',    value: brinquedo.categoria },
+    { label: 'Faixa Etária', value: curso.faixaEtaria },
+    { label: 'Capacidade',   value: curso.capacidade },
+    { label: 'Dimensões',    value: curso.dimensoes },
+    { label: 'Energia',      value: curso.energia ?? 'Não requer' },
+    { label: 'Categoria',    value: curso.categoria },
   ]
 
   const handleCart = () => {
     if (inCart) {
-      remove(brinquedo.id)
+      remove(curso.id)
     } else {
       add({
-        id: brinquedo.id,
-        nome: brinquedo.nome,
-        slug: brinquedo.slug,
-        fotoDestaque: brinquedo.fotoDestaque,
-        categoria: brinquedo.categoria,
+        id: curso.id,
+        nome: curso.nome,
+        slug: curso.slug,
+        fotoDestaque: curso.fotoDestaque,
+        categoria: curso.categoria,
       })
     }
   }
@@ -81,7 +81,7 @@ export function BrinquedoDetail({ brinquedo }: { brinquedo: Brinquedo }) {
             {fotos[activePhoto] ? (
               <Image
                 src={fotos[activePhoto]}
-                alt={brinquedo.nome}
+                alt={curso.nome}
                 fill
                 className="object-cover"
                 priority
@@ -110,7 +110,7 @@ export function BrinquedoDetail({ brinquedo }: { brinquedo: Brinquedo }) {
                     i === activePhoto ? 'ring-2 ring-brand-accent' : 'opacity-60 hover:opacity-100'
                   )}
                 >
-                  <Image src={foto} alt={`${brinquedo.nome} ${i + 1}`} fill className="object-cover" />
+                  <Image src={foto} alt={`${curso.nome} ${i + 1}`} fill className="object-cover" />
                 </button>
               ))}
             </div>
@@ -121,9 +121,9 @@ export function BrinquedoDetail({ brinquedo }: { brinquedo: Brinquedo }) {
         <div>
           <div className="mb-2 flex items-center gap-2 flex-wrap">
             <span className="bg-brand-accent text-white text-xs px-3 py-1 rounded-full uppercase font-semibold">
-              {brinquedo.categoria}
+              {curso.categoria}
             </span>
-            {brinquedo.destaque && (
+            {curso.destaque && (
               <span className="bg-yellow-600/20 text-yellow-500 text-xs px-3 py-1 rounded-full border border-yellow-600/40">
                 ⭐ Destaque
               </span>
@@ -136,11 +136,11 @@ export function BrinquedoDetail({ brinquedo }: { brinquedo: Brinquedo }) {
           </div>
 
           <h1 className="font-[family-name:var(--font-display)] text-4xl lg:text-5xl font-bold text-brand-text uppercase mt-3">
-            {brinquedo.nome}
+            {curso.nome}
           </h1>
 
-          {brinquedo.descricao && (
-            <p className="text-brand-muted mt-4 leading-relaxed">{brinquedo.descricao}</p>
+          {curso.descricao && (
+            <p className="text-brand-muted mt-4 leading-relaxed">{curso.descricao}</p>
           )}
 
           {/* Specs */}
@@ -182,10 +182,10 @@ export function BrinquedoDetail({ brinquedo }: { brinquedo: Brinquedo }) {
             </a>
 
             <Link
-              href="/brinquedos"
+              href="/cursos"
               className="flex items-center justify-center w-full border border-brand-border text-brand-text hover:border-brand-accent hover:text-brand-accent font-semibold py-3 rounded-xl transition-colors"
             >
-              Ver mais brinquedos
+              Ver mais cursos
             </Link>
           </div>
 
@@ -210,7 +210,7 @@ export function BrinquedoDetail({ brinquedo }: { brinquedo: Brinquedo }) {
           <div className="relative max-w-4xl max-h-[90dvh] w-full h-full">
             <Image
               src={fotos[activePhoto]}
-              alt={brinquedo.nome}
+              alt={curso.nome}
               fill
               className="object-contain"
               onClick={(e) => e.stopPropagation()}

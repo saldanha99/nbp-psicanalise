@@ -19,12 +19,12 @@ export async function getDashboardMetrics() {
     leadsTotal30dRes,
     leadsConf30dRes,
     leadsPerdidosMesRes,
-    topBrinquedoRes,
+    topCursoRes,
     topMonitorRes,
     proximosEventosRes,
     leadsPorStatusRes,
     origemLeadsRes,
-    topBrinquedosRes,
+    topCursosRes,
     eventosPorStatusRes,
   ] = await Promise.all([
     // Leads criados hoje
@@ -62,12 +62,12 @@ export async function getDashboardMetrics() {
       .where(and(eq(leads.status, 'perdido'), gte(leads.createdAt, inicioMes)))
       .then(r => Number(r[0].n)),
 
-    // Top brinquedo (1)
+    // Top curso (1)
     db.execute(sql`
       SELECT b.nome, COUNT(*)::int AS total
       FROM eventos e
-      CROSS JOIN LATERAL unnest(e.brinquedos_contratados) AS toy_id
-      JOIN brinquedos b ON b.id = toy_id
+      CROSS JOIN LATERAL unnest(e.cursos_contratados) AS course_id
+      JOIN cursos b ON b.id = course_id
       WHERE e.status != 'cancelado'
       GROUP BY b.nome ORDER BY total DESC LIMIT 1
     `).then(r => r.rows[0] as { nome: string; total: number } | undefined),
@@ -108,12 +108,12 @@ export async function getDashboardMetrics() {
       GROUP BY origem ORDER BY total DESC LIMIT 6
     `).then(r => r.rows as { origem: string; total: number }[]),
 
-    // Top 6 brinquedos mais alugados
+    // Top 6 cursos mais alugados
     db.execute(sql`
       SELECT b.nome, COUNT(*)::int AS total
       FROM eventos e
-      CROSS JOIN LATERAL unnest(e.brinquedos_contratados) AS toy_id
-      JOIN brinquedos b ON b.id = toy_id
+      CROSS JOIN LATERAL unnest(e.cursos_contratados) AS course_id
+      JOIN cursos b ON b.id = course_id
       WHERE e.status != 'cancelado'
       GROUP BY b.nome ORDER BY total DESC LIMIT 6
     `).then(r => r.rows as { nome: string; total: number }[]),
@@ -134,12 +134,12 @@ export async function getDashboardMetrics() {
                           ? Math.round((leadsConf30dRes / leadsTotal30dRes) * 100)
                           : 0,
     leadsPerdidosMes:   leadsPerdidosMesRes,
-    topBrinquedo:       topBrinquedoRes ?? null,
+    topCurso:       topCursoRes ?? null,
     topMonitor:         topMonitorRes ?? null,
     proximosEventos:    proximosEventosRes,
     leadsPorStatus:     leadsPorStatusRes,
     origemLeads:        origemLeadsRes,
-    topBrinquedos:      topBrinquedosRes,
+    topCursos:      topCursosRes,
     eventosPorStatus:   eventosPorStatusRes,
   }
 }

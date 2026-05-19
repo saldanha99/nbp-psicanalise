@@ -17,7 +17,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 }
 
 interface FeaturedCard3DProps {
-  brinquedo: {
+  curso: {
     id: string
     nome: string
     slug: string
@@ -32,8 +32,8 @@ interface FeaturedCard3DProps {
   index: number
 }
 
-export function FeaturedCard3D({ brinquedo, index }: FeaturedCard3DProps) {
-  const { id, nome, slug, categoria, faixaEtaria, capacidade, fotos, fotoDestaque } = brinquedo
+export function FeaturedCard3D({ curso, index }: FeaturedCard3DProps) {
+  const { id, nome, slug, categoria, faixaEtaria, capacidade, fotos, fotoDestaque } = curso
   const { add, remove, has, open } = useCart()
   const [mounted, setMounted] = useState(false)
   const [hovered, setHovered] = useState(false)
@@ -107,7 +107,7 @@ export function FeaturedCard3D({ brinquedo, index }: FeaturedCard3DProps) {
         <div className="bg-brand-surface flex flex-col h-full">
 
           {/* Image */}
-          <Link href={`/brinquedos/${slug}`} className="relative aspect-[4/3] bg-brand-surface-2 overflow-hidden block">
+          <Link href={`/cursos/${slug}`} className="relative aspect-[4/3] bg-brand-surface-2 overflow-hidden block">
             {imageSrc ? (
               <Image
                 src={imageSrc}
@@ -153,7 +153,7 @@ export function FeaturedCard3D({ brinquedo, index }: FeaturedCard3DProps) {
 
           {/* Content */}
           <div className="flex flex-col gap-3 p-4 flex-1">
-            <Link href={`/brinquedos/${slug}`}>
+            <Link href={`/cursos/${slug}`}>
               <h3
                 className="text-brand-text font-bold text-sm sm:text-base leading-snug"
                 style={{
@@ -179,7 +179,7 @@ export function FeaturedCard3D({ brinquedo, index }: FeaturedCard3DProps) {
 
             <div className="mt-auto flex gap-2">
               <Link
-                href={`/brinquedos/${slug}`}
+                href={`/cursos/${slug}`}
                 className="flex-1 inline-flex items-center justify-center border border-brand-border text-brand-text hover:border-brand-accent hover:text-brand-accent font-semibold text-xs px-2 py-2 rounded-lg transition-colors"
               >
                 Ver detalhes

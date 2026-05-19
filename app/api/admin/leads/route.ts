@@ -27,7 +27,7 @@ export async function POST(request: Request) {
       horarioEvento: body.horarioEvento || null,
       enderecoEvento: body.enderecoEvento || null,
       regiaoEvento: body.regiaoEvento || null,
-      brinquedosInteresse: body.brinquedosInteresse || [],
+      cursosInteresse: body.cursosInteresse || [],
       mensagem: body.mensagem || null,
       origem: body.origem || 'manual',
       status: body.status || 'novo',

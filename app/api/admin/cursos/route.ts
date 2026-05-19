@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth/config'
-import { getAllBrinquedosAdmin, createBrinquedo } from '@/lib/db/queries/brinquedos'
-import { brinquedoSchema } from '@/lib/validations/toy'
+import { getAllCursosAdmin, createCurso } from '@/lib/db/queries/cursos'
+import { cursoSchema } from '@/lib/validations/course'
 
 export async function GET() {
   const session = await auth()
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  const brinquedos = await getAllBrinquedosAdmin()
-  return NextResponse.json(brinquedos)
+  const cursos = await getAllCursosAdmin()
+  return NextResponse.json(cursos)
 }
 
 export async function POST(request: Request) {
@@ -16,11 +16,11 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json()
-    const data = brinquedoSchema.parse(body)
-    const brinquedo = await createBrinquedo(data)
-    return NextResponse.json(brinquedo, { status: 201 })
+    const data = cursoSchema.parse(body)
+    const curso = await createCurso(data)
+    return NextResponse.json(curso, { status: 201 })
   } catch (error) {
-    console.error('[POST /api/admin/brinquedos]', error)
+    console.error('[POST /api/admin/cursos]', error)
     return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 })
   }
 }

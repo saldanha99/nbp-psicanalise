@@ -10,7 +10,7 @@ import { useScroll } from '@/components/ui/use-scroll';
 import { CartButton } from '@/components/public/CartButton';
 
 const navLinks = [
-  { href: '/brinquedos', label: 'Brinquedos' },
+  { href: '/cursos', label: 'Cursos' },
   { href: '/sobre', label: 'Sobre' },
   { href: '/#contato', label: 'Contato' },
 ];
@@ -76,7 +76,7 @@ export function HeaderClient({ logoUrl, bannerAtivo = 'true', bannerTexto = 'Des
                   TWIX EVENTOS
                 </span>
                 <span className="text-[10px] md:text-xs text-brand-muted font-medium tracking-widest uppercase">
-                  Locação de Brinquedos
+                  Locação de Cursos
                 </span>
               </div>
             )}

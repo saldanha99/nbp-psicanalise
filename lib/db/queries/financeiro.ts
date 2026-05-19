@@ -1,5 +1,5 @@
 import { db } from '../index'
-import { eventos, brinquedos, monitores, eventoMonitores } from '../schema'
+import { eventos, cursos, monitores, eventoMonitores } from '../schema'
 import { eq, gte, lt, not, inArray, and, sum, count, sql, desc } from 'drizzle-orm'
 
 export type MesAno = { mes: number; ano: number }
@@ -16,7 +16,7 @@ function mesRange(mes: number, ano: number) {
 export async function getKpisMes(mes: number, ano: number) {
   const { inicioStr, fimStr } = mesRange(mes, ano)
 
-  const [totalFaturado, totalFestas, brinquedosAlugados] = await Promise.all([
+  const [totalFaturado, totalFestas, cursosAlugados] = await Promise.all([
     db.select({ t: sum(eventos.valorTotal) })
       .from(eventos)
       .where(and(
@@ -36,19 +36,19 @@ export async function getKpisMes(mes: number, ano: number) {
       .then(r => Number(r[0].n)),
 
     db.execute(sql`
-      SELECT COALESCE(SUM(array_length(brinquedos_contratados, 1)), 0)::int AS total
+      SELECT COALESCE(SUM(array_length(cursos_contratados, 1)), 0)::int AS total
       FROM eventos
       WHERE status != 'cancelado'
         AND data_evento >= ${inicioStr}
         AND data_evento < ${fimStr}
-        AND brinquedos_contratados IS NOT NULL
+        AND cursos_contratados IS NOT NULL
     `).then(r => Number((r.rows[0] as { total: number }).total ?? 0)),
   ])
 
   const ticketMedioFestas = totalFestas > 0 ? totalFaturado / totalFestas : 0
-  const ticketMedioBrinquedos = brinquedosAlugados > 0 ? totalFaturado / brinquedosAlugados : 0
+  const ticketMedioCursos = cursosAlugados > 0 ? totalFaturado / cursosAlugados : 0
 
-  return { totalFaturado, totalFestas, brinquedosAlugados, ticketMedioFestas, ticketMedioBrinquedos }
+  return { totalFaturado, totalFestas, cursosAlugados, ticketMedioFestas, ticketMedioCursos }
 }
 
 export async function getReceitaPorMes(ano: number) {
@@ -74,14 +74,14 @@ export async function getReceitaPorMes(ano: number) {
   }))
 }
 
-export async function getRankingBrinquedosMes(mes: number, ano: number) {
+export async function getRankingCursosMes(mes: number, ano: number) {
   const { inicioStr, fimStr } = mesRange(mes, ano)
   const rows = await db.execute(sql`
     SELECT b.nome, COUNT(*)::int AS alugados,
-           COALESCE(SUM(e.valor_total / NULLIF(array_length(e.brinquedos_contratados,1),0)), 0)::float AS receita
+           COALESCE(SUM(e.valor_total / NULLIF(array_length(e.cursos_contratados,1),0)), 0)::float AS receita
     FROM eventos e
-    CROSS JOIN LATERAL unnest(e.brinquedos_contratados) AS toy_id
-    JOIN brinquedos b ON b.id = toy_id
+    CROSS JOIN LATERAL unnest(e.cursos_contratados) AS course_id
+    JOIN cursos b ON b.id = course_id
     WHERE e.status != 'cancelado'
       AND e.data_evento >= ${inicioStr}
       AND e.data_evento < ${fimStr}

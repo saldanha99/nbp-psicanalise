@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { getAllBrinquedosAdmin } from '@/lib/db/queries/brinquedos'
+import { getAllCursosAdmin } from '@/lib/db/queries/cursos'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
@@ -8,8 +8,8 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = { title: 'Catálogo' }
 export const dynamic = 'force-dynamic'
 
-async function BrinquedosContent() {
-  const brinquedos = await getAllBrinquedosAdmin()
+async function CursosContent() {
+  const cursos = await getAllCursosAdmin()
 
   return (
     <div className="p-6 pb-24 md:pb-6">
@@ -18,19 +18,19 @@ async function BrinquedosContent() {
           <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold text-brand-text uppercase">
             Catálogo
           </h1>
-          <p className="text-brand-muted text-sm mt-1">{brinquedos.length} brinquedos cadastrados</p>
+          <p className="text-brand-muted text-sm mt-1">{cursos.length} cursos cadastrados</p>
         </div>
-        <Link href="/admin/brinquedos/novo">
+        <Link href="/admin/cursos/novo">
           <Button className="bg-brand-accent hover:bg-brand-accent-hover text-white">
-            + Novo Brinquedo
+            + Novo Curso
           </Button>
         </Link>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {brinquedos.map(b => (
+        {cursos.map(b => (
           <div key={b.id} className="group bg-brand-surface border border-brand-border rounded-xl overflow-hidden hover:border-brand-accent/40 transition-colors duration-150">
-            <Link href={`/admin/brinquedos/${b.id}/editar`} className="block">
+            <Link href={`/admin/cursos/${b.id}/editar`} className="block">
               <div className="relative aspect-video bg-brand-surface-2">
                 {b.fotoDestaque ? (
                   <Image src={b.fotoDestaque} alt={b.nome} fill className="object-cover group-hover:scale-[1.02] transition-transform duration-200" />
@@ -56,7 +56,7 @@ async function BrinquedosContent() {
                 </div>
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <span className="text-white text-sm font-semibold bg-brand-accent px-3 py-1.5 rounded-lg">
-                    Editar brinquedo
+                    Editar curso
                   </span>
                 </div>
               </div>
@@ -69,7 +69,7 @@ async function BrinquedosContent() {
               </div>
             </Link>
             <div className="px-4 pb-4">
-              <BrinquedoToggle id={b.id} ativo={b.ativo} />
+              <CursoToggle id={b.id} ativo={b.ativo} />
             </div>
           </div>
         ))}
@@ -78,11 +78,11 @@ async function BrinquedosContent() {
   )
 }
 
-function BrinquedoToggle({ id, ativo }: { id: string; ativo: boolean }) {
+function CursoToggle({ id, ativo }: { id: string; ativo: boolean }) {
   return (
     <form action={async () => {
       'use server'
-      const { toggleAtivo } = await import('@/lib/db/queries/brinquedos')
+      const { toggleAtivo } = await import('@/lib/db/queries/cursos')
       await toggleAtivo(id, !ativo)
     }}>
       <Button
@@ -97,10 +97,10 @@ function BrinquedoToggle({ id, ativo }: { id: string; ativo: boolean }) {
   )
 }
 
-export default function BrinquedosPage() {
+export default function CursosPage() {
   return (
     <Suspense fallback={<div className="p-6 text-brand-muted">Carregando catálogo...</div>}>
-      <BrinquedosContent />
+      <CursosContent />
     </Suspense>
   )
 }

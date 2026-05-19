@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const brinquedoSchema = z.object({
+export const cursoSchema = z.object({
   nome:            z.string().min(2, 'Nome obrigatório'),
   slug:            z.string().min(2, 'Slug obrigatório').regex(/^[a-z0-9-]+$/, 'Slug inválido'),
   descricao:       z.string().optional(),
@@ -17,7 +17,7 @@ export const brinquedoSchema = z.object({
   precoReferencia: z.string().optional(),
 })
 
-export type BrinquedoInput = z.infer<typeof brinquedoSchema>
+export type CursoInput = z.infer<typeof cursoSchema>
 
 export const eventoSchema = z.object({
   leadId:                z.string().uuid().optional().nullable(),
@@ -29,7 +29,7 @@ export const eventoSchema = z.object({
   horarioFim:            z.string().optional().nullable(),
   enderecoCompleto:      z.string().min(5, 'Endereço obrigatório'),
   regiaoEvento:          z.string().optional().nullable(),
-  brinquedosContratados: z.array(z.string()).default([]),
+  cursosContratados: z.array(z.string()).default([]),
   valorTotal:            z.string().optional().nullable(),
   valorEntrada:          z.string().optional().nullable(),
   valorRestante:         z.string().optional().nullable(),

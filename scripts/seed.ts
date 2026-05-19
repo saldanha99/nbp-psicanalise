@@ -27,8 +27,8 @@ async function seed() {
   }]).onConflictDoNothing()
   console.log('✅ Usuário admin inserido')
 
-  // Brinquedos
-  await db.insert(schema.brinquedos).values([
+  // Cursos
+  await db.insert(schema.cursos).values([
     { nome: 'Futebol de Sabão', slug: 'futebol-de-sabao', categoria: 'inflaveis', faixaEtaria: 'Livre para todas as idades', capacidade: 'Até 4 adultos ou 8 crianças', dimensoes: '5m largura × 10m comprimento', energia: '110v ou 220v', destaque: true, ordemDestaque: 1, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2023/03/Sem-titulo-1.png' },
     { nome: 'Canhão de Espuma', slug: 'canhao-de-espuma', categoria: 'batalhas', faixaEtaria: 'Livre para todas as idades', capacidade: 'Variado', dimensoes: '2m largura × 1,5m comprimento', energia: '220v', destaque: true, ordemDestaque: 2, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2023/03/IMG_2562-scaled.jpeg' },
     { nome: 'Tobogã Inflável', slug: 'toboga-inflavel', categoria: 'inflaveis', faixaEtaria: 'Até 10 anos', capacidade: 'Até 2 crianças', dimensoes: '3m largura × 5m comprimento × 4m altura', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2023/03/IMG_3347-scaled.jpeg' },
@@ -54,7 +54,7 @@ async function seed() {
     { nome: 'Cotonetes UFC', slug: 'cotonetes-ufc', categoria: 'batalhas', faixaEtaria: 'Todas as idades', capacidade: '2 pessoas', dimensoes: '5,6m × 5,6m × 1,8m altura', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2024/10/esportivos-guerra-cotonete-UFC.jpg' },
     { nome: 'Cotonete Street', slug: 'cotonete-street', categoria: 'batalhas', faixaEtaria: 'Todas as idades', capacidade: '2 pessoas', dimensoes: '5,6m × 5,6m × 1,8m altura', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2025/09/cotonete-1.jpeg' },
   ]).onConflictDoNothing()
-  console.log('✅ 24 brinquedos inseridos')
+  console.log('✅ 24 cursos inseridos')
 
   console.log('\n🎉 Seed concluído!')
 }

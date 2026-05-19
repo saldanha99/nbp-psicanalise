@@ -199,9 +199,9 @@ export function EventCalendar({ eventos }: Props) {
                   <span className="line-clamp-2">{evento.enderecoCompleto}</span>
                 </div>
 
-                {evento.brinquedosContratados && evento.brinquedosContratados.length > 0 && (
+                {evento.cursosContratados && evento.cursosContratados.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {evento.brinquedosContratados.map((b) => (
+                    {evento.cursosContratados.map((b) => (
                       <span key={b} className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 text-[10px]">
                         {b}
                       </span>

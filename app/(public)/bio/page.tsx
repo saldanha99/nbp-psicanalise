@@ -1,25 +1,25 @@
-import { getBrinquedosDestaque } from '@/lib/db/queries/brinquedos'
+import { getCursosDestaque } from '@/lib/db/queries/cursos'
 import Image from 'next/image'
 import { whatsappLink, WHATSAPP_NUMBER } from '@/lib/utils'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Twix Eventos — Link na Bio',
-  description: 'Brinquedos infláveis e eletrônicos para festas em São José dos Campos. Reserve via WhatsApp!',
+  description: 'Cursos infláveis e eletrônicos para festas em São José dos Campos. Reserve via WhatsApp!',
 }
 
 export const dynamic = 'force-dynamic'
 
 const links = [
-  { label: '📦 Ver Catálogo Completo',        href: '/brinquedos' },
+  { label: '📦 Ver Catálogo Completo',        href: '/cursos' },
   { label: '💬 Reservar via WhatsApp',         href: `https://wa.me/${WHATSAPP_NUMBER}?text=Olá! Vi o perfil do Instagram e gostaria de fazer uma reserva!` },
   { label: '⭐ +455 Avaliações no Google',     href: 'https://g.co/kgs/twix-eventos', external: true },
-  { label: '🎉 Descontos de Segunda a Quinta', href: '/brinquedos' },
+  { label: '🎉 Descontos de Segunda a Quinta', href: '/cursos' },
   { label: '📍 Nossa Localização',             href: 'https://maps.google.com/?q=R.+Prof.+Roberval+Fróes,+390,+São+José+dos+Campos', external: true },
 ]
 
 export default async function BioPage() {
-  const destaques = await getBrinquedosDestaque()
+  const destaques = await getCursosDestaque()
 
   return (
     <div className="min-h-screen bg-brand-bg flex flex-col items-center py-12 px-4">
@@ -31,7 +31,7 @@ export default async function BioPage() {
         <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold text-brand-text uppercase">
           TWIX EVENTOS
         </h1>
-        <p className="text-brand-muted text-sm mt-1">Locação de Brinquedos • SJC • Desde 2015</p>
+        <p className="text-brand-muted text-sm mt-1">Locação de Cursos • SJC • Desde 2015</p>
         <div className="flex items-center justify-center gap-1 mt-2">
           {[1,2,3,4,5].map(i => (
             <svg key={i} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -63,7 +63,7 @@ export default async function BioPage() {
           <p className="text-brand-muted text-xs uppercase tracking-wide text-center mb-4">Mais populares</p>
           <div className="grid grid-cols-3 gap-2">
             {destaques.slice(0, 6).map(b => (
-              <a key={b.id} href={`/brinquedos/${b.slug}`} className="block">
+              <a key={b.id} href={`/cursos/${b.slug}`} className="block">
                 <div className="relative aspect-square rounded-xl overflow-hidden bg-brand-surface border border-brand-border hover:border-brand-accent transition-colors">
                   {b.fotoDestaque ? (
                     <Image src={b.fotoDestaque} alt={b.nome} fill className="object-cover" />

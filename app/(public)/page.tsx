@@ -1,4 +1,4 @@
-import { getBrinquedosDestaque } from '@/lib/db/queries/brinquedos'
+import { getCursosDestaque } from '@/lib/db/queries/cursos'
 import { getConfig } from '@/lib/db/queries/configuracoes'
 import { Header } from '@/components/public/Header'
 import { Hero } from '@/components/public/Hero'
@@ -16,8 +16,8 @@ import { ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Twix Eventos | Locação de Brinquedos Infláveis em São José dos Campos',
-  description: 'Aluguel de brinquedos infláveis e eletrônicos para festas e eventos em São José dos Campos. +455 avaliações 5 estrelas. Tobogã, touro mecânico, canhão de espuma e muito mais!',
+  title: 'Twix Eventos | Locação de Cursos Infláveis em São José dos Campos',
+  description: 'Aluguel de cursos infláveis e eletrônicos para festas e eventos em São José dos Campos. +455 avaliações 5 estrelas. Tobogã, touro mecânico, canhão de espuma e muito mais!',
 }
 
 export const dynamic = 'force-dynamic'
@@ -26,7 +26,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
   name: 'Twix Eventos',
-  description: 'Locação de brinquedos infláveis e eletrônicos para eventos em São José dos Campos',
+  description: 'Locação de cursos infláveis e eletrônicos para eventos em São José dos Campos',
   url: 'https://twixeventos.com',
   telephone: '+55-12-99649-8725',
   address: {
@@ -52,7 +52,7 @@ function pickRandom<T>(arr: T[], n: number): T[] {
 
 export default async function HomePage() {
   const [allDestaques, videoUrl, heroSlidesRaw] = await Promise.all([
-    getBrinquedosDestaque(),
+    getCursosDestaque(),
     getConfig('video_apresentacao'),
     getConfig('hero_slides'),
   ])
@@ -70,8 +70,8 @@ export default async function HomePage() {
         <Hero slides={heroSlides} />
         <AuthorityBar />
 
-        {/* Brinquedos em Destaque */}
-        <section id="brinquedos" className="py-20 bg-brand-bg relative overflow-hidden">
+        {/* Cursos em Destaque */}
+        <section id="cursos" className="py-20 bg-brand-bg relative overflow-hidden">
           {/* Subtle background glow */}
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] opacity-[0.06] pointer-events-none"
@@ -93,12 +93,12 @@ export default async function HomePage() {
 
             {destaques.length === 0 ? (
               <div className="text-center text-brand-muted py-12">
-                Nenhum brinquedo em destaque no momento.
+                Nenhum curso em destaque no momento.
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto">
-                {destaques.map((brinquedo, i) => (
-                  <FeaturedCard3D key={brinquedo.id} brinquedo={brinquedo} index={i} />
+                {destaques.map((curso, i) => (
+                  <FeaturedCard3D key={curso.id} curso={curso} index={i} />
                 ))}
               </div>
             )}
@@ -106,14 +106,14 @@ export default async function HomePage() {
             {/* CTA para catálogo completo */}
             <div className="mt-12 text-center">
               <Link
-                href="/brinquedos"
+                href="/cursos"
                 className="group inline-flex items-center gap-3 glass hover:border-blue-500/40 hover:bg-blue-500/5 text-brand-text hover:text-blue-400 font-semibold px-8 py-4 rounded-xl transition-all duration-200 text-base"
               >
                 Ver catálogo completo
                 <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform duration-200" />
               </Link>
               <p className="text-brand-muted text-sm mt-3">
-                24+ brinquedos disponíveis no catálogo
+                24+ cursos disponíveis no catálogo
               </p>
             </div>
           </div>
@@ -129,7 +129,7 @@ export default async function HomePage() {
           cardHeading="Excelência Comprovada"
           cardDescription="A Twix Eventos é referência em diversão e segurança. Nossas avaliações no Google refletem o compromisso que temos com cada detalhe do seu evento."
           ctaHeading="Sua festa merece o melhor."
-          ctaDescription="Garanta agora os melhores brinquedos com quem entende de diversão em São José dos Campos."
+          ctaDescription="Garanta agora os melhores cursos com quem entende de diversão em São José dos Campos."
         />
         <FAQAccordion />
 

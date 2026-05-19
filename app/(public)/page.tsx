@@ -1,141 +1,136 @@
 import { getCursosDestaque } from '@/lib/db/queries/cursos'
 import { Header } from '@/components/public/Header'
-import { CourseGrid } from '@/components/public/CourseGrid'
 import { Footer } from '@/components/public/Footer'
 import { WhatsAppButton } from '@/components/public/WhatsAppButton'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'NBP Psicanálise | Cursos e Formação',
-  description: 'O Núcleo Brasileiro de Psicanálise oferece cursos, formação e eventos focados no estudo contínuo e aprofundado da Psicanálise.',
+  title: 'home - NBP Psicanálise | Formação em Psicanálise com Certificação',
+  description: 'Somos um núcleo de Psicanálise, com sede na cidade de São Paulo, no bairro Tatuapé. Oferecemos curso de formação para você que deseja tornar-se um profissional da área.',
 }
 
 export const dynamic = 'force-dynamic'
-
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'EducationalOrganization',
-  name: 'NBP Psicanálise',
-  description: 'O Núcleo Brasileiro de Psicanálise oferece cursos e formação na área de Psicanálise.',
-  url: 'https://nbpsicanalise.com.br',
-  telephone: '+55-11-99999-9999',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: 'Tatuapé',
-    addressLocality: 'São Paulo',
-    addressRegion: 'SP',
-    addressCountry: 'BR',
-  },
-}
 
 export default async function HomePage() {
   const destaques = await getCursosDestaque()
 
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+    <div className="bg-white min-h-screen font-sans text-[#333]">
       <Header />
-      <main className="flex-1 bg-[#f9f9f9]">
-        
-        {/* Hero Section Oficial NBP */}
-        <section className="relative w-full bg-white overflow-hidden py-16 md:py-24 border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center gap-12">
+      
+      <main>
+        {/* SEÇÃO 1: HERO NÚCLEO PSICANALÍTICO */}
+        <section className="w-full py-16 md:py-32">
+          <div className="max-w-[1200px] mx-auto px-4 flex flex-col-reverse md:flex-row items-center gap-12">
             
-            <div className="flex-1 text-center md:text-left">
-              <div className="inline-flex items-center gap-2 text-[#6a5a98] text-sm font-semibold uppercase tracking-widest mb-4">
-                <span className="w-8 h-px bg-[#6a5a98]"></span>
-                Núcleo Psicanalítico
-              </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#6a5a98] mb-6 leading-tight font-[family-name:var(--font-display)] uppercase">
-                Núcleo Brasileiro de Psicanálise
+            {/* Texto Esquerda */}
+            <div className="w-full md:w-1/2 flex flex-col justify-center">
+              <span className="text-[12px] uppercase text-[#6a5a98] tracking-widest font-semibold mb-4 flex items-center gap-2">
+                <span className="w-4 h-[1px] bg-[#6a5a98]"></span>
+                Núcleo psicanalítico
+              </span>
+              <h1 className="text-3xl md:text-5xl font-bold text-[#6a5a98] leading-tight mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                NÚCLEO BRASILEIRO DE PSICANÁLISE
               </h1>
-              <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl leading-relaxed">
-                Somos um núcleo de Psicanálise, com sede na cidade de São Paulo, no bairro Tatuapé. Oferecemos curso de formação para você que deseja tornar-se um profissional da área, e/ou conhecer, aprofundar-se no universo psicanalítico.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center md:justify-start">
-                <Link
-                  href="/cursos"
-                  className="bg-[#6a5a98] hover:bg-[#584885] text-white px-8 py-4 rounded-md font-medium transition-colors w-full sm:w-auto text-center shadow-lg shadow-[#6a5a98]/20"
-                >
-                  Conheça a Formação
-                </Link>
-                <Link
-                  href="/sobre"
-                  className="bg-white border border-[#6a5a98] text-[#6a5a98] hover:bg-[#6a5a98]/5 px-8 py-4 rounded-md font-medium transition-colors w-full sm:w-auto text-center"
-                >
-                  Saiba Mais
-                </Link>
+              <div className="text-[16px] leading-[28px] font-light text-gray-700">
+                <p>Somos um núcleo de Psicanálise, com sede na cidade de São Paulo, no bairro Tatuapé. Oferecemos curso de formação para você que deseja tornar-se um profissional da área, e/ou conhecer, aprofundar-se no universo psicanalítico.</p>
               </div>
             </div>
 
-            <div className="flex-1 relative">
-              {/* Imagem oficial extraída do site WP */}
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-black/10">
-                <img 
-                  src="https://nbpsicanalise.com.br/wp-content/uploads/2021/04/curso-formacao-min.png" 
-                  alt="Curso de Formação NBP" 
-                  className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700"
-                />
-              </div>
-              {/* Decoração sutil de fundo */}
-              <div className="absolute -z-10 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-[#6a5a98]/10 to-transparent rounded-full blur-3xl"></div>
+            {/* Imagem Direita (Parallax effect in WP) */}
+            <div className="w-full md:w-1/2 flex justify-center md:justify-end">
+              <img 
+                src="https://nbpsicanalise.com.br/wp-content/uploads/2021/04/curso-formacao-min.png" 
+                alt="Núcleo Brasileiro de Psicanálise" 
+                className="w-full max-w-[500px] h-auto object-contain"
+              />
             </div>
 
           </div>
         </section>
 
-        {/* Cursos em Destaque */}
-        <section id="cursos" className="py-24 bg-[#f9f9f9] relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* SEÇÃO 2: DEPOIMENTOS (FULL BACKGROUND) */}
+        <section 
+          className="w-full h-[400px] bg-fixed bg-center bg-cover flex items-center justify-center"
+          style={{ backgroundImage: 'url(https://nbpsicanalise.com.br/wp-content/uploads/2021/04/bg-depoimento.jpg)' }}
+        >
+          {/* No site original esta seção contém o carrossel "O QUE DIZEM SOBRE NÓS", 
+              estamos mantendo o layout de fundo 100% igual ao WP. */}
+          <div className="text-center text-white">
+            <h2 className="text-3xl font-semibold tracking-wide uppercase shadow-sm">O Que Dizem Sobre Nós</h2>
+          </div>
+        </section>
+
+        {/* SEÇÃO 3: CONHEÇA NOSSOS CURSOS */}
+        <section className="w-full py-16 md:py-32">
+          <div className="max-w-[1200px] mx-auto px-4 flex flex-col md:flex-row items-center gap-12 mb-16">
             
-            <div className="flex flex-col md:flex-row items-end justify-between mb-12 border-b border-gray-200 pb-6">
-              <div>
-                <div className="inline-flex items-center gap-2 text-[#6a5a98] text-sm font-semibold uppercase tracking-widest mb-3">
-                  Formações em Psicanálise
+            {/* Imagem Esquerda */}
+            <div className="w-full md:w-1/2 flex justify-center md:justify-start">
+              <img 
+                src="https://nbpsicanalise.com.br/wp-content/uploads/2021/04/cursos-min.png" 
+                alt="Conheça Nossos Cursos" 
+                className="w-full max-w-[500px] h-auto object-contain"
+              />
+            </div>
+
+            {/* Texto Direita */}
+            <div className="w-full md:w-1/2 flex flex-col justify-center">
+              <span className="text-[12px] uppercase text-[#6a5a98] tracking-widest font-semibold mb-4 flex items-center gap-2">
+                <span className="w-4 h-[1px] bg-[#6a5a98]"></span>
+                Formações em Psicanálise
+              </span>
+              <h2 className="text-3xl md:text-5xl font-bold text-[#6a5a98] leading-tight mb-6" style={{ fontFamily: 'Raleway, sans-serif' }}>
+                CONHEÇA NOSSOS CURSOS
+              </h2>
+              <div className="text-[16px] leading-[28px] font-light text-gray-700">
+                <p>Com profissionais devidamente formados e certificados, oferecemos uma formação em Psicanálise sólida, workshops, cursos rápidos, palestras, entre outros.</p>
+              </div>
+            </div>
+
+          </div>
+
+          {/* GRID DE CURSOS EXTRAÍDOS */}
+          <div className="max-w-[1200px] mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {destaques.slice(0, 6).map((curso) => (
+                <div key={curso.id} className="group cursor-pointer">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-black mb-4">
+                    <img 
+                      src={curso.imagemUrl || "https://nbpsicanalise.com.br/wp-content/uploads/2023/08/sobre-formacao-psicanalista.jpeg"} 
+                      alt={curso.nome}
+                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                    />
+                  </div>
+                  <h3 className="text-[16px] font-semibold text-[#333] mb-2 uppercase leading-snug" style={{ fontFamily: 'Raleway, sans-serif' }}>
+                    {curso.nome}
+                  </h3>
+                  {curso.resumo && (
+                    <p className="text-[13px] text-gray-500 line-clamp-2 leading-relaxed">
+                      {curso.resumo}
+                    </p>
+                  )}
+                  <Link href={`/cursos/${curso.slug}`} className="inline-block mt-4 text-[11px] font-bold text-[#6a5a98] uppercase tracking-widest hover:text-[#584885] transition-colors">
+                    Ver Curso →
+                  </Link>
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 font-[family-name:var(--font-display)] uppercase">
-                  Conheça <span className="text-[#6a5a98]">Nossos Cursos</span>
-                </h2>
-              </div>
-              
-              <Link
-                href="/cursos"
-                className="hidden md:inline-flex items-center gap-2 text-[#6a5a98] hover:text-[#584885] font-semibold transition-colors group"
-              >
-                Ver todos os cursos
-                <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
+              ))}
             </div>
-
-            {destaques.length === 0 ? (
-              <div className="text-center text-gray-500 py-12 bg-white rounded-xl border border-gray-100 shadow-sm">
-                Nenhum curso cadastrado no momento.
+            {destaques.length > 6 && (
+              <div className="mt-12 text-center">
+                <Link href="/cursos" className="inline-block px-8 py-3 border-2 border-[#6a5a98] text-[#6a5a98] text-[12px] font-bold uppercase tracking-widest hover:bg-[#6a5a98] hover:text-white transition-colors">
+                  Ver Todos os Cursos
+                </Link>
               </div>
-            ) : (
-              <CourseGrid cursos={destaques} />
             )}
-
-            <div className="mt-10 text-center md:hidden">
-              <Link
-                href="/cursos"
-                className="inline-flex items-center gap-2 bg-white border border-gray-200 text-[#6a5a98] hover:bg-gray-50 px-6 py-3 rounded-md font-medium transition-colors"
-              >
-                Ver catálogo completo
-                <ArrowRight className="size-4" />
-              </Link>
-            </div>
-
           </div>
         </section>
 
       </main>
+
       <Footer />
       <WhatsAppButton />
-    </>
+    </div>
   )
 }

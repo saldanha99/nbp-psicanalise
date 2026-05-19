@@ -19,7 +19,7 @@ export default async function CursosPage() {
   return (
     <>
       <Header />
-      <main className="flex-1 bg-brand-bg pt-8 pb-16">
+      <main className="flex-1 bg-[#f9f9f9] pt-8 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <CatalogHeader totalCourses={cursos.length} />
           <CourseGrid cursos={cursos} />

@@ -44,13 +44,13 @@ export function VideoSection({ videoUrl }: VideoSectionProps) {
         {/* Heading */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/25 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-widest px-4 py-2 rounded-full mb-5">
-            Conheça a Twix
+            Conheça o NBP
           </div>
           <h2 className="font-[family-name:var(--font-display)] text-4xl lg:text-5xl font-bold text-brand-text uppercase">
             VEja como <span className="text-brand-accent">FUNCIONA</span>
           </h2>
           <p className="text-brand-muted mt-3 max-w-xl mx-auto">
-            Do inflável à montagem — veja como deixamos sua festa inesquecível
+            Conheça o nosso núcleo e assista à apresentação da nossa metodologia
           </p>
         </div>
 
@@ -63,7 +63,7 @@ export function VideoSection({ videoUrl }: VideoSectionProps) {
             {playing ? (
               <iframe
                 src={embedUrl}
-                title="Vídeo de apresentação Twix Eventos"
+                title="Vídeo de apresentação NBP Psicanálise"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="w-full h-full border-0"
@@ -78,7 +78,7 @@ export function VideoSection({ videoUrl }: VideoSectionProps) {
                 {/* Thumbnail */}
                 <img
                   src={thumbnail}
-                  alt="Vídeo Twix Eventos"
+                  alt="Vídeo NBP Psicanálise"
                   className="w-full h-full object-cover"
                 />
 

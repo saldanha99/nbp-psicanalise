@@ -388,10 +388,10 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
       <FadeIn delay={60}>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           <KpiCard titulo="Receita do Mês"       valor={metrics.receitaMes}       icon={<DollarSign className="size-4" />}  color="#34D399" prefix="R$" decimals={0} trend={trendReceita} sub={`vs R$ ${receitaMesAnt.toLocaleString('pt-BR', { maximumFractionDigits: 0 })} mês ant.`} />
-          <KpiCard titulo="Eventos Esta Semana"  valor={metrics.eventosEstaSemana} icon={<CalendarDays className="size-4" />} color="#818CF8" sub="próximos 7 dias" />
+          <KpiCard titulo="Turmas Iniciando"     valor={metrics.eventosEstaSemana} icon={<CalendarDays className="size-4" />} color="#818CF8" sub="próximos 7 dias" />
           <KpiCard titulo="Leads no Pipeline"    valor={metrics.leadsAbertos}      icon={<TrendingUp className="size-4" />}   color="#60A5FA" sub="em aberto" />
           <KpiCard titulo="Leads Hoje"           valor={metrics.leadsHoje}         icon={<Users className="size-4" />}        color="#F472B6" sub="novos hoje" />
-          <KpiCard titulo="Conversão 30d"        valor={metrics.taxaConversao}     icon={<Target className="size-4" />}       color={metrics.taxaConversao >= 50 ? '#34D399' : '#F59E0B'} suffix="%" trend={metrics.taxaConversao >= 50 ? 'up' : 'down'} sub="leads → confirmados" />
+          <KpiCard titulo="Conversão 30d"        valor={metrics.taxaConversao}     icon={<Target className="size-4" />}       color={metrics.taxaConversao >= 50 ? '#34D399' : '#F59E0B'} suffix="%" trend={metrics.taxaConversao >= 50 ? 'up' : 'down'} sub="leads → matrículas" />
           <KpiCard titulo="Perdidos no Mês"      valor={metrics.leadsPerdidosMes}  icon={<TrendingDown className="size-4" />} color="#F87171" trend={metrics.leadsPerdidosMes > 5 ? 'down' : 'neutral'} sub="leads perdidos" />
         </div>
       </FadeIn>
@@ -436,7 +436,7 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
             </ResponsiveContainer>
             <div className="flex items-center gap-5 mt-3 pl-1">
               <div className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-violet-400 rounded" /><span className="text-brand-muted text-[10px]">Receita</span></div>
-              <div className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-pink-400 rounded border-dashed" style={{ borderTop: '2px dashed #F472B6', background: 'none' }} /><span className="text-brand-muted text-[10px]">Festas</span></div>
+              <div className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-pink-400 rounded border-dashed" style={{ borderTop: '2px dashed #F472B6', background: 'none' }} /><span className="text-brand-muted text-[10px]">Matrículas</span></div>
             </div>
           </Card>
 
@@ -472,7 +472,7 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
 
           {/* Top cursos */}
           <Card>
-            <CardHeader title="Top Cursos" sub="Mais alugados no período" />
+            <CardHeader title="Top Cursos" sub="Mais procurados no período" />
             {metrics.topCursos.length === 0 ? (
               <p className="text-brand-muted text-sm text-center py-6">Sem dados ainda</p>
             ) : (
@@ -511,25 +511,15 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
           <Card>
             <CardHeader title="Origem dos Leads" sub="Últimos 90 dias" />
             <OrigemDonut data={metrics.origemLeads} />
-            <div className="mt-4 pt-4 border-t border-brand-border grid grid-cols-2 gap-2">
+            <div className="mt-4 pt-4 border-t border-brand-border">
               {metrics.topCurso && (
-                <div className="bg-brand-surface-2 rounded-xl p-3 border border-brand-border">
+                <div className="bg-brand-surface-2 rounded-xl p-3 border border-brand-border w-full">
                   <div className="flex items-center gap-1.5 mb-1">
                     <Trophy className="size-3 text-yellow-400" />
-                    <span className="text-brand-muted text-[10px] uppercase tracking-wider">Top Brinq.</span>
+                    <span className="text-brand-muted text-[10px] uppercase tracking-wider">Top Curso</span>
                   </div>
                   <p className="text-brand-text text-xs font-bold leading-tight line-clamp-2">{metrics.topCurso.nome}</p>
-                  <p className="text-brand-muted text-[10px] mt-0.5">{metrics.topCurso.total} eventos</p>
-                </div>
-              )}
-              {metrics.topMonitor && (
-                <div className="bg-brand-surface-2 rounded-xl p-3 border border-brand-border">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <UserCheck className="size-3 text-blue-400" />
-                    <span className="text-brand-muted text-[10px] uppercase tracking-wider">Top Monitor</span>
-                  </div>
-                  <p className="text-brand-text text-xs font-bold leading-tight line-clamp-2">{metrics.topMonitor.nome}</p>
-                  <p className="text-brand-muted text-[10px] mt-0.5">{metrics.topMonitor.total} eventos</p>
+                  <p className="text-brand-muted text-[10px] mt-0.5">{metrics.topCurso.total} matrículas</p>
                 </div>
               )}
             </div>
@@ -567,9 +557,9 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
 
           {/* Próximos eventos */}
           <Card className={leadsAlerta.length > 0 ? 'lg:col-span-2' : 'lg:col-span-3'}>
-            <CardHeader title="Próximas Festas" sub="Agenda dos próximos dias" action={
+            <CardHeader title="Próximos Encontros" sub="Agenda dos próximos dias" action={
               <span className="text-xs text-brand-muted bg-brand-surface-2 border border-brand-border rounded-lg px-2.5 py-1.5">
-                {metrics.proximosEventos.length} eventos
+                {metrics.proximosEventos.length} turmas
               </span>
             } />
 
@@ -578,7 +568,7 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
                 <div className="w-12 h-12 rounded-2xl bg-brand-surface-2 border border-brand-border flex items-center justify-center">
                   <Clock className="size-5 text-brand-muted" />
                 </div>
-                <p className="text-brand-muted text-sm">Nenhum evento agendado</p>
+                <p className="text-brand-muted text-sm">Nenhum encontro agendado</p>
               </div>
             ) : (
               <div className={cn(

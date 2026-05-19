@@ -12,18 +12,14 @@ import { cn } from '@/lib/utils'
 const NAV_ITEMS = [
   { href: '/admin',               label: 'Dashboard',        icon: LayoutDashboard, exact: true },
   { href: '/admin/leads',         label: 'Leads / CRM',      icon: Users },
-  { href: '/admin/clientes',      label: 'Clientes',         icon: Contact },
-  { href: '/admin/cursos',    label: 'Cursos',       icon: Package },
-  { href: '/admin/eventos',       label: 'Eventos',          icon: Calendar },
-  { href: '/admin/monitores',     label: 'Monitores',        icon: UserCheck },
-  { href: '/admin/financeiro',    label: 'Financeiro',       icon: DollarSign },
-  { href: '/admin/cashback',      label: 'Cashback',         icon: Coins },
+  { href: '/admin/clientes',      label: 'Clientes / Alunos', icon: Contact },
+  { href: '/admin/cursos',        label: 'Cursos',           icon: Package },
   { href: '/admin/usuarios',      label: 'Usuários',         icon: UserCog },
   { href: '/admin/configuracoes', label: 'Configurações',    icon: Settings },
 ]
 
 const BOTTOM_NAV = [
-  NAV_ITEMS[0], NAV_ITEMS[1], NAV_ITEMS[2], NAV_ITEMS[4], NAV_ITEMS[6],
+  NAV_ITEMS[0], NAV_ITEMS[1], NAV_ITEMS[2], NAV_ITEMS[3],
 ]
 
 export function Sidebar() {

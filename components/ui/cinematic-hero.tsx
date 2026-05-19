@@ -182,15 +182,15 @@ export interface CinematicHeroProps extends React.HTMLAttributes<HTMLDivElement>
 }
 
 export function CinematicHero({ 
-  brandName = "Twix Eventos",
+  brandName = "NBP Psicanálise",
   tagline1 = "Sua confiança é",
   tagline2 = "nossa maior conquista.",
   cardHeading = "Fidelidade e Excelência",
-  cardDescription = <><span className="text-white font-semibold">Twix Eventos</span> é avaliada com excelência máxima por quem mais importa: nossos clientes. Cada evento é uma história de sucesso construída com dedicação e profissionalismo.</>,
+  cardDescription = <><span className="text-white font-semibold">NBP Psicanálise</span> é avaliada com excelência máxima por quem mais importa: nossos alunos. Cada formação é uma história de sucesso construída com dedicação e rigor acadêmico.</>,
   metricValue = 455,
   metricLabel = "Avaliações 5★",
   ctaHeading = "O próximo sucesso é o seu.",
-  ctaDescription = "Junte-se aos milhares de clientes que confiam na Twix Eventos para transformar momentos em memórias inesquecíveis.",
+  ctaDescription = "Junte-se aos milhares de alunos que confiam no NBP Psicanálise para impulsionar suas carreiras e vivenciar uma jornada profunda de autoconhecimento.",
   className, 
   ...props 
 }: CinematicHeroProps) {

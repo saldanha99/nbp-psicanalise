@@ -1,60 +1,191 @@
 import { neon } from '@neondatabase/serverless'
 import { drizzle } from 'drizzle-orm/neon-http'
 import * as schema from '../lib/db/schema'
+import * as fs from 'fs'
+import * as path from 'path'
+import { eq, sql as drizzleSql } from 'drizzle-orm'
 
-const DATABASE_URL = 'postgresql://neondb_owner:npg_aM10bQZrcwoi@ep-misty-lab-acmq6rff.sa-east-1.aws.neon.tech/neondb?sslmode=require'
+// Parse .env manualmente
+const envPath = path.resolve(process.cwd(), '.env')
+let databaseUrl = process.env.DATABASE_URL
 
-const sql = neon(DATABASE_URL)
+try {
+  if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, 'utf8')
+    envContent.split('\n').forEach(line => {
+      const parts = line.split('=')
+      if (parts.length >= 2) {
+        const key = parts[0].trim()
+        const value = parts.slice(1).join('=').trim()
+        if (key === 'DATABASE_URL') {
+          databaseUrl = value
+        }
+      }
+    })
+  }
+} catch (e) {
+  console.log('Aviso ao ler .env:', e)
+}
+
+if (!databaseUrl) {
+  console.error('❌ DATABASE_URL não encontrada no .env ou process.env')
+  process.exit(1)
+}
+
+const sql = neon(databaseUrl)
 const db = drizzle(sql, { schema })
 
 async function seed() {
-  console.log('🌱 Inserindo dados iniciais...')
+  console.log('🌱 Inserindo dados iniciais do NBP Psicanálise...')
 
   // Configurações
   await db.insert(schema.configuracoes).values([
-    { chave: 'whatsapp_numero', valor: '5512996498725', descricao: 'Número WhatsApp sem formatação' },
-    { chave: 'whatsapp_mensagem_padrao', valor: 'Olá! Estou no site e gostaria de mais informações', descricao: 'Mensagem padrão WhatsApp' },
+    { chave: 'whatsapp_numero', valor: '5511961695163', descricao: 'Número WhatsApp sem formatação' },
+    { chave: 'whatsapp_mensagem_padrao', valor: 'Olá! Gostaria de saber mais sobre as formações do NBP Psicanálise.', descricao: 'Mensagem padrão WhatsApp' },
     { chave: 'sla_followup_horas', valor: '48', descricao: 'Horas para alertar lead sem interação' },
-    { chave: 'desconto_seg_qui', valor: 'true', descricao: 'Exibir banner de desconto segunda a quinta' },
-  ]).onConflictDoNothing()
-  console.log('✅ Configurações inseridas')
+    { chave: 'desconto_seg_qui', valor: 'false', descricao: 'Exibir banner de desconto segunda a quinta' },
+  ]).onConflictDoUpdate({
+    target: schema.configuracoes.chave,
+    set: {
+      valor: drizzleSql`excluded.valor`,
+      descricao: drizzleSql`excluded.descricao`,
+    }
+  })
+  console.log('✅ Configurações inseridas/atualizadas')
 
-  // Admin user (senha: twix@2025)
+  // Admin user (senha: nbp@2025)
+  const passwordHash = '$2b$10$XHdSVDX1MLsFNjlXKSim.OmqyJ3VrH8PtJ/WsCkaGcJ0XjCJ/Xjvm'
+  
+  // Deletar o admin antigo se existir
+  await db.delete(schema.adminUsers).where(eq(schema.adminUsers.email, 'admin@twixeventos.com'))
+  
   await db.insert(schema.adminUsers).values([{
-    email: 'admin@twixeventos.com',
-    passwordHash: '$2b$12$y0pQfLCBXevVJHI.ThE2jup0cP0ouWs.nPXwEk1Skn0onk6t8QzVS',
-    nome: 'Admin Twix',
+    email: 'admin@nbpsicanalise.com.br',
+    passwordHash,
+    nome: 'Admin NBP',
   }]).onConflictDoNothing()
-  console.log('✅ Usuário admin inserido')
+  console.log('✅ Usuário admin inserido/atualizado')
 
-  // Cursos
+  // Limpar os cursos antigos (Twix Eventos)
+  await db.delete(schema.cursos)
+  console.log('🗑️ Cursos antigos removidos')
+
+  // Cursos NBP Psicanálise
   await db.insert(schema.cursos).values([
-    { nome: 'Futebol de Sabão', slug: 'futebol-de-sabao', categoria: 'inflaveis', faixaEtaria: 'Livre para todas as idades', capacidade: 'Até 4 adultos ou 8 crianças', dimensoes: '5m largura × 10m comprimento', energia: '110v ou 220v', destaque: true, ordemDestaque: 1, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2023/03/Sem-titulo-1.png' },
-    { nome: 'Canhão de Espuma', slug: 'canhao-de-espuma', categoria: 'batalhas', faixaEtaria: 'Livre para todas as idades', capacidade: 'Variado', dimensoes: '2m largura × 1,5m comprimento', energia: '220v', destaque: true, ordemDestaque: 2, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2023/03/IMG_2562-scaled.jpeg' },
-    { nome: 'Tobogã Inflável', slug: 'toboga-inflavel', categoria: 'inflaveis', faixaEtaria: 'Até 10 anos', capacidade: 'Até 2 crianças', dimensoes: '3m largura × 5m comprimento × 4m altura', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2023/03/IMG_3347-scaled.jpeg' },
-    { nome: 'Giro Radical', slug: 'giro-radical', categoria: 'radicais', faixaEtaria: 'Livre para todas as idades', capacidade: '4 pessoas', dimensoes: '6m de circunferência', energia: '220v', destaque: true, ordemDestaque: 3, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2024/10/giro-radical-twixeventos-3-scaled.jpg' },
-    { nome: 'Toboágua', slug: 'toboagua', categoria: 'aquaticos', faixaEtaria: 'Até 15 anos', capacidade: '1 pessoa', dimensoes: '4,2m altura × 5m comprimento × 3m largura', energia: '220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2024/03/aluguel-de-toboagua-inflavel-Image-2024-03-01-at-10.10.01.jpg' },
-    { nome: 'Óculos VR', slug: 'oculos-vr', categoria: 'radicais', faixaEtaria: 'Livre para todas as idades', capacidade: '1 pessoa', dimensoes: '2,5m largura × 2,5m comprimento', energia: '110v ou 220v', destaque: true, ordemDestaque: 4, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2023/03/oculos-realidade-virtual.jpg' },
-    { nome: 'WaterBall', slug: 'waterball', categoria: 'aquaticos', faixaEtaria: 'Livre para todas as idades', capacidade: '1 pessoa', dimensoes: '2m de circunferência', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2023/03/waterball.png' },
-    { nome: 'Touro Mecânico', slug: 'touro-mecanico', categoria: 'radicais', faixaEtaria: 'Livre para todas as idades', capacidade: '1 pessoa', dimensoes: '4,2m largura × 4,2m comprimento', energia: '220v', destaque: true, ordemDestaque: 5, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2023/05/aliguel-de-touro-Mecanico.jpg' },
-    { nome: 'Mini Tobogã', slug: 'mini-toboga', categoria: 'inflaveis', faixaEtaria: 'Até 7 anos', capacidade: '2 crianças', dimensoes: '2,5m largura × 3m comprimento × 3m altura', energia: '220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2023/03/mini-toboga.jpg' },
-    { nome: 'Cama Elástica', slug: 'cama-elastica', categoria: 'inflaveis', faixaEtaria: 'Consultar tamanhos', capacidade: '2 a 3 crianças', dimensoes: 'Modelos de 2 ou 3 metros', energia: 'Não precisa de energia', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2023/03/cama-elastica.jpg' },
-    { nome: 'Guerra de Cotonete', slug: 'guerra-de-cotonete', categoria: 'batalhas', faixaEtaria: 'Livre para todas as idades', capacidade: '2 pessoas', dimensoes: '5m largura × 5m comprimento', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2024/10/1602589231129.jpeg' },
-    { nome: 'Piscina de Bolinhas Tradicional', slug: 'piscina-de-bolinhas-tradicional', categoria: 'inflaveis', faixaEtaria: 'Até 7 anos', capacidade: '3 a 4 crianças', dimensoes: '1,5m × 1,5m', energia: 'Não precisa de energia', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2023/03/piscina-de-bolinhas.jpg' },
-    { nome: 'Toboshark Tradicional', slug: 'toboshark-tradicional', categoria: 'toboshark', faixaEtaria: 'Todas as idades', capacidade: '2 pessoas', dimensoes: '10m comprimento × 7m altura × 4,2m largura', energia: '110v ou 220v', destaque: true, ordemDestaque: 6, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2024/11/Toboshark-Tradicional-sjc-2-Photoroom.jpg' },
-    { nome: 'T-Rex 3 em 1', slug: 't-rex-3-em-1', categoria: 'tematicos', faixaEtaria: 'Até 10 anos', capacidade: '4 crianças', dimensoes: '8m comprimento × 4,5m largura × 6m altura', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2024/10/Imagem-do-WhatsApp-de-2024-10-23-as-10.21.36_79c0dc12.jpg' },
-    { nome: 'Barco Pirata', slug: 'barco-pirata', categoria: 'inflaveis', faixaEtaria: 'Até 7 anos', capacidade: '3 a 4 crianças', dimensoes: '3m altura × 3,5m largura × 5,8m comprimento', energia: '220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2024/10/barco-pirata-3-1.jpeg.webp' },
-    { nome: 'Toboshark Acqua', slug: 'toboshark-acqua', categoria: 'toboshark', faixaEtaria: 'Todas as idades', capacidade: '2 pessoas', dimensoes: '8m comprimento × 7m altura × 4,2m largura', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2024/11/aluguel-toboshark-acqua.jpg' },
-    { nome: 'Super Toboshark Slide', slug: 'super-toboshark-slide', categoria: 'toboshark', faixaEtaria: 'Todas as idades', capacidade: '2 pessoas', dimensoes: '4,2m largura × 7m altura × 17m comprimento', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2024/11/Aluguel-Super-Toboshark-Slide-1.jpg' },
-    { nome: 'Slide Radical', slug: 'slide-radical', categoria: 'toboshark', faixaEtaria: 'Todas as idades', capacidade: '2 pessoas', dimensoes: '9m comprimento × 3,2m altura × 3m largura', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2025/03/Twix-Eventos-Slide-Radical-3.png' },
-    { nome: 'Jardim Encantado', slug: 'jardim-encantado', categoria: 'tematicos', faixaEtaria: 'Todas as idades', capacidade: '3 pessoas', dimensoes: '7,5m × 4m × 3,5m altura', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2025/09/jd-encantado-1.jpeg' },
-    { nome: 'Fundo do Mar 2 em 1', slug: 'fundo-do-mar-2-em-1', categoria: 'tematicos', faixaEtaria: 'Todas as idades', capacidade: '2 pessoas', dimensoes: '4,5m × 4,5m × 4,5m altura', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2025/09/fundo-do-mar-5.jpeg' },
-    { nome: 'Escalada Tropical', slug: 'escalada-tropical', categoria: 'radicais', faixaEtaria: 'Todas as idades', capacidade: '1 pessoa', dimensoes: '4,5m × 4,5m × 4,5m altura', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2025/09/escalada-tropical.png' },
-    { nome: 'Piscina de Bolinhas Inflável', slug: 'piscina-de-bolinhas-inflavel', categoria: 'inflaveis', faixaEtaria: 'Crianças', capacidade: '3 crianças', dimensoes: '2 metros', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2024/10/piscina-inflavel.jpeg.webp' },
-    { nome: 'Cotonetes UFC', slug: 'cotonetes-ufc', categoria: 'batalhas', faixaEtaria: 'Todas as idades', capacidade: '2 pessoas', dimensoes: '5,6m × 5,6m × 1,8m altura', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2024/10/esportivos-guerra-cotonete-UFC.jpg' },
-    { nome: 'Cotonete Street', slug: 'cotonete-street', categoria: 'batalhas', faixaEtaria: 'Todas as idades', capacidade: '2 pessoas', dimensoes: '5,6m × 5,6m × 1,8m altura', energia: '110v ou 220v', destaque: false, ordemDestaque: 0, fotoDestaque: 'https://twixeventos.com/wp-content/uploads/2025/09/cotonete-1.jpeg' },
+    {
+      nome: 'Formação em Psicanálise',
+      slug: 'formacao-em-psicanalise',
+      descricao: 'Curso completo de formação em psicanálise com duração de 26 meses, baseado no tripé psicanalítico (análise pessoal, conhecimento teórico e supervisão).',
+      categoria: 'formacao',
+      faixaEtaria: 'Mínimo 21 anos',
+      capacidade: 'Presencial / Ao Vivo / Gravado',
+      dimensoes: '26 meses',
+      energia: 'N/A',
+      destaque: true,
+      ordemDestaque: 1,
+      fotos: ['https://nbpsicanalise.com.br/wp-content/uploads/2021/04/curso-formacao-min.png'],
+      fotoDestaque: 'https://nbpsicanalise.com.br/wp-content/uploads/2021/04/curso-formacao-min.png',
+      ativo: true,
+      monitoresNecessarios: 0
+    },
+    {
+      nome: '8º Elaborando a Psicanálise - Sábado',
+      slug: 'crs-8-elaborando-a-psicanalise-sabado-30-05-26-das-9h-as-18',
+      descricao: 'Workshop intensivo de elaboração de casos clínicos e teoria psicanalítica aplicada. Sábado das 9h às 18h.',
+      categoria: 'presencial',
+      faixaEtaria: 'Estudantes e Profissionais',
+      capacidade: 'Sala de aula',
+      dimensoes: '09 horas',
+      energia: 'N/A',
+      destaque: true,
+      ordemDestaque: 2,
+      fotos: ['https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/154/154_F.jpeg'],
+      fotoDestaque: 'https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/154/154_F.jpeg',
+      ativo: true,
+      monitoresNecessarios: 0
+    },
+    {
+      nome: '8º Elaborando a Psicanálise - Domingo',
+      slug: 'crs-8-elaborando-a-psicanalise-domingo-31-05-26-das-9h-as-18',
+      descricao: 'Workshop intensivo de elaboração de casos clínicos e teoria psicanalítica aplicada. Domingo das 9h às 18h.',
+      categoria: 'presencial',
+      faixaEtaria: 'Estudantes e Profissionais',
+      capacidade: 'Sala de aula',
+      dimensoes: '09 horas',
+      energia: 'N/A',
+      destaque: true,
+      ordemDestaque: 3,
+      fotos: ['https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/160/160_F.jpeg'],
+      fotoDestaque: 'https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/160/160_F.jpeg',
+      ativo: true,
+      monitoresNecessarios: 0
+    },
+    {
+      nome: 'Palestra - Do Desamparo ao Desejo',
+      slug: 'palestra-do-desamparo-ao-desejo-a-constituicao-do-sujeito-a-partir-dos-vinculos',
+      descricao: 'Palestra sobre a constituição do sujeito a partir dos vínculos primários. Palestrante convidado.',
+      categoria: 'aovivo',
+      faixaEtaria: 'Livre para todos os interessados',
+      capacidade: 'Transmissão Online',
+      dimensoes: '02 horas',
+      energia: 'N/A',
+      destaque: true,
+      ordemDestaque: 4,
+      fotos: ['https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/148/148_F.jpeg'],
+      fotoDestaque: 'https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/148/148_F.jpeg',
+      ativo: true,
+      monitoresNecessarios: 0
+    },
+    {
+      nome: 'Grupoterapia - Quinta às 15h',
+      slug: 'grupoterapia-07-08-25-quinta-as-15h',
+      descricao: 'Sessões semanais de psicoterapia em grupo mediadas por psicanalistas certificados do Núcleo.',
+      categoria: 'presencial',
+      faixaEtaria: 'Adultos',
+      capacidade: 'Sala de terapia',
+      dimensoes: '02 horas',
+      energia: 'N/A',
+      destaque: true,
+      ordemDestaque: 5,
+      fotos: ['https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/132/132_F.jpeg'],
+      fotoDestaque: 'https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/132/132_F.jpeg',
+      ativo: true,
+      monitoresNecessarios: 0
+    },
+    {
+      nome: 'AULAS GRAVADAS - Leitura e Estudo do Livro "Édipo"',
+      slug: 'aulas-gravadas-leitura-e-estudo-do-livro-edipo-de-j-d-nasio',
+      descricao: 'Curso gravado com leitura e análise detalhada da obra "Édipo" do renomado psicanalista J.-D. Násio.',
+      categoria: 'gravado',
+      faixaEtaria: 'Interessados em Psicanálise',
+      capacidade: 'Acesso Online Vitalício',
+      dimensoes: '1:30h',
+      energia: 'N/A',
+      destaque: true,
+      ordemDestaque: 6,
+      fotos: ['https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/50/50_F.jpeg'],
+      fotoDestaque: 'https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/50/50_F.jpeg',
+      ativo: true,
+      monitoresNecessarios: 0
+    },
+    {
+      nome: 'AULAS GRAVADAS - Estudo do Livro "Porque Repetimos os Mesmos Erros"',
+      slug: 'aulas-gravadas-estudo-do-livro-porque-repetimos-os-mesmos-erros-de-j-d',
+      descricao: 'Curso gravado focado na repetição na clínica psicanalítica a partir da obra de J.-D. Násio.',
+      categoria: 'gravado',
+      faixaEtaria: 'Interessados em Psicanálise',
+      capacidade: 'Acesso Online Vitalício',
+      dimensoes: '1:30h',
+      energia: 'N/A',
+      destaque: false,
+      ordemDestaque: 0,
+      fotos: ['https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/30/30_F.png'],
+      fotoDestaque: 'https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/30/30_F.png',
+      ativo: true,
+      monitoresNecessarios: 0
+    }
   ]).onConflictDoNothing()
-  console.log('✅ 24 cursos inseridos')
+  console.log('✅ 7 cursos do NBP Psicanálise inseridos')
 
   console.log('\n🎉 Seed concluído!')
 }

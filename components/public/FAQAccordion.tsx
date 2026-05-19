@@ -6,44 +6,34 @@ import { cn } from '@/lib/utils'
 
 const faqs = [
   {
-    question: 'Qual é a área de atendimento da Twix Eventos?',
+    question: 'Como funciona a Formação em Psicanálise do NBP?',
     answer:
-      'Atendemos São José dos Campos e toda a região do Vale do Paraíba. Entre em contato via WhatsApp para confirmar a disponibilidade para a sua localização.',
+      'Nossa formação é estruturada com base no tripé psicanalítico essencial: teoria psicanalítica detalhada, supervisão clínica com analistas experientes e análise pessoal do estudante.',
   },
   {
-    question: 'Qual é o prazo mínimo para reservar?',
+    question: 'Qual certificação receberei ao final do curso?',
     answer:
-      'Recomendamos reservar com pelo menos 7 dias de antecedência, especialmente nos finais de semana. Porém, consulte nossa disponibilidade — às vezes conseguimos atender com menos prazo.',
+      'Ao concluir todas as exigências curriculares (grade teórica, horas de análise e supervisão), você receberá o certificado oficial de Formação em Psicanálise emitido pelo NBP, habilitando-o a atuar clinicamente.',
   },
   {
-    question: 'Como funciona o pagamento e a entrada?',
+    question: 'Quem pode ingressar na Formação do NBP?',
     answer:
-      'Confirmamos a reserva com apenas 10% de entrada via PIX ou transferência. O restante é pago no dia do evento, antes da montagem dos cursos.',
+      'A formação é voltada para portadores de diploma de ensino superior em qualquer área do conhecimento que desejem atuar como psicanalistas ou que busquem um profundo autoconhecimento e fundamentação teórica.',
   },
   {
-    question: 'Os cursos são seguros para crianças?',
+    question: 'As aulas são presenciais ou online?',
     answer:
-      'Sim! Todos os nossos cursos passam por inspeção e manutenção regulares. A equipe chega 2 horas antes para montar tudo com segurança e sempre acompanha o evento quando necessário.',
+      'Oferecemos modalidades flexíveis de ensino, com opções de aulas ao vivo online e encontros presenciais, permitindo que alunos de qualquer localidade do país realizem sua formação com excelência.',
   },
   {
-    question: 'O que está incluído no aluguel?',
+    question: 'Como funciona a prática clínica supervisionada?',
     answer:
-      'O aluguel inclui entrega, montagem, desmontagem e retirada dos cursos. Também fornecemos os equipamentos de proteção quando aplicável.',
+      'A partir do período determinado na formação, o aluno inicia os atendimentos clínicos de estágio, que são acompanhados e orientados por supervisores credenciados pelo NBP.',
   },
   {
-    question: 'E se chover no dia do evento?',
+    question: 'Quais são as formas de pagamento e matrícula?',
     answer:
-      'Em caso de chuva, trabalhamos junto com o cliente para reagendar o evento para outra data disponível sem custo adicional. A sua satisfação é nossa prioridade.',
-  },
-  {
-    question: 'Posso alugar mais de um curso ao mesmo tempo?',
-    answer:
-      'Claro! Você pode combinar quantos cursos quiser, sujeito à disponibilidade. Inclusive, alugar mais de um item pode ter condições especiais de preço.',
-  },
-  {
-    question: 'Quanto tempo antes vocês chegam para montar?',
-    answer:
-      'Nossa equipe chega aproximadamente 2 horas antes do horário de início do seu evento para garantir que tudo esteja montado, testado e pronto para a diversão.',
+      'As matrículas podem ser iniciadas diretamente por nosso site ou WhatsApp. Oferecemos opções facilitadas de parcelamento e planos especiais de pagamento para a sua formação.',
   },
 ]
 
@@ -59,7 +49,7 @@ export function FAQAccordion() {
           <h2 className="text-3xl sm:text-4xl font-black uppercase text-brand-text tracking-tight">
             PERGUNTAS <span className="text-brand-accent">FREQUENTES</span>
           </h2>
-          <p className="text-brand-muted text-base">Tudo o que você precisa saber antes de contratar.</p>
+          <p className="text-brand-muted text-base">Tudo o que você precisa saber sobre a nossa formação.</p>
         </div>
 
         <div className="flex flex-col gap-2">

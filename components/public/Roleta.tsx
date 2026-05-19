@@ -90,7 +90,7 @@ function WheelSVG({ premios, spinning }: { premios: Premio[]; spinning: boolean 
       <circle cx={cx} cy={cy} r={Ri} fill="#1e293b" stroke="rgba(255,255,255,0.2)" strokeWidth="2" />
       <circle cx={cx} cy={cy} r={Ri - 8} fill="rgba(255,255,255,0.05)" />
       <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="11" fontWeight="800" fontFamily="system-ui">
-        TWIX
+        NBP
       </text>
     </svg>
   )

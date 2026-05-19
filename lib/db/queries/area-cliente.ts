@@ -3,11 +3,11 @@ import { clientes, eventos, cashbackTransacoes, roletaGiros } from '../schema'
 import { eq, desc, count, sql } from 'drizzle-orm'
 import { getConfig } from './configuracoes'
 
-/* ── Gera código único TWX-XXXXXXXX ─────────────────────── */
+/* ── Gera código único NBP-XXXXXXXX ─────────────────────── */
 function gerarCodigo(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // sem 0/O/I/1
   const parte = (n: number) => Array.from({ length: n }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
-  return `TWX-${parte(4)}${parte(4)}`
+  return `NBP-${parte(4)}${parte(4)}`
 }
 
 /* ── Garante código único no banco ──────────────────────── */

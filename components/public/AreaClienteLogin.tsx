@@ -13,11 +13,11 @@ export function AreaClienteLogin() {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const handleInput = (v: string) => {
-    // Formatar automaticamente: TWXA3K74B2 → TWX-A3K74B2
+    // Formatar automaticamente: NBPA3K74B2 → NBP-A3K74B2
     let raw = v.toUpperCase().replace(/[^A-Z0-9]/g, '')
-    if (raw.startsWith('TWX')) raw = raw.slice(3)
+    if (raw.startsWith('NBP')) raw = raw.slice(3)
     if (raw.length > 8) raw = raw.slice(0, 8)
-    const formatted = raw.length > 0 ? `TWX-${raw}` : ''
+    const formatted = raw.length > 0 ? `NBP-${raw}` : ''
     setCodigo(formatted)
     setErro('')
   }
@@ -26,7 +26,7 @@ export function AreaClienteLogin() {
     e.preventDefault()
     const codigoLimpo = codigo.trim().toUpperCase()
     if (codigoLimpo.length < 8) {
-      setErro('Código inválido. Formato: TWX-XXXXXXXX')
+      setErro('Código inválido. Formato: NBP-XXXXXXXX')
       return
     }
     setLoading(true)
@@ -62,8 +62,8 @@ export function AreaClienteLogin() {
             <Ticket className="size-6 text-white" />
           </div>
           <div>
-            <p className="text-brand-text font-extrabold text-xl leading-none tracking-tight">Twix Eventos</p>
-            <p className="text-brand-muted text-xs mt-0.5">Área do Cliente</p>
+            <p className="text-brand-text font-extrabold text-xl leading-none tracking-tight">NBP Psicanálise</p>
+            <p className="text-brand-muted text-xs mt-0.5">Área de Acesso</p>
           </div>
         </div>
 
@@ -96,7 +96,7 @@ export function AreaClienteLogin() {
                   type="text"
                   value={codigo}
                   onChange={e => handleInput(e.target.value)}
-                  placeholder="TWX-A3K7..."
+                  placeholder="NBP-A3K7..."
                   maxLength={12}
                   autoComplete="off"
                   autoCorrect="off"
@@ -107,7 +107,7 @@ export function AreaClienteLogin() {
                   <p className="text-red-400 text-xs mt-2 text-center">{erro}</p>
                 )}
                 <p className="text-brand-muted text-xs text-center mt-2">
-                  Formato: <span className="font-mono text-brand-text">TWX-A3K74B2X</span>
+                  Formato: <span className="font-mono text-brand-text">NBP-A3K74B2X</span>
                 </p>
               </div>
 
@@ -143,8 +143,8 @@ export function AreaClienteLogin() {
           {/* Benefícios abaixo do card */}
           <div className="grid grid-cols-3 gap-3 mt-6">
             {[
-              { icon: History,    label: 'Histórico de festas' },
-              { icon: Gift,       label: 'Cashback em cada evento' },
+              { icon: History,    label: 'Meus cursos' },
+              { icon: Gift,       label: 'Acesso imediato' },
               { icon: ShieldCheck,label: 'Dados seguros' },
             ].map(({ icon: Icon, label }) => (
               <div key={label} className="flex flex-col items-center gap-2 p-3 bg-brand-surface border border-brand-border rounded-2xl text-center">

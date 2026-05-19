@@ -9,8 +9,27 @@ interface Props {
   cursos: Curso[]
 }
 
+function formatCategoryLabel(value: string) {
+  if (value === 'todos') return 'Todos'
+  // Format slug-like categories or keep as is
+  return value
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
 export function CourseGrid({ cursos }: Props) {
   const [categoriaAtiva, setCategoriaAtiva] = useState('todos')
+
+  // Compute dynamic categories based on available courses
+  const categorias = useMemo(() => {
+    const cats = new Set(cursos.map((c) => c.categoria).filter(Boolean))
+    const list = Array.from(cats).map((c) => ({
+      value: c,
+      label: formatCategoryLabel(c),
+    }))
+    return [{ value: 'todos', label: 'Todos' }, ...list]
+  }, [cursos])
 
   const filtered = useMemo(() => {
     if (categoriaAtiva === 'todos') return cursos
@@ -18,11 +37,15 @@ export function CourseGrid({ cursos }: Props) {
   }, [cursos, categoriaAtiva])
 
   return (
-    <div className="flex flex-col gap-8">
-      <CategoryFilter onFilter={setCategoriaAtiva} categoriaAtiva={categoriaAtiva} />
+    <div className="flex flex-col gap-6">
+      <CategoryFilter
+        onFilter={setCategoriaAtiva}
+        categoriaAtiva={categoriaAtiva}
+        categorias={categorias}
+      />
 
       {filtered.length === 0 ? (
-        <div className="py-20 text-center text-brand-muted">
+        <div className="py-20 text-center text-gray-400 bg-white border border-gray-150 rounded-lg shadow-sm">
           Nenhum curso encontrado para esta categoria.
         </div>
       ) : (
@@ -31,7 +54,7 @@ export function CourseGrid({ cursos }: Props) {
           key={categoriaAtiva}
         >
           {filtered.map((curso) => (
-            <div key={curso.id} className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <div key={curso.id} className="animate-in fade-in duration-300">
               <CourseCard curso={curso} />
             </div>
           ))}

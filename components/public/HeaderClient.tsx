@@ -56,12 +56,14 @@ export function HeaderClient({ logoUrl, bannerAtivo = 'false', bannerTexto = '' 
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/minha-area"
+            <a
+              href="https://cursos.nbpsicanalise.com.br/login"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-[#333] hover:text-[#6a5a98] font-semibold text-[12px] uppercase tracking-wider transition-colors font-[family-name:var(--font-heading)]"
             >
               Minha Área
-            </Link>
+            </a>
           </div>
 
           {/* Mobile Toggle */}
@@ -90,13 +92,15 @@ export function HeaderClient({ logoUrl, bannerAtivo = 'false', bannerTexto = '' 
                   {link.label}
                 </Link>
               ))}
-              <Link
-                href="/minha-area"
+              <a
+                href="https://cursos.nbpsicanalise.com.br/login"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-lg font-bold text-[#6a5a98] uppercase tracking-wider border-b border-gray-100 pb-2"
                 onClick={() => setOpen(false)}
               >
                 Minha Área
-              </Link>
+              </a>
             </div>
           </div>
         )}

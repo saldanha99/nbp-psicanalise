@@ -14,8 +14,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const b = await getCursoBySlug(slug)
   if (!b) return {}
   return {
-    title: `Aluguel de ${b.nome} em SJC`,
-    description: `Alugue o ${b.nome} para o seu evento em São José dos Campos. ${b.faixaEtaria} · ${b.capacidade} · ${b.dimensoes}. Reserve agora via WhatsApp!`,
+    title: `${b.nome} — NBP Psicanálise`,
+    description: `Matricule-se no curso ${b.nome} no Núcleo Brasileiro de Psicanálise. Formação de qualidade em Psicanálise.`,
   }
 }
 

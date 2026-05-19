@@ -2,10 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Users, Baby, Plus, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useCart } from '@/lib/store/cart'
-import { useEffect, useState } from 'react'
 
 interface CourseCardProps {
   curso: {
@@ -19,139 +16,72 @@ interface CourseCardProps {
     fotoDestaque: string | null
     destaque: boolean
     dimensoes: string
+    descricao: string | null
   }
-}
-
-const CATEGORY_LABELS: Record<string, string> = {
-  inflaveis: 'Inflável',
-  toboshark: 'Toboshark',
-  radicais: 'Radical',
-  batalhas: 'Batalha',
-  tematicos: 'Temático',
-  aquaticos: 'Aquático',
 }
 
 export function CourseCard({ curso }: CourseCardProps) {
-  const { id, nome, slug, categoria, faixaEtaria, capacidade, fotos, fotoDestaque, destaque } = curso
-  const { add, remove, has, open } = useCart()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    useCart.persist.rehydrate()
-    setMounted(true) // eslint-disable-line react-hooks/set-state-in-effect
-  }, [])
-
-  const inCart = mounted && has(id)
+  const { nome, slug, categoria, fotos, fotoDestaque, destaque, descricao } = curso
   const imageSrc = fotoDestaque ?? (fotos && fotos.length > 0 ? fotos[0] : null)
-  const categoryLabel = CATEGORY_LABELS[categoria] ?? categoria
 
-  const handleCart = (e: React.MouseEvent) => {
-    e.preventDefault()
-    if (inCart) {
-      remove(id)
-    } else {
-      add({ id, nome, slug, fotoDestaque: imageSrc, categoria })
-    }
-  }
-
-  const card = (
+  return (
     <div
       className={cn(
-        'bg-brand-surface rounded-xl overflow-hidden flex flex-col transition-all duration-200 group',
-        destaque ? 'border-0' : 'border border-brand-border hover:border-brand-accent',
-        inCart && 'ring-2 ring-brand-accent/50'
+        'bg-white rounded-lg overflow-hidden flex flex-col transition-all duration-200 group border border-gray-150 hover:border-[#6a5a98] shadow-sm'
       )}
     >
       {/* Imagem */}
-      <Link href={`/cursos/${slug}`} className="relative aspect-[4/3] bg-brand-surface-2 overflow-hidden block">
+      <Link href={`/cursos/${slug}`} className="relative aspect-[4/3] bg-gray-50 overflow-hidden block">
         {imageSrc ? (
-          <Image
+          <img
             src={imageSrc}
             alt={nome}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <span className="text-brand-muted text-sm">Sem foto</span>
+          <div className="w-full h-full flex items-center justify-center bg-gray-100">
+            <span className="text-gray-400 text-sm">Sem foto</span>
           </div>
         )}
 
         <div className="absolute top-3 left-3 z-10">
-          <span className="bg-brand-bg/80 backdrop-blur-sm text-brand-muted text-xs font-medium px-2.5 py-1 rounded-full border border-brand-border">
-            {categoryLabel}
+          <span className="bg-white/90 backdrop-blur-sm text-[#6a5a98] text-[10px] uppercase font-bold px-2 py-0.5 rounded border border-gray-200">
+            {categoria}
           </span>
         </div>
 
         {destaque && (
           <div className="absolute top-3 right-3 z-10">
-            <span className="bg-brand-accent text-white text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
+            <span className="bg-[#6a5a98] text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wide">
               DESTAQUE
             </span>
-          </div>
-        )}
-
-        {inCart && (
-          <div className="absolute inset-0 bg-brand-accent/10 flex items-center justify-center">
-            <div className="bg-brand-accent text-white rounded-full p-2">
-              <Check className="size-6" />
-            </div>
           </div>
         )}
       </Link>
 
       {/* Conteúdo */}
-      <div className="flex flex-col gap-3 p-4 flex-1">
+      <div className="flex flex-col gap-2.5 p-4 flex-1">
         <Link href={`/cursos/${slug}`}>
-          <h3 className="text-brand-text font-bold text-base leading-snug group-hover:text-brand-accent transition-colors">
+          <h3 className="text-gray-900 font-bold text-base leading-snug group-hover:text-[#6a5a98] transition-colors uppercase font-[family-name:var(--font-heading)]">
             {nome}
           </h3>
         </Link>
 
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-center gap-2 text-brand-muted text-sm">
-            <Baby className="size-3.5 shrink-0" />
-            <span>Faixa etária: {faixaEtaria}</span>
-          </div>
-          <div className="flex items-center gap-2 text-brand-muted text-sm">
-            <Users className="size-3.5 shrink-0" />
-            <span>Capacidade: {capacidade}</span>
-          </div>
-        </div>
+        {descricao && (
+          <p className="text-gray-500 text-sm line-clamp-2 leading-relaxed font-light">
+            {descricao}
+          </p>
+        )}
 
-        <div className="mt-auto flex gap-2">
+        <div className="mt-auto pt-4 border-t border-gray-100 flex gap-2">
           <Link
             href={`/cursos/${slug}`}
-            className="flex-1 inline-flex items-center justify-center border border-brand-border text-brand-text hover:border-brand-accent hover:text-brand-accent font-semibold text-sm px-3 py-2.5 rounded-lg transition-colors"
+            className="w-full inline-flex items-center justify-center bg-[#6a5a98] hover:bg-[#584885] text-white font-bold text-[11px] uppercase tracking-wider py-3 rounded transition-colors"
           >
-            Ver detalhes
+            Ver Detalhes
           </Link>
-          <button
-            onClick={handleCart}
-            className={cn(
-              'inline-flex items-center justify-center gap-1 font-semibold text-sm px-3 py-2.5 rounded-lg transition-colors',
-              inCart
-                ? 'bg-brand-accent text-white hover:bg-red-500'
-                : 'bg-brand-accent hover:bg-brand-accent-hover text-white'
-            )}
-            aria-label={inCart ? 'Remover do orçamento' : 'Adicionar ao orçamento'}
-          >
-            {inCart ? <Check className="size-4" /> : <Plus className="size-4" />}
-            <span className="hidden sm:inline">{inCart ? 'Adicionado' : 'Orçar'}</span>
-          </button>
         </div>
       </div>
     </div>
   )
-
-  if (destaque) {
-    return (
-      <div className="p-[2px] rounded-[13px] shimmer-border-gradient">
-        {card}
-      </div>
-    )
-  }
-
-  return card
 }

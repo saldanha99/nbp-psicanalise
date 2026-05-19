@@ -98,7 +98,7 @@ export default async function HomePage() {
                 <div key={curso.id} className="group cursor-pointer">
                   <div className="relative aspect-[4/3] overflow-hidden bg-black mb-4">
                     <img 
-                      src={curso.imagemUrl || "https://nbpsicanalise.com.br/wp-content/uploads/2023/08/sobre-formacao-psicanalista.jpeg"} 
+                      src={curso.fotos?.[0] || "https://nbpsicanalise.com.br/wp-content/uploads/2023/08/sobre-formacao-psicanalista.jpeg"} 
                       alt={curso.nome}
                       className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                     />
@@ -106,9 +106,9 @@ export default async function HomePage() {
                   <h3 className="text-[16px] font-semibold text-[#333] mb-2 uppercase leading-snug" style={{ fontFamily: 'Raleway, sans-serif' }}>
                     {curso.nome}
                   </h3>
-                  {curso.resumo && (
+                  {curso.descricao && (
                     <p className="text-[13px] text-gray-500 line-clamp-2 leading-relaxed">
-                      {curso.resumo}
+                      {curso.descricao}
                     </p>
                   )}
                   <Link href={`/cursos/${curso.slug}`} className="inline-block mt-4 text-[11px] font-bold text-[#6a5a98] uppercase tracking-widest hover:text-[#584885] transition-colors">

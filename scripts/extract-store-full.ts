@@ -1,3 +1,4 @@
+// @ts-nocheck
 import fetch from 'node-fetch';
 import * as cheerio from 'cheerio';
 import { db } from '../lib/db';

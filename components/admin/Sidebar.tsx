@@ -5,17 +5,18 @@ import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import {
   LayoutDashboard, Users, Package, Calendar,
-  Settings, LogOut, UserCheck, DollarSign, UserCog, Contact, Coins,
+  Settings, LogOut, UserCheck, DollarSign, UserCog, Contact, Coins, GraduationCap,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
-  { href: '/admin',               label: 'Dashboard',        icon: LayoutDashboard, exact: true },
-  { href: '/admin/leads',         label: 'Leads / CRM',      icon: Users },
-  { href: '/admin/clientes',      label: 'Clientes / Alunos', icon: Contact },
-  { href: '/admin/cursos',        label: 'Cursos',           icon: Package },
-  { href: '/admin/usuarios',      label: 'Usuários',         icon: UserCog },
-  { href: '/admin/configuracoes', label: 'Configurações',    icon: Settings },
+  { href: '/admin',               label: 'Dashboard',   exact: true, icon: LayoutDashboard },
+  { href: '/admin/leads',         label: 'Leads',       icon: Users },
+  { href: '/admin/clientes',      label: 'Alunos',      icon: Contact },
+  { href: '/admin/cursos',        label: 'Cursos',      icon: Package },
+  { href: '/admin/matriculas',    label: 'Matrículas',   icon: GraduationCap },
+  { href: '/admin/usuarios',      label: 'Usuários',     icon: UserCog },
+  { href: '/admin/configuracoes', label: 'Configurações', icon: Settings },
 ]
 
 const BOTTOM_NAV = [

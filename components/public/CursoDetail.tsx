@@ -12,19 +12,29 @@ interface Curso {
   slug: string
   descricao: string | null
   categoria: string
-  faixaEtaria: string
-  capacidade: string
-  dimensoes: string
-  energia: string | null
   fotos: string[] | null
   fotoDestaque: string | null
   destaque: boolean
   precoReferencia?: string | null
+  publicoAlvo?: string | null
+  docenteNome?: string | null
+  docenteCargo?: string | null
+  docenteFoto?: string | null
+  docenteDesc?: string | null
 }
 
 export function CursoDetail({ curso }: { curso: Curso }) {
   const [activePhoto, setActivePhoto] = useState(0)
   const [lightbox, setLightbox] = useState(false)
+
+  const isAulasGravadas = curso.categoria.toLowerCase().includes('gravada') || curso.nome.toLowerCase().includes('aulas gravadas')
+  const options = isAulasGravadas
+    ? Array.from({ length: 18 }, (_, i) => `Aula ${18 - i} Gravada`)
+    : []
+
+  const [selectedOption, setSelectedOption] = useState(() => {
+    return isAulasGravadas ? 'Aula 18 Gravada' : ''
+  })
 
   const fotos = curso.fotos?.length
     ? curso.fotos
@@ -34,11 +44,14 @@ export function CursoDetail({ curso }: { curso: Curso }) {
 
   const waLink = whatsappLink(
     WHATSAPP_NUMBER,
-    `Olá! Tenho interesse em me matricular no curso *${curso.nome}*. Como posso prosseguir com a inscrição?`
+    selectedOption
+      ? `Olá! Tenho interesse em me matricular no curso *${curso.nome}* (${selectedOption}). Como posso prosseguir com a inscrição?`
+      : `Olá! Tenho interesse em me matricular no curso *${curso.nome}*. Como posso prosseguir com a inscrição?`
   )
 
   const shareText = `Confira o curso ${curso.nome} no NBP Psicanálise!`
   const shareUrl = typeof window !== 'undefined' ? window.location.href : ''
+  const priceValue = curso.precoReferencia ? parseFloat(curso.precoReferencia) : 0
 
   return (
     <div className="space-y-8">
@@ -87,9 +100,10 @@ export function CursoDetail({ curso }: { curso: Curso }) {
               <BookOpen className="size-5 text-[#5B1A82]" />
               Mais Informações
             </h3>
-            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm leading-relaxed text-gray-700 text-sm whitespace-pre-line">
-              {curso.descricao || "Nenhuma descrição detalhada disponível para este curso no momento."}
-            </div>
+            <div 
+              className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm rich-content"
+              dangerouslySetInnerHTML={{ __html: curso.descricao || "Nenhuma descrição detalhada disponível para este curso no momento." }}
+            />
           </section>
 
           {/* Section: Para Quem */}
@@ -98,11 +112,18 @@ export function CursoDetail({ curso }: { curso: Curso }) {
               <CheckCircle className="size-5 text-[#5B1A82]" />
               Para Quem é Este Curso
             </h3>
-            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm leading-relaxed text-gray-700 text-sm">
-              <p>
-                Este curso é aberto a todos os adultos interessados em explorar as complexidades da psique humana através da lente da psicanálise. 
-                Ideal para psicólogos, terapeutas, estudantes, profissionais de saúde e qualquer pessoa interessada em iniciar ou aprofundar sua jornada de autoconhecimento e formação clínica.
-              </p>
+            <div className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
+              {curso.publicoAlvo ? (
+                <div 
+                  className="rich-content text-sm" 
+                  dangerouslySetInnerHTML={{ __html: curso.publicoAlvo }} 
+                />
+              ) : (
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  Este curso é aberto a todos os adultos interessados em explorar as complexidades da psique humana através da lente da psicanálise. 
+                  Ideal para psicólogos, terapeutas, estudantes, profissionais de saúde e qualquer pessoa interessada em iniciar ou aprofundar sua formação clínica.
+                </p>
+              )}
             </div>
           </section>
 
@@ -116,22 +137,29 @@ export function CursoDetail({ curso }: { curso: Curso }) {
               <div className="flex flex-col md:flex-row gap-6 items-start">
                 <div className="relative size-24 md:size-32 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-200">
                   <img 
-                    src="https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/47/47_ORG.jpg" 
-                    alt="Aurélio Gonzales"
-                    className="w-full h-full object-cover"
+                    src={curso.docenteFoto || "https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/47/47_ORG.jpg"} 
+                    alt={curso.docenteNome || "Aurélio Gonzales"}
+                    className="w-full h-full object-cover grayscale"
                   />
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-3 flex-1">
                   <div>
-                    <h4 className="text-lg font-bold text-gray-900">Aurélio Gonzales</h4>
+                    <h4 className="text-lg font-bold text-gray-900">{curso.docenteNome || "Aurélio Gonzales"}</h4>
                     <p className="text-xs font-semibold text-[#5B1A82] uppercase tracking-wider">
-                      Psicanalista, Professor, Supervisor Clínico e Diretor do NBP
+                      {curso.docenteCargo || "Psicanalista, Professor, Supervisor Clínico e Diretor do NBP"}
                     </p>
                   </div>
-                  <p className="text-gray-600 text-xs leading-relaxed">
-                    Aurélio Gonzales, psicanalista com mais de 12 anos de experiência clínica e didática na psicanálise, 
-                    traz seu conhecimento profundo e atualizado para guiar os alunos nas vivências práticas e estudos teóricos do Núcleo Brasileiro de Psicanálise.
-                  </p>
+                  {curso.docenteDesc ? (
+                    <div 
+                      className="rich-content text-xs text-gray-600" 
+                      dangerouslySetInnerHTML={{ __html: curso.docenteDesc }} 
+                    />
+                  ) : (
+                    <p className="text-gray-600 text-xs leading-relaxed">
+                      Aurélio Gonzales, psicanalista com mais de 12 anos de experiência clínica e didática na psicanálise, 
+                      traz seu conhecimento profundo e atualizado para guiar os alunos nas vivências práticas e estudos teóricos do Núcleo Brasileiro de Psicanálise.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -163,13 +191,21 @@ export function CursoDetail({ curso }: { curso: Curso }) {
             {/* Preço e Botão */}
             <div className="p-6 space-y-6">
               <div className="space-y-1">
-                {curso.precoReferencia ? (
+                {priceValue > 0 ? (
                   <div>
                     <span className="text-xs text-gray-500 block">Preço do Curso</span>
                     <span className="text-3xl font-black text-gray-900">
-                      R$ {parseFloat(curso.precoReferencia).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                      R$ {priceValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                     </span>
                     <span className="text-xs text-gray-500 ml-1">à vista</span>
+                  </div>
+                ) : isAulasGravadas ? (
+                  <div>
+                    <span className="text-xs text-gray-500 block">Preço do Curso</span>
+                    <span className="text-3xl font-black text-gray-900">
+                      R$ 25,00
+                    </span>
+                    <span className="text-xs text-gray-500 ml-1">cada aula</span>
                   </div>
                 ) : (
                   <div>
@@ -178,6 +214,27 @@ export function CursoDetail({ curso }: { curso: Curso }) {
                   </div>
                 )}
               </div>
+
+              {/* Opções de compra (aulas gravadas) */}
+              {isAulasGravadas && (
+                <div className="space-y-2">
+                  <label htmlFor="lesson-select" className="text-[10px] font-bold text-gray-500 block uppercase tracking-wider">
+                    Selecione a Aula:
+                  </label>
+                  <select
+                    id="lesson-select"
+                    value={selectedOption}
+                    onChange={(e) => setSelectedOption(e.target.value)}
+                    className="w-full border border-gray-250 rounded-xl px-3 py-3 text-xs text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#5B1A82]/50 bg-white font-semibold transition-all shadow-sm cursor-pointer"
+                  >
+                    {options.map((opt) => (
+                      <option key={opt} value={opt}>
+                        {opt}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {/* Botão de Matrícula */}
               <a

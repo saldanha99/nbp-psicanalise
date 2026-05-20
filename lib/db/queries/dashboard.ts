@@ -1,31 +1,27 @@
 import { db } from '../index'
-import { leads, eventos } from '../schema'
-import { eq, gte, lt, not, inArray, and, count, sum, sql } from 'drizzle-orm'
+import { leads, alunos, matriculas, pedidos, cursos } from '../schema'
+import { eq, desc, gte, lt, not, inArray, and, count, sum, sql } from 'drizzle-orm'
 
 export async function getDashboardMetrics() {
   const hoje = new Date()
   hoje.setHours(0, 0, 0, 0)
   const inicioMes   = new Date(hoje.getFullYear(), hoje.getMonth(), 1)
   const inicio30d   = new Date(hoje.getTime() - 30 * 86400000)
-  const semanaFim   = new Date(hoje.getTime() + 7 * 86400000)
-  const hojeStr     = hoje.toISOString().slice(0, 10)
-  const semanaFimStr = semanaFim.toISOString().slice(0, 10)
 
   const [
     leadsHojeRes,
     leadsAbertosRes,
-    eventosEstaSemanaRes,
+    alunosTotalRes,
+    matriculasAtivasRes,
     receitaMesRes,
     leadsTotal30dRes,
     leadsConf30dRes,
     leadsPerdidosMesRes,
     topCursoRes,
-    topMonitorRes,
-    proximosEventosRes,
+    ultimasMatriculasRes,
     leadsPorStatusRes,
     origemLeadsRes,
     topCursosRes,
-    eventosPorStatusRes,
   ] = await Promise.all([
     // Leads criados hoje
     db.select({ n: count() }).from(leads)
@@ -37,14 +33,18 @@ export async function getDashboardMetrics() {
       .where(not(inArray(leads.status, ['realizado', 'perdido'])))
       .then(r => Number(r[0].n)),
 
-    // Eventos esta semana
-    db.select({ n: count() }).from(eventos)
-      .where(and(gte(eventos.dataEvento, hojeStr), lt(eventos.dataEvento, semanaFimStr)))
+    // Total de Alunos
+    db.select({ n: count() }).from(alunos)
       .then(r => Number(r[0].n)),
 
-    // Receita do mês (confirmados)
-    db.select({ t: sum(eventos.valorTotal) }).from(eventos)
-      .where(and(eq(eventos.status, 'confirmado'), gte(eventos.createdAt, inicioMes)))
+    // Matrículas ativas
+    db.select({ n: count() }).from(matriculas)
+      .where(eq(matriculas.status, 'ativo'))
+      .then(r => Number(r[0].n)),
+
+    // Receita do mês (pedidos pagos)
+    db.select({ t: sum(pedidos.valor) }).from(pedidos)
+      .where(and(eq(pedidos.status, 'pago'), gte(pedidos.createdAt, inicioMes)))
       .then(r => Number(r[0].t ?? 0)),
 
     // Leads total 30d (para taxa de conversão)
@@ -62,35 +62,27 @@ export async function getDashboardMetrics() {
       .where(and(eq(leads.status, 'perdido'), gte(leads.createdAt, inicioMes)))
       .then(r => Number(r[0].n)),
 
-    // Top curso (1)
+    // Top curso (por vendas)
     db.execute(sql`
-      SELECT b.nome, COUNT(*)::int AS total
-      FROM eventos e
-      CROSS JOIN LATERAL unnest(e.cursos_contratados) AS course_id
-      JOIN cursos b ON b.id = course_id
-      WHERE e.status != 'cancelado'
-      GROUP BY b.nome ORDER BY total DESC LIMIT 1
+      SELECT c.nome, COUNT(*)::int AS total
+      FROM pedidos p
+      JOIN cursos c ON c.id = p.curso_id
+      WHERE p.status = 'pago'
+      GROUP BY c.nome ORDER BY total DESC LIMIT 1
     `).then(r => r.rows[0] as { nome: string; total: number } | undefined),
 
-    // Top monitor (1)
-    db.execute(sql`
-      SELECT m.nome, COUNT(*)::int AS total
-      FROM evento_monitores em
-      JOIN monitores m ON m.id = em.monitor_id
-      GROUP BY m.id, m.nome ORDER BY total DESC LIMIT 1
-    `).then(r => r.rows[0] as { nome: string; total: number } | undefined),
-
-    // Próximos eventos (até 6)
+    // Últimas matrículas (até 6)
     db.select({
-      id: eventos.id,
-      nomeCliente: eventos.nomeCliente,
-      dataEvento: eventos.dataEvento,
-      horarioInicio: eventos.horarioInicio,
-      enderecoCompleto: eventos.enderecoCompleto,
-      status: eventos.status,
-    }).from(eventos)
-      .where(gte(eventos.dataEvento, hojeStr))
-      .orderBy(eventos.dataEvento)
+      id: matriculas.id,
+      alunoNome: alunos.nome,
+      cursoNome: cursos.nome,
+      status: matriculas.status,
+      progressoPercent: matriculas.progressoPercent,
+      createdAt: matriculas.createdAt,
+    }).from(matriculas)
+      .innerJoin(alunos, eq(matriculas.alunoId, alunos.id))
+      .innerJoin(cursos, eq(matriculas.cursoId, cursos.id))
+      .orderBy(desc(matriculas.createdAt))
       .limit(6),
 
     // Funil: leads por status (todos os leads)
@@ -108,38 +100,31 @@ export async function getDashboardMetrics() {
       GROUP BY origem ORDER BY total DESC LIMIT 6
     `).then(r => r.rows as { origem: string; total: number }[]),
 
-    // Top 6 cursos mais alugados
+    // Top 6 cursos mais vendidos
     db.execute(sql`
-      SELECT b.nome, COUNT(*)::int AS total
-      FROM eventos e
-      CROSS JOIN LATERAL unnest(e.cursos_contratados) AS course_id
-      JOIN cursos b ON b.id = course_id
-      WHERE e.status != 'cancelado'
-      GROUP BY b.nome ORDER BY total DESC LIMIT 6
+      SELECT c.nome, COUNT(*)::int AS total
+      FROM pedidos p
+      JOIN cursos c ON c.id = p.curso_id
+      WHERE p.status = 'pago'
+      GROUP BY c.nome ORDER BY total DESC LIMIT 6
     `).then(r => r.rows as { nome: string; total: number }[]),
-
-    // Eventos por status (para donut)
-    db.execute(sql`
-      SELECT status, COUNT(*)::int AS total
-      FROM eventos GROUP BY status
-    `).then(r => r.rows as { status: string; total: number }[]),
   ])
 
   return {
     leadsHoje:          leadsHojeRes,
     leadsAbertos:       leadsAbertosRes,
-    eventosEstaSemana:  eventosEstaSemanaRes,
+    alunosTotal:        alunosTotalRes,
+    matriculasAtivas:   matriculasAtivasRes,
     receitaMes:         receitaMesRes,
     taxaConversao:      leadsTotal30dRes > 0
                           ? Math.round((leadsConf30dRes / leadsTotal30dRes) * 100)
                           : 0,
     leadsPerdidosMes:   leadsPerdidosMesRes,
-    topCurso:       topCursoRes ?? null,
-    topMonitor:         topMonitorRes ?? null,
-    proximosEventos:    proximosEventosRes,
+    topCurso:           topCursoRes ?? null,
+    ultimasMatriculas:  ultimasMatriculasRes,
     leadsPorStatus:     leadsPorStatusRes,
     origemLeads:        origemLeadsRes,
-    topCursos:      topCursosRes,
-    eventosPorStatus:   eventosPorStatusRes,
+    topCursos:          topCursosRes,
   }
 }
+

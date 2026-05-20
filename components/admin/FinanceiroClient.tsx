@@ -186,7 +186,7 @@ export function FinanceiroClient({
           <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold text-brand-text uppercase tracking-wide">
             Financeiro
           </h1>
-          <p className="text-brand-muted text-sm mt-1">Receitas, festas e performance por período</p>
+          <p className="text-brand-muted text-sm mt-1">Faturamento, inscrições e performance por período</p>
         </div>
         {/* Month navigator */}
         <div className="flex items-center gap-2 bg-brand-surface border border-brand-border rounded-2xl px-4 py-2.5">
@@ -245,12 +245,11 @@ export function FinanceiroClient({
 
       {activeTab === 'visao_geral' && <>
       {/* KPI cards */}
-      <div className={cn('grid grid-cols-2 lg:grid-cols-5 gap-3 transition-opacity duration-200', loading && 'opacity-50')}>
+      <div className={cn('grid grid-cols-2 lg:grid-cols-4 gap-3 transition-opacity duration-200', loading && 'opacity-50')}>
         <KpiCard titulo="Total Faturado" valor={kpis.totalFaturado} icone={<DollarSign className="size-4" />} cor="#34D399" prefix="R$ " decimals={0} />
-        <KpiCard titulo="Total de Festas" valor={kpis.totalFestas} icone={<CalendarDays className="size-4" />} cor="#818CF8" />
-        <KpiCard titulo="Cursos Alugados" valor={kpis.cursosAlugados} icone={<Package className="size-4" />} cor="#60A5FA" />
-        <KpiCard titulo="Ticket / Festa" valor={kpis.ticketMedioFestas} icone={<TrendingUp className="size-4" />} cor="#F59E0B" prefix="R$ " decimals={0} />
-        <KpiCard titulo="Ticket / Curso" valor={kpis.ticketMedioCursos} icone={<TrendingUp className="size-4" />} cor="#EC4899" prefix="R$ " decimals={0} />
+        <KpiCard titulo="Pedidos Pagos" valor={kpis.totalFestas} icone={<CalendarDays className="size-4" />} cor="#818CF8" />
+        <KpiCard titulo="Inscrições" valor={kpis.cursosAlugados} icone={<Package className="size-4" />} cor="#60A5FA" />
+        <KpiCard titulo="Ticket Médio" valor={kpis.ticketMedioFestas} icone={<TrendingUp className="size-4" />} cor="#F59E0B" prefix="R$ " decimals={0} />
       </div>
 
       {/* Charts row */}
@@ -280,7 +279,7 @@ export function FinanceiroClient({
 
         {/* Origens pie */}
         <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
-          <h2 className="text-brand-text font-semibold mb-1">Origem dos Clientes</h2>
+          <h2 className="text-brand-text font-semibold mb-1">Origem das Vendas</h2>
           <p className="text-brand-muted text-xs mb-4">{MESES[mes - 1]}</p>
           {origens.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-40 text-brand-muted text-sm">
@@ -294,7 +293,7 @@ export function FinanceiroClient({
                     <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(v) => [`${v} festas`]} />
+                <Tooltip formatter={(v) => [`${v} inscrições`]} />
                 <Legend
                   formatter={(v) => <span className="text-xs text-brand-muted">{v}</span>}
                   iconSize={8}
@@ -309,7 +308,7 @@ export function FinanceiroClient({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Curso ranking */}
         <div className="bg-brand-surface border border-brand-border rounded-2xl p-5">
-          <h2 className="text-brand-text font-semibold mb-1">Ranking de Cursos</h2>
+          <h2 className="text-brand-text font-semibold mb-1">Ranking de Vendas por Curso</h2>
           <p className="text-brand-muted text-xs mb-4">{MESES[mes - 1]} {ano}</p>
           {ranking.length === 0 ? (
             <p className="text-brand-muted text-sm text-center py-8">Sem dados</p>
@@ -347,25 +346,25 @@ export function FinanceiroClient({
           )}
         </div>
 
-        {/* Events table */}
+        {/* Payments table */}
         <div className="lg:col-span-2 bg-brand-surface border border-brand-border rounded-2xl overflow-hidden">
           <div className="flex items-center justify-between px-5 py-4 border-b border-brand-border">
             <div>
-              <h2 className="text-brand-text font-semibold">Festas do Mês</h2>
-              <p className="text-brand-muted text-xs mt-0.5">{MESES[mes - 1]} {ano} · {eventos.length} festas</p>
+              <h2 className="text-brand-text font-semibold">Pedidos do Mês</h2>
+              <p className="text-brand-muted text-xs mt-0.5">{MESES[mes - 1]} {ano} · {eventos.length} pedidos</p>
             </div>
           </div>
           <div className={cn('overflow-x-auto transition-opacity duration-200', loading && 'opacity-50')}>
             {eventos.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-brand-muted">
                 <CalendarDays className="size-8 mb-2 opacity-40" />
-                <p className="text-sm">Nenhuma festa neste período</p>
+                <p className="text-sm">Nenhum pedido neste período</p>
               </div>
             ) : (
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-brand-border">
-                    {['Data','Cliente','Valor Total','Gastos','Resultado','Origem','Status'].map(h => (
+                    {['Data','Aluno','Curso','Valor','Forma de Pagamento','Status'].map(h => (
                       <th key={h} className="text-left text-xs text-brand-muted font-medium uppercase tracking-wider px-4 py-3 whitespace-nowrap">
                         {h}
                       </th>
@@ -375,26 +374,19 @@ export function FinanceiroClient({
                 <tbody>
                   {eventos.map(e => {
                     const vt = Number(e.valorTotal ?? 0)
-                    const gastos = Number(e.custoMonitores ?? 0) + Number(e.custoTransporte ?? 0) + Number(e.custosExtras ?? 0)
-                    const resultado = vt - gastos
                     const [, mes2, dia] = e.dataEvento.split('-')
                     return (
                       <tr key={e.id} className="border-b border-brand-border/50 hover:bg-brand-surface-2 transition-colors">
                         <td className="px-4 py-3 text-brand-muted whitespace-nowrap">{dia}/{mes2}</td>
                         <td className="px-4 py-3 text-brand-text font-medium max-w-[140px] truncate">{e.nomeCliente}</td>
+                        <td className="px-4 py-3 text-brand-text max-w-[140px] truncate">{e.origemCliente ?? '—'}</td>
                         <td className="px-4 py-3 text-emerald-400 font-semibold whitespace-nowrap tabular-nums">
                           {vt.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                         </td>
-                        <td className="px-4 py-3 text-red-400 whitespace-nowrap tabular-nums">
-                          {gastos > 0 ? gastos.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '—'}
-                        </td>
-                        <td className={cn('px-4 py-3 font-semibold whitespace-nowrap tabular-nums', resultado >= 0 ? 'text-emerald-400' : 'text-red-400')}>
-                          {resultado.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                        </td>
-                        <td className="px-4 py-3 text-brand-muted max-w-[100px] truncate">{e.origemCliente ?? '—'}</td>
+                        <td className="px-4 py-3 text-brand-muted max-w-[100px] truncate capitalize">{e.tipoCliente ?? '—'}</td>
                         <td className="px-4 py-3">
-                          <span className={cn('text-xs font-semibold px-2 py-0.5 rounded-full border capitalize', STATUS_EVT[e.status] ?? 'text-brand-muted bg-brand-surface-2 border-brand-border')}>
-                            {e.status}
+                          <span className={cn('text-xs font-semibold px-2 py-0.5 rounded-full border capitalize', STATUS_PAG[e.statusPagamento] ?? 'text-brand-muted bg-brand-surface-2 border-brand-border')}>
+                            {e.statusPagamento}
                           </span>
                         </td>
                       </tr>
@@ -403,21 +395,10 @@ export function FinanceiroClient({
                 </tbody>
                 <tfoot>
                   <tr className="bg-brand-surface-2">
-                    <td colSpan={2} className="px-4 py-3 text-brand-muted text-xs font-semibold uppercase">Total</td>
+                    <td colSpan={3} className="px-4 py-3 text-brand-muted text-xs font-semibold uppercase">Total Faturado</td>
                     <td className="px-4 py-3 text-emerald-400 font-bold tabular-nums">
                       {eventos.reduce((s, e) => s + Number(e.valorTotal ?? 0), 0)
                         .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                    </td>
-                    <td className="px-4 py-3 text-red-400 font-bold tabular-nums">
-                      {eventos.reduce((s, e) => s + Number(e.custoMonitores ?? 0) + Number(e.custoTransporte ?? 0) + Number(e.custosExtras ?? 0), 0)
-                        .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                    </td>
-                    <td className="px-4 py-3 text-emerald-400 font-bold tabular-nums">
-                      {eventos.reduce((s, e) => {
-                        const vt = Number(e.valorTotal ?? 0)
-                        const g = Number(e.custoMonitores ?? 0) + Number(e.custoTransporte ?? 0) + Number(e.custosExtras ?? 0)
-                        return s + vt - g
-                      }, 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                     </td>
                     <td colSpan={2} />
                   </tr>

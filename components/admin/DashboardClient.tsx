@@ -45,19 +45,23 @@ const STATUS_CFG: Record<string, { label: string; color: string; bg: string; bor
 interface Metrics {
   leadsHoje: number
   leadsAbertos: number
-  eventosEstaSemana: number
+  alunosTotal: number
+  matriculasAtivas: number
   receitaMes: number
   taxaConversao: number
   leadsPerdidosMes: number
   topCurso: { nome: string; total: number } | null
-  topMonitor:   { nome: string; total: number } | null
-  proximosEventos: {
-    id: string; nomeCliente: string; dataEvento: string
-    horarioInicio: string; enderecoCompleto: string; status: string
+  ultimasMatriculas: {
+    id: string
+    alunoNome: string
+    cursoNome: string
+    status: string
+    progressoPercent: number
+    createdAt: Date
   }[]
   leadsPorStatus:   { status: string; total: number }[]
   origemLeads:      { origem: string; total: number }[]
-  topCursos:    { nome: string; total: number }[]
+  topCursos:        { nome: string; total: number }[]
 }
 interface ChartData { mes: number; receita: number; festas: number }
 interface LeadAlerta { id: string; nome: string; status: string; ultimaInteracao: Date }
@@ -122,9 +126,9 @@ function KpiCard({
       </div>
 
       <div className="flex items-end gap-2">
-        <p className="text-brand-text text-[2rem] font-extrabold leading-none tabular-nums tracking-tight">
+        <div className="text-brand-text text-[2rem] font-extrabold leading-none tabular-nums tracking-tight">
           <AnimatedNumber value={valor} prefix={prefix} suffix={suffix} decimals={decimals} />
-        </p>
+        </div>
         {trend && trend !== 'neutral' && (
           <span className={cn('flex items-center gap-0.5 text-xs font-bold mb-1', trend === 'up' ? 'text-emerald-400' : 'text-red-400')}>
             {trend === 'up' ? <ArrowUpRight className="size-3.5" /> : <ArrowDownRight className="size-3.5" />}
@@ -168,7 +172,7 @@ function RevenueTooltip({ active, payload, label }: { active?: boolean; payload?
       <p className="text-brand-muted font-medium mb-1.5">{label}</p>
       {payload.map(p => (
         <div key={p.dataKey} className="flex items-center justify-between gap-4">
-          <span className="text-brand-muted capitalize">{p.dataKey === 'receita' ? 'Receita' : 'Festas'}</span>
+          <span className="text-brand-muted capitalize">{p.dataKey === 'receita' ? 'Receita' : 'Matrículas'}</span>
           <span className="text-brand-text font-bold">
             {p.dataKey === 'receita'
               ? p.value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })
@@ -338,6 +342,12 @@ function OrigemDonut({ data }: { data: { origem: string; total: number }[] }) {
   )
 }
 
+const MATRICULA_STATUS_CFG: Record<string, { label: string; color: string; bg: string; border: string }> = {
+  ativo: { label: 'Ativa', color: '#34D399', bg: 'bg-emerald-400/10', border: 'border-emerald-400/30' },
+  concluido: { label: 'Concluído', color: '#818CF8', bg: 'bg-violet-400/10', border: 'border-violet-400/30' },
+  suspenso: { label: 'Suspenso', color: '#F87171', bg: 'bg-red-400/10', border: 'border-red-400/30' },
+}
+
 /* ─────────────────────────────────────────────
    MAIN COMPONENT
 ───────────────────────────────────────────── */
@@ -353,13 +363,13 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
   const receitaMesAnt = receitaAnual.find(d => d.mes === mesAtual - 1)?.receita ?? 0
   const trendReceita  = metrics.receitaMes > receitaMesAnt ? 'up' : metrics.receitaMes < receitaMesAnt ? 'down' : 'neutral'
   const totalLeads    = metrics.leadsPorStatus.reduce((s, d) => s + d.total, 0)
-  const maxCurso  = Math.max(...(metrics.topCursos.map(b => b.total)), 1)
+  const maxCurso      = Math.max(...(metrics.topCursos.map(b => b.total)), 1)
 
-  const eventoStatusChip = (status: string) => {
-    const cfg = STATUS_CFG[status]
-    if (!cfg) return <span className="text-xs px-2.5 py-0.5 rounded-full bg-brand-surface-2 text-brand-muted border border-brand-border capitalize">{status}</span>
+  const matriculaStatusChip = (status: string) => {
+    const cfg = MATRICULA_STATUS_CFG[status]
+    if (!cfg) return <span className="text-[10px] px-2 py-0.5 rounded-full bg-brand-surface-2 text-brand-muted border border-brand-border capitalize">{status}</span>
     return (
-      <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full border capitalize ${cfg.bg} ${cfg.border}`} style={{ color: cfg.color }}>
+      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border capitalize ${cfg.bg} ${cfg.border}`} style={{ color: cfg.color }}>
         {cfg.label}
       </span>
     )
@@ -388,11 +398,11 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
       <FadeIn delay={60}>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           <KpiCard titulo="Receita do Mês"       valor={metrics.receitaMes}       icon={<DollarSign className="size-4" />}  color="#34D399" prefix="R$" decimals={0} trend={trendReceita} sub={`vs R$ ${receitaMesAnt.toLocaleString('pt-BR', { maximumFractionDigits: 0 })} mês ant.`} />
-          <KpiCard titulo="Turmas Iniciando"     valor={metrics.eventosEstaSemana} icon={<CalendarDays className="size-4" />} color="#818CF8" sub="próximos 7 dias" />
-          <KpiCard titulo="Leads no Pipeline"    valor={metrics.leadsAbertos}      icon={<TrendingUp className="size-4" />}   color="#60A5FA" sub="em aberto" />
-          <KpiCard titulo="Leads Hoje"           valor={metrics.leadsHoje}         icon={<Users className="size-4" />}        color="#F472B6" sub="novos hoje" />
-          <KpiCard titulo="Conversão 30d"        valor={metrics.taxaConversao}     icon={<Target className="size-4" />}       color={metrics.taxaConversao >= 50 ? '#34D399' : '#F59E0B'} suffix="%" trend={metrics.taxaConversao >= 50 ? 'up' : 'down'} sub="leads → matrículas" />
-          <KpiCard titulo="Perdidos no Mês"      valor={metrics.leadsPerdidosMes}  icon={<TrendingDown className="size-4" />} color="#F87171" trend={metrics.leadsPerdidosMes > 5 ? 'down' : 'neutral'} sub="leads perdidos" />
+          <KpiCard titulo="Matrículas Ativas"    valor={metrics.matriculasAtivas} icon={<CalendarDays className="size-4" />} color="#818CF8" sub="alunos cursando" />
+          <KpiCard titulo="Total de Alunos"      valor={metrics.alunosTotal}      icon={<Users className="size-4" />}        color="#F472B6" sub="alunos cadastrados" />
+          <KpiCard titulo="Novos Leads Hoje"     valor={metrics.leadsHoje}         icon={<UserCheck className="size-4" />}   color="#60A5FA" sub="novos hoje" />
+          <KpiCard titulo="Conversão EAD 30d"    valor={metrics.taxaConversao}     icon={<Target className="size-4" />}       color={metrics.taxaConversao >= 50 ? '#34D399' : '#F59E0B'} suffix="%" trend={metrics.taxaConversao >= 50 ? 'up' : 'down'} sub="leads → matrículas" />
+          <KpiCard titulo="Perdidos no Mês"      valor={metrics.leadsPerdidosMes}  icon={<TrendingDown className="size-4" />} color="#F87171" trend={metrics.leadsPerdidosMes > 5 ? 'down' : 'neutral'} sub="leads arquivados" />
         </div>
       </FadeIn>
 
@@ -436,13 +446,13 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
             </ResponsiveContainer>
             <div className="flex items-center gap-5 mt-3 pl-1">
               <div className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-violet-400 rounded" /><span className="text-brand-muted text-[10px]">Receita</span></div>
-              <div className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-pink-400 rounded border-dashed" style={{ borderTop: '2px dashed #F472B6', background: 'none' }} /><span className="text-brand-muted text-[10px]">Matrículas</span></div>
+              <div className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-pink-400 rounded border-dashed" style={{ borderTop: '2px dashed #F472B6', background: 'none' }} /><span className="text-brand-muted text-[10px]">Inscrições</span></div>
             </div>
           </Card>
 
           {/* Radial gauge */}
           <Card className="flex flex-col">
-            <CardHeader title="Taxa de Conversão" sub="Leads → Confirmados (30 dias)" />
+            <CardHeader title="Taxa de Conversão" sub="Leads → Inscrições (30 dias)" />
             <div className="flex-1 flex flex-col justify-between">
               <ConversionGauge value={metrics.taxaConversao} />
               <div className="grid grid-cols-2 gap-2 mt-4">
@@ -527,7 +537,7 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
         </div>
       </FadeIn>
 
-      {/* ── Próximos Eventos + Alertas ── */}
+      {/* ── Matrículas Recentes + Alertas ── */}
       <FadeIn delay={240}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
@@ -555,56 +565,51 @@ export function DashboardClient({ metrics, receitaAnual, leadsAlerta }: Props) {
             </Card>
           )}
 
-          {/* Próximos eventos */}
+          {/* Últimas Matrículas */}
           <Card className={leadsAlerta.length > 0 ? 'lg:col-span-2' : 'lg:col-span-3'}>
-            <CardHeader title="Próximos Encontros" sub="Agenda dos próximos dias" action={
+            <CardHeader title="Matrículas Recentes" sub="Novas inscrições no Portal do Aluno" action={
               <span className="text-xs text-brand-muted bg-brand-surface-2 border border-brand-border rounded-lg px-2.5 py-1.5">
-                {metrics.proximosEventos.length} turmas
+                {metrics.ultimasMatriculas.length} recentes
               </span>
             } />
 
-            {metrics.proximosEventos.length === 0 ? (
+            {metrics.ultimasMatriculas.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-10 text-center gap-3">
                 <div className="w-12 h-12 rounded-2xl bg-brand-surface-2 border border-brand-border flex items-center justify-center">
                   <Clock className="size-5 text-brand-muted" />
                 </div>
-                <p className="text-brand-muted text-sm">Nenhum encontro agendado</p>
+                <p className="text-brand-muted text-sm">Nenhuma matrícula recente</p>
               </div>
             ) : (
-              <div className={cn(
-                'gap-3',
-                leadsAlerta.length > 0 ? 'grid grid-cols-1 sm:grid-cols-2' : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-              )}>
-                {metrics.proximosEventos.map(e => {
-                  const [ano, mes, dia] = e.dataEvento.split('-')
-                  const isHoje = e.dataEvento === new Date().toISOString().slice(0, 10)
+              <div className="space-y-3">
+                {metrics.ultimasMatriculas.map(m => {
+                  const dataMatr = new Date(m.createdAt)
                   return (
                     <div
-                      key={e.id}
-                      className={cn(
-                        'group relative bg-brand-surface-2 border rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg overflow-hidden',
-                        isHoje ? 'border-brand-accent/40' : 'border-brand-border'
-                      )}
+                      key={m.id}
+                      className="group relative bg-brand-surface-2 border border-brand-border rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg overflow-hidden"
                     >
-                      {isHoje && (
-                        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-brand-accent to-transparent" />
-                      )}
-                      <div className="flex items-start gap-3">
-                        <div className={cn(
-                          'shrink-0 w-12 h-12 rounded-xl flex flex-col items-center justify-center border',
-                          isHoje
-                            ? 'bg-brand-accent/15 border-brand-accent/30 text-brand-accent'
-                            : 'bg-brand-surface border-brand-border text-brand-muted'
-                        )}>
-                          <span className="text-sm font-extrabold leading-none">{dia}</span>
-                          <span className="text-[9px] uppercase tracking-wider mt-0.5">{MESES[Number(mes) - 1]}</span>
-                        </div>
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div className="flex-1 min-w-0">
-                          <p className="text-brand-text font-bold text-sm truncate">{e.nomeCliente}</p>
-                          <p className="text-brand-muted text-xs mt-0.5 truncate">
-                            {e.horarioInicio} · {e.enderecoCompleto.slice(0, 35)}{e.enderecoCompleto.length > 35 ? '…' : ''}
-                          </p>
-                          <div className="mt-2">{eventoStatusChip(e.status)}</div>
+                          <div className="flex items-center gap-2">
+                            <p className="text-brand-text font-bold text-sm truncate">{m.alunoNome}</p>
+                            {matriculaStatusChip(m.status)}
+                          </div>
+                          <p className="text-brand-muted text-xs mt-0.5 truncate">{m.cursoNome}</p>
+                        </div>
+                        <div className="flex items-center gap-4 shrink-0">
+                          <div className="text-right hidden sm:block">
+                            <p className="text-brand-text font-semibold text-xs tabular-nums">{m.progressoPercent}% concluído</p>
+                            <div className="w-24 h-1.5 bg-brand-surface border border-brand-border rounded-full overflow-hidden mt-1">
+                              <div
+                                className="h-full bg-brand-accent rounded-full animate-all duration-300"
+                                style={{ width: `${m.progressoPercent}%` }}
+                              />
+                            </div>
+                          </div>
+                          <div className="text-right text-[10px] text-brand-muted tabular-nums">
+                            {dataMatr.toLocaleDateString('pt-BR')}
+                          </div>
                         </div>
                       </div>
                     </div>

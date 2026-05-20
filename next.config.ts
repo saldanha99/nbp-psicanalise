@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'cursos.nbpsicanalise.com.br',
+      },
+      {
+        protocol: 'https',
+        hostname: 'nbpsicanalise.com.br',
+      },
     ],
   },
 }

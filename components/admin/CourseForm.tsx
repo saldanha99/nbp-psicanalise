@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,12 +19,19 @@ const schema = z.object({
   nome: z.string().min(2, 'Nome obrigatório'),
   slug: z.string().min(2, 'Slug obrigatório'),
   categoria: z.string().min(1, 'Categoria obrigatória'),
-  faixaEtaria: z.string().min(1, 'Faixa etária obrigatória'),
-  capacidade: z.string().min(1, 'Capacidade obrigatória'),
-  dimensoes: z.string().min(1, 'Dimensões obrigatórias'),
-  energia: z.string().optional(),
   descricao: z.string().optional(),
   precoReferencia: z.string().optional(),
+  precoVenda: z.string().optional(),
+  precoOriginal: z.string().optional(),
+  tipoCurso: z.string().optional(),
+  cargaHoraria: z.string().optional(),
+  certificado: z.boolean(),
+  acessoVitalicio: z.boolean(),
+  diasAcesso: z.string().optional(),
+  vagasTotal: z.string().optional(),
+  dataEvento: z.string().optional(),
+  horarioEvento: z.string().optional(),
+  localEvento: z.string().optional(),
   ativo: z.boolean(),
   destaque: z.boolean(),
   fotos: z.array(z.string()),
@@ -51,12 +58,19 @@ export function CourseForm({ curso, onSuccess }: Props) {
       nome: curso?.nome ?? '',
       slug: curso?.slug ?? '',
       categoria: curso?.categoria ?? '',
-      faixaEtaria: curso?.faixaEtaria ?? '',
-      capacidade: curso?.capacidade ?? '',
-      dimensoes: curso?.dimensoes ?? '',
-      energia: curso?.energia ?? '',
       descricao: curso?.descricao ?? '',
       precoReferencia: curso?.precoReferencia ?? '',
+      precoVenda: (curso as Curso & { precoVenda?: string })?.precoVenda ?? '',
+      precoOriginal: (curso as Curso & { precoOriginal?: string })?.precoOriginal ?? '',
+      tipoCurso: (curso as Curso & { tipoCurso?: string })?.tipoCurso ?? 'gravado',
+      cargaHoraria: (curso as Curso & { cargaHoraria?: string })?.cargaHoraria ?? '',
+      certificado: (curso as Curso & { certificado?: boolean })?.certificado ?? true,
+      acessoVitalicio: (curso as Curso & { acessoVitalicio?: boolean })?.acessoVitalicio ?? true,
+      diasAcesso: '',
+      vagasTotal: '',
+      dataEvento: '',
+      horarioEvento: '',
+      localEvento: '',
       ativo: curso?.ativo ?? true,
       destaque: curso?.destaque ?? false,
       fotos: curso?.fotos ?? [],
@@ -82,7 +96,6 @@ export function CourseForm({ curso, onSuccess }: Props) {
     const payload = {
       ...data,
       precoReferencia: data.precoReferencia?.trim() || null,
-      energia: data.energia?.trim() || null,
       descricao: data.descricao?.trim() || null,
     }
 
@@ -130,7 +143,7 @@ export function CourseForm({ curso, onSuccess }: Props) {
         </div>
       </div>
 
-      {/* Categoria + Faixa Etária */}
+      {/* Categoria + Preço de Referência */}
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
           <label className="text-sm font-medium text-zinc-300">Categoria *</label>
@@ -146,51 +159,6 @@ export function CourseForm({ curso, onSuccess }: Props) {
             ))}
           </select>
           {errors.categoria && <p className="text-xs text-red-400">{errors.categoria.message}</p>}
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-zinc-300">Faixa Etária *</label>
-          <input
-            {...register('faixaEtaria')}
-            placeholder="3 a 12 anos"
-            className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500"
-          />
-          {errors.faixaEtaria && <p className="text-xs text-red-400">{errors.faixaEtaria.message}</p>}
-        </div>
-      </div>
-
-      {/* Capacidade + Dimensões */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-zinc-300">Capacidade *</label>
-          <input
-            {...register('capacidade')}
-            placeholder="Até 10 crianças"
-            className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500"
-          />
-          {errors.capacidade && <p className="text-xs text-red-400">{errors.capacidade.message}</p>}
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-zinc-300">Dimensões *</label>
-          <input
-            {...register('dimensoes')}
-            placeholder="4m x 4m x 3m"
-            className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500"
-          />
-          {errors.dimensoes && <p className="text-xs text-red-400">{errors.dimensoes.message}</p>}
-        </div>
-      </div>
-
-      {/* Energia + Preço */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-zinc-300">Energia</label>
-          <input
-            {...register('energia')}
-            placeholder="Tomada 110V / não necessária"
-            className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500"
-          />
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -214,6 +182,89 @@ export function CourseForm({ curso, onSuccess }: Props) {
           placeholder="Descreva o curso, suas características e diferenciais..."
           className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500 resize-none"
         />
+      </div>
+
+      {/* Separador LMS */}
+      <div className="border-t border-zinc-800 pt-4">
+        <p className="text-xs text-zinc-500 uppercase tracking-widest mb-4">Configurações LMS / Checkout</p>
+
+        {/* Preços de venda */}
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-zinc-300">Preço de Venda (R$)</label>
+            <input {...register('precoVenda')} type="number" step="0.01" placeholder="180.00"
+              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-zinc-300">Preço Original / Riscado (R$)</label>
+            <input {...register('precoOriginal')} type="number" step="0.01" placeholder="250.00"
+              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+          </div>
+        </div>
+
+        {/* Tipo do curso + carga horária */}
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-zinc-300">Tipo do Curso</label>
+            <select {...register('tipoCurso')}
+              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500">
+              <option value="gravado">Gravado (EAD)</option>
+              <option value="presencial">Presencial</option>
+              <option value="aovivo">Ao Vivo (Online)</option>
+              <option value="formacao">Formação Completa</option>
+            </select>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-zinc-300">Carga Horária</label>
+            <input {...register('cargaHoraria')} placeholder="Ex: 40h" 
+              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+          </div>
+        </div>
+
+        {/* Acesso e vagas */}
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-zinc-300">Vagas Totais (0 = ilimitado)</label>
+            <input {...register('vagasTotal')} type="number" placeholder="0"
+              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-zinc-300">Dias de Acesso (0 = vitalício)</label>
+            <input {...register('diasAcesso')} type="number" placeholder="0"
+              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+          </div>
+        </div>
+
+        {/* Evento presencial */}
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-zinc-300">Data do Evento</label>
+            <input {...register('dataEvento')} type="date"
+              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-zinc-300">Horário</label>
+            <input {...register('horarioEvento')} placeholder="9h às 18h"
+              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-zinc-300">Local</label>
+            <input {...register('localEvento')} placeholder="Tatuapé, SP"
+              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+          </div>
+        </div>
+
+        {/* Checkboxes LMS */}
+        <div className="flex gap-6 mb-4">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input {...register('certificado')} type="checkbox" className="w-4 h-4 rounded accent-orange-500" />
+            <span className="text-sm text-zinc-300">Gera certificado</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input {...register('acessoVitalicio')} type="checkbox" className="w-4 h-4 rounded accent-orange-500" />
+            <span className="text-sm text-zinc-300">Acesso vitalício</span>
+          </label>
+        </div>
       </div>
 
       {/* Checkboxes */}

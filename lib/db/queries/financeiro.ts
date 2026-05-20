@@ -1,91 +1,95 @@
 import { db } from '../index'
-import { eventos, cursos, monitores, eventoMonitores } from '../schema'
-import { eq, gte, lt, not, inArray, and, sum, count, sql, desc } from 'drizzle-orm'
+import { pedidos, cursos, alunos } from '../schema'
+import { eq, gte, lt, and, sum, count, sql, desc } from 'drizzle-orm'
 
 export type MesAno = { mes: number; ano: number }
 
 function mesRange(mes: number, ano: number) {
   const inicio = new Date(ano, mes - 1, 1)
   const fim = new Date(ano, mes, 1)
-  return {
-    inicioStr: inicio.toISOString().slice(0, 10),
-    fimStr: fim.toISOString().slice(0, 10),
-  }
+  return { inicio, fim }
 }
 
 export async function getKpisMes(mes: number, ano: number) {
-  const { inicioStr, fimStr } = mesRange(mes, ano)
+  const { inicio, fim } = mesRange(mes, ano)
 
-  const [totalFaturado, totalFestas, cursosAlugados] = await Promise.all([
-    db.select({ t: sum(eventos.valorTotal) })
-      .from(eventos)
+  const [totalFaturado, totalVendas, cursosVendidos] = await Promise.all([
+    // Total Faturado
+    db.select({ t: sum(pedidos.valor) })
+      .from(pedidos)
       .where(and(
-        not(inArray(eventos.status, ['cancelado'])),
-        gte(eventos.dataEvento, inicioStr),
-        lt(eventos.dataEvento, fimStr),
+        eq(pedidos.status, 'pago'),
+        gte(pedidos.createdAt, inicio),
+        lt(pedidos.createdAt, fim)
       ))
       .then(r => Number(r[0].t ?? 0)),
 
+    // Total de Vendas (Pedidos Pagos)
     db.select({ n: count() })
-      .from(eventos)
+      .from(pedidos)
       .where(and(
-        not(inArray(eventos.status, ['cancelado'])),
-        gte(eventos.dataEvento, inicioStr),
-        lt(eventos.dataEvento, fimStr),
+        eq(pedidos.status, 'pago'),
+        gte(pedidos.createdAt, inicio),
+        lt(pedidos.createdAt, fim)
       ))
       .then(r => Number(r[0].n)),
 
-    db.execute(sql`
-      SELECT COALESCE(SUM(array_length(cursos_contratados, 1)), 0)::int AS total
-      FROM eventos
-      WHERE status != 'cancelado'
-        AND data_evento >= ${inicioStr}
-        AND data_evento < ${fimStr}
-        AND cursos_contratados IS NOT NULL
-    `).then(r => Number((r.rows[0] as { total: number }).total ?? 0)),
+    // Quantidade total de inscrições (pedidos pagos)
+    db.select({ n: count() })
+      .from(pedidos)
+      .where(and(
+        eq(pedidos.status, 'pago'),
+        gte(pedidos.createdAt, inicio),
+        lt(pedidos.createdAt, fim)
+      ))
+      .then(r => Number(r[0].n)),
   ])
 
-  const ticketMedioFestas = totalFestas > 0 ? totalFaturado / totalFestas : 0
-  const ticketMedioCursos = cursosAlugados > 0 ? totalFaturado / cursosAlugados : 0
+  const ticketMedioVendas = totalVendas > 0 ? totalFaturado / totalVendas : 0
 
-  return { totalFaturado, totalFestas, cursosAlugados, ticketMedioFestas, ticketMedioCursos }
+  return {
+    totalFaturado,
+    totalFestas: totalVendas, // alias para manter retrocompatibilidade com UI
+    cursosAlugados: cursosVendidos, // alias para manter retrocompatibilidade com UI
+    ticketMedioFestas: ticketMedioVendas,
+    ticketMedioCursos: ticketMedioVendas,
+  }
 }
 
 export async function getReceitaPorMes(ano: number) {
   const rows = await db.execute(sql`
     SELECT
-      EXTRACT(MONTH FROM data_evento::date)::int AS mes,
-      COALESCE(SUM(valor_total), 0)::float AS receita,
-      COUNT(*)::int AS festas
-    FROM eventos
-    WHERE status != 'cancelado'
-      AND EXTRACT(YEAR FROM data_evento::date) = ${ano}
+      EXTRACT(MONTH FROM created_at)::int AS mes,
+      COALESCE(SUM(valor), 0)::float AS receita,
+      COUNT(*)::int AS vendas
+    FROM pedidos
+    WHERE status = 'pago'
+      AND EXTRACT(YEAR FROM created_at) = ${ano}
     GROUP BY mes
     ORDER BY mes
   `)
-  const map: Record<number, { receita: number; festas: number }> = {}
-  for (const r of rows.rows as { mes: number; receita: number; festas: number }[]) {
-    map[r.mes] = { receita: r.receita, festas: r.festas }
+  const map: Record<number, { receita: number; vendas: number }> = {}
+  for (const r of rows.rows as { mes: number; receita: number; vendas: number }[]) {
+    map[r.mes] = { receita: r.receita, vendas: r.vendas }
   }
   return Array.from({ length: 12 }, (_, i) => ({
     mes: i + 1,
     receita: map[i + 1]?.receita ?? 0,
-    festas: map[i + 1]?.festas ?? 0,
+    festas: map[i + 1]?.vendas ?? 0, // manter o nome da propriedade para retrocompatibilidade
   }))
 }
 
 export async function getRankingCursosMes(mes: number, ano: number) {
-  const { inicioStr, fimStr } = mesRange(mes, ano)
+  const { inicio, fim } = mesRange(mes, ano)
   const rows = await db.execute(sql`
-    SELECT b.nome, COUNT(*)::int AS alugados,
-           COALESCE(SUM(e.valor_total / NULLIF(array_length(e.cursos_contratados,1),0)), 0)::float AS receita
-    FROM eventos e
-    CROSS JOIN LATERAL unnest(e.cursos_contratados) AS course_id
-    JOIN cursos b ON b.id = course_id
-    WHERE e.status != 'cancelado'
-      AND e.data_evento >= ${inicioStr}
-      AND e.data_evento < ${fimStr}
-    GROUP BY b.nome
+    SELECT c.nome, COUNT(*)::int AS alugados,
+           COALESCE(SUM(p.valor), 0)::float AS receita
+    FROM pedidos p
+    JOIN cursos c ON c.id = p.curso_id
+    WHERE p.status = 'pago'
+      AND p.created_at >= ${inicio}
+      AND p.created_at < ${fim}
+    GROUP BY c.nome
     ORDER BY alugados DESC
     LIMIT 10
   `)
@@ -93,66 +97,45 @@ export async function getRankingCursosMes(mes: number, ano: number) {
 }
 
 export async function getOrigemClientesMes(mes: number, ano: number) {
-  const { inicioStr, fimStr } = mesRange(mes, ano)
-  try {
-    const rows = await db.execute(sql`
-      SELECT COALESCE(origem_cliente, 'Não informado') AS origem, COUNT(*)::int AS total
-      FROM eventos
-      WHERE status != 'cancelado' AND data_evento >= ${inicioStr} AND data_evento < ${fimStr}
-      GROUP BY origem ORDER BY total DESC
-    `)
-    return rows.rows as { origem: string; total: number }[]
-  } catch {
-    return []
-  }
+  // Retorna vazio pois não se aplica ao LMS de forma direta
+  return []
 }
 
-type EventoMes = {
-  id: string; nomeCliente: string; dataEvento: string; horarioInicio: string
-  valorTotal: string | null; custoMonitores: string | null; custoTransporte: string | null
-  custosExtras: string | null; status: string; statusPagamento: string
-  origemCliente: string | null; tipoCliente: string | null
-}
+// Representa a lista de pedidos do mês
+export async function getEventosMes(mes: number, ano: number) {
+  const { inicio, fim } = mesRange(mes, ano)
+  
+  const rows = await db
+    .select({
+      id: pedidos.id,
+      alunoNome: alunos.nome,
+      cursoNome: cursos.nome,
+      valor: pedidos.valor,
+      formaPagamento: pedidos.formaPagamento,
+      status: pedidos.status,
+      createdAt: pedidos.createdAt,
+    })
+    .from(pedidos)
+    .innerJoin(alunos, eq(pedidos.alunoId, alunos.id))
+    .innerJoin(cursos, eq(pedidos.cursoId, cursos.id))
+    .where(and(
+      gte(pedidos.createdAt, inicio),
+      lt(pedidos.createdAt, fim)
+    ))
+    .orderBy(desc(pedidos.createdAt))
 
-export async function getEventosMes(mes: number, ano: number): Promise<EventoMes[]> {
-  const { inicioStr, fimStr } = mesRange(mes, ano)
-  const base = sql`
-    SELECT id, nome_cliente, data_evento, horario_inicio,
-           valor_total, custo_monitores, custo_transporte, custos_extras,
-           status, status_pagamento
-    FROM eventos
-    WHERE data_evento >= ${inicioStr} AND data_evento < ${fimStr} AND status != 'cancelado'
-    ORDER BY data_evento
-  `
-  const withExtra = sql`
-    SELECT id, nome_cliente, data_evento, horario_inicio,
-           valor_total, custo_monitores, custo_transporte, custos_extras,
-           status, status_pagamento, origem_cliente, tipo_cliente
-    FROM eventos
-    WHERE data_evento >= ${inicioStr} AND data_evento < ${fimStr} AND status != 'cancelado'
-    ORDER BY data_evento
-  `
-
-  const toResult = (r: Record<string, unknown>): EventoMes => ({
-    id: r.id as string,
-    nomeCliente: r.nome_cliente as string,
-    dataEvento: r.data_evento as string,
-    horarioInicio: r.horario_inicio as string,
-    valorTotal: r.valor_total as string | null,
-    custoMonitores: r.custo_monitores as string | null,
-    custoTransporte: r.custo_transporte as string | null,
-    custosExtras: r.custos_extras as string | null,
-    status: r.status as string,
-    statusPagamento: r.status_pagamento as string,
-    origemCliente: (r.origem_cliente as string | null) ?? null,
-    tipoCliente: (r.tipo_cliente as string | null) ?? null,
-  })
-
-  try {
-    const rows = await db.execute(withExtra)
-    return (rows.rows as Record<string, unknown>[]).map(toResult)
-  } catch {
-    const rows = await db.execute(base)
-    return (rows.rows as Record<string, unknown>[]).map(toResult)
-  }
+  return rows.map(r => ({
+    id: r.id,
+    nomeCliente: r.alunoNome,
+    dataEvento: r.createdAt.toISOString().slice(0, 10),
+    horarioInicio: r.createdAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+    valorTotal: r.valor,
+    custoMonitores: '0',
+    custoTransporte: '0',
+    custosExtras: '0',
+    status: r.status === 'pago' ? 'realizado' : r.status === 'cancelado' ? 'cancelado' : 'confirmado',
+    statusPagamento: r.status === 'pago' ? 'pago' : 'pendente',
+    origemCliente: r.cursoNome, // usar nome do curso no lugar da origem
+    tipoCliente: r.formaPagamento,
+  }))
 }

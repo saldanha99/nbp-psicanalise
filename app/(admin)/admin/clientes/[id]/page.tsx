@@ -1,28 +1,40 @@
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getClienteById, getEventosCliente } from '@/lib/db/queries/clientes'
-import { getGirosDisponiveis, getGirosBonusCliente } from '@/lib/db/queries/area-cliente'
+import {
+  getAlunoById,
+  getAlunoMatriculas,
+  getAlunoPedidos,
+  getAlunoRegistros,
+} from '@/lib/db/queries/alunos'
 import { ClienteDetailClient } from '@/components/admin/ClienteDetailClient'
 
 export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params
-  const c = await getClienteById(id)
-  return { title: c ? `Cliente — ${c.nome}` : 'Cliente' }
+  const c = await getAlunoById(id)
+  return { title: c ? `Aluno — ${c.nome}` : 'Aluno' }
 }
 
 async function ClienteDetailContent({ id }: { id: string }) {
-  const [cliente, eventos, girosDisponiveis, girosBonus] = await Promise.all([
-    getClienteById(id),
-    getEventosCliente(id),
-    getGirosDisponiveis(id),
-    getGirosBonusCliente(id),
+  const [aluno, matriculas, pedidos, registros] = await Promise.all([
+    getAlunoById(id),
+    getAlunoMatriculas(id),
+    getAlunoPedidos(id),
+    getAlunoRegistros(id),
   ])
-  if (!cliente) notFound()
+  if (!aluno) notFound()
+
+  const clienteData = {
+    ...aluno,
+    matriculas,
+    pedidos,
+    registros,
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return <ClienteDetailClient cliente={{ ...(cliente as any), girosDisponiveis, girosBonus }} eventos={eventos as any} />
+  return <ClienteDetailClient cliente={clienteData as any} />
 }
 
 export default async function ClienteDetailPage({ params }: { params: Promise<{ id: string }> }) {

@@ -260,3 +260,70 @@
     animation: none;
   }
 }
+
+/* ── Rich Content HTML styling ── */
+.rich-content {
+  color: var(--brand-text);
+  line-height: 1.6;
+}
+
+.rich-content p {
+  margin-bottom: 1rem;
+}
+
+.rich-content p:last-child {
+  margin-bottom: 0;
+}
+
+.rich-content a {
+  color: #5B1A82;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.rich-content a:hover {
+  color: #481469;
+}
+
+.rich-content ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.rich-content ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.rich-content li {
+  margin-bottom: 0.5rem;
+}
+
+.rich-content h1, 
+.rich-content h2, 
+.rich-content h3, 
+.rich-content h4, 
+.rich-content h5, 
+.rich-content h6 {
+  font-weight: 700;
+  color: var(--brand-text);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Hide duplicate headers embedded in scraped HTML */
+.rich-content .section-title,
+.rich-content .rbt-title-style-3 {
+  display: none !important;
+}
+
+.dark .rich-content a {
+  color: #a78bfa;
+}
+
+.dark .rich-content a:hover {
+  color: #c084fc;
+}

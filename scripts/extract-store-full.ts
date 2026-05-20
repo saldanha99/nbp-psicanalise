@@ -1,10 +1,9 @@
 // @ts-nocheck
-import fetch from 'node-fetch';
+import 'dotenv/config';
 import * as cheerio from 'cheerio';
 import { db } from '../lib/db';
 import { cursos } from '../lib/db/schema';
 import { eq } from 'drizzle-orm';
-import 'dotenv/config';
 
 // Função para gerar slug a partir do nome
 function generateSlug(text: string) {
@@ -76,7 +75,21 @@ async function scrapeStore() {
       }
 
       // Extrair descrição
-      let descricao = $('.descricao-produto').html() || $('.descricao').html() || p.NomeProduto;
+      let descricao = $('#content_pnlOCurso').html() || $('.descricao-produto').html() || $('.descricao').html() || p.NomeProduto;
+
+      // Extrair público-alvo
+      let publicoAlvo = $('#content_pnlParaQuem').html() || $('#content_divPublicoAlvo').html() || $('.publico-alvo').html() || null;
+
+      // Extrair docente
+      let docenteNome = $('#content_pnlProfessores .title').first().text().trim() || $('#content_divProfessores .title').first().text().trim() || 'Aurélio Gonzales';
+      let docenteCargo = $('#content_pnlProfessores .subtitle').first().text().trim() || $('#content_divProfessores .subtitle').first().text().trim() || 'Psicanalista, Professor, Supervisor Clínico e Diretor do NBP';
+      let docenteFoto = $('#content_pnlProfessores img').first().attr('src') || $('#content_divProfessores img').first().attr('src') || null;
+      if (docenteFoto && !docenteFoto.startsWith('http')) {
+        docenteFoto = 'https://cursos.nbpsicanalise.com.br' + docenteFoto;
+      } else if (!docenteFoto) {
+        docenteFoto = 'https://cursos.nbpsicanalise.com.br/Digitalizacao/Produto/Imagem/47/47_ORG.jpg';
+      }
+      let docenteDesc = $('#content_pnlProfessores .description').first().html() || $('#content_divProfessores .description').first().html() || null;
 
       // Gerar dados para inserção
       let slug = generateSlug(p.NomeProduto);
@@ -96,6 +109,11 @@ async function scrapeStore() {
         precoReferencia: preco ? preco.toString() : '0',
         fotoDestaque: imageUrl || '',
         fotos: imageUrl ? [imageUrl] : [],
+        publicoAlvo,
+        docenteNome,
+        docenteCargo,
+        docenteFoto,
+        docenteDesc,
         ativo: true
       };
 
@@ -108,7 +126,8 @@ async function scrapeStore() {
          await db.insert(cursos).values(cursoData);
          console.log(` ✅ Inserido: ${slug}`);
       } else {
-         console.log(` ⚠️ Já existe: ${slug}`);
+         await db.update(cursos).set(cursoData).where(eq(cursos.slug, slug));
+         console.log(` 🔄 Atualizado: ${slug}`);
       }
       
       // Delay to be polite

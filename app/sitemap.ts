@@ -3,6 +3,7 @@ import { db } from '@/lib/db'
 import { cursos } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { getConfig } from '@/lib/db/queries/configuracoes'
+import { artigos } from '@/lib/data/artigos'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 3600 // regenera a cada 1 hora
@@ -27,7 +28,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/sobre`,    lastModified: agora, changeFrequency: 'monthly', priority: 0.6  },
     { url: `${base}/contato`,    lastModified: agora, changeFrequency: 'monthly', priority: 0.7  },
     { url: `${base}/bio`,        lastModified: agora, changeFrequency: 'weekly',  priority: 0.65 },
-    { url: `${base}/minha-area`, lastModified: agora, changeFrequency: 'monthly', priority: 0.5  },
+    { url: `${base}/psicanalistas`, lastModified: agora, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${base}/textos`,     lastModified: agora, changeFrequency: 'weekly',  priority: 0.8 },
   ]
 
   // ── Cursos (páginas individuais) ──────────────────────────
@@ -48,14 +50,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // silencia erro para não quebrar o sitemap se o DB estiver indisponível
   }
 
-  // ── Blog (opcional, ativado nas configs) ──────────────────────
-  // Estrutura preparada para quando o blog for implementado
-  const blogUrls: MetadataRoute.Sitemap = []
-  if (includeBlog === 'true') {
-    // Quando implementar o blog, buscar posts aqui
-    // const posts = await getPostsPublicados()
-    // blogUrls = posts.map(p => ({ url: `${base}/blog/${p.slug}`, ... }))
-  }
+  // ── Artigos Acadêmicos ───────────────────────────────────────
+  const artigosUrls: MetadataRoute.Sitemap = artigos.map(a => ({
+    url: `${base}/textos/${a.slug}`,
+    lastModified: agora,
+    changeFrequency: 'weekly',
+    priority: 0.7,
+  }))
 
-  return [...estaticas, ...cursosUrls, ...blogUrls]
+  return [...estaticas, ...cursosUrls, ...artigosUrls]
 }
+

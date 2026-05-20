@@ -62,7 +62,6 @@ async function CursosContent() {
               </div>
               <div className="p-4 pb-2">
                 <h3 className="text-brand-text font-semibold group-hover:text-brand-accent transition-colors">{b.nome}</h3>
-                <p className="text-brand-muted text-xs mt-1">{b.faixaEtaria} · {b.capacidade}</p>
                 {(b.fotos?.length ?? 0) > 0 && (
                   <p className="text-brand-muted text-xs mt-1">{b.fotos!.length} foto{b.fotos!.length !== 1 ? 's' : ''}</p>
                 )}

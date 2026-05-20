@@ -4,10 +4,6 @@ export type Curso = {
   slug: string
   descricao: string | null
   categoria: string
-  faixaEtaria: string
-  capacidade: string
-  dimensoes: string
-  energia: string | null
   fotos: string[] | null
   fotoDestaque: string | null
   ativo: boolean

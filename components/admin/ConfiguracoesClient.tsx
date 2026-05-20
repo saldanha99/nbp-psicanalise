@@ -5,7 +5,7 @@ import {
   Globe, Search, Zap, MessageCircle, Layout, Share2, Settings,
   Save, Check, Eye, EyeOff, ChevronRight, Layers, Bot, Map,
   ExternalLink, RefreshCw, CheckCircle2, XCircle, Gift,
-  Plus, Trash2, GripVertical,
+  Plus, Trash2, GripVertical, GraduationCap,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { saveConfigs } from '@/app/actions/configuracoes'
@@ -32,7 +32,7 @@ const TABS: Tab[] = [
   { id: 'social',      label: 'Redes Sociais', icon: Share2,         description: 'Links das redes sociais exibidos no footer' },
   { id: 'automacoes',  label: 'Automações',    icon: Bot,            description: 'WhatsApp automático: aniversários, pesquisas e avaliações' },
   { id: 'sitemap',     label: 'Sitemap / GSC', icon: Map,            description: 'Sitemap dinâmico e indexação no Google Search Console' },
-  { id: 'cashback',    label: 'Área do Cliente', icon: Gift,         description: 'Programa de cashback e configurações do portal do cliente' },
+  { id: 'cashback',    label: 'Área do Aluno', icon: GraduationCap,  description: 'Horas de formação e portal do aluno' },
   { id: 'sistema',     label: 'Sistema',       icon: Settings,       description: 'SLA, alertas e parâmetros operacionais' },
 ]
 
@@ -914,77 +914,44 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
       keys: ['cashback_ativo','cashback_percentual','cashback_validade_dias','cashback_min_resgate','area_cliente_ativo','area_cliente_titulo','roleta_ativa','roleta_min_cashback','roleta_premios'],
       content: (
         <div className="space-y-5">
-          <SectionTitle description="Configure o portal de autoatendimento dos seus clientes">Portal do Cliente</SectionTitle>
+          <SectionTitle description="Configure o portal do aluno e os requisitos de certificação para formação">Portal do Aluno</SectionTitle>
           <div className="flex items-center justify-between p-4 bg-brand-surface-2 rounded-xl border border-brand-border">
             <div>
-              <p className="text-brand-text text-sm font-medium">Área do cliente ativa</p>
-              <p className="text-brand-muted text-xs">Clientes podem acessar via código único em <code className="text-brand-accent">/minha-area</code></p>
+              <p className="text-brand-text text-sm font-medium">Área do aluno ativa</p>
+              <p className="text-brand-muted text-xs">Alunos podem acessar via código único em <code className="text-brand-accent">/minha-area</code></p>
             </div>
-            <Toggle value={get('area_cliente_ativo') || 'true'} onChange={set('area_cliente_ativo')} label="Área ativa" />
+            <Toggle value={get('area_cliente_ativo') || 'true'} onChange={set('area_cliente_ativo')} label="Portal ativo" />
           </div>
-          <Field label="Título da área do cliente">
-            <Input value={get('area_cliente_titulo')} onChange={set('area_cliente_titulo')} placeholder="Minha Área" />
+          <Field label="Título da Área do Aluno">
+            <Input value={get('area_cliente_titulo')} onChange={set('area_cliente_titulo')} placeholder="Portal do Aluno" />
           </Field>
 
           <Divider />
-          <SectionTitle description="Os clientes ganham cashback a cada festa realizada">Programa de Cashback</SectionTitle>
-          <div className="flex items-center justify-between p-4 bg-brand-surface-2 rounded-xl border border-brand-border">
+          <SectionTitle description="Horas necessárias de atividades práticas para o aluno obter certificação">Requisitos de Formação (Psicanálise)</SectionTitle>
+          <div className="flex items-center justify-between p-4 bg-brand-surface-2 rounded-xl border border-brand-border mb-3">
             <div>
-              <p className="text-brand-text text-sm font-medium">Programa de cashback ativo</p>
-              <p className="text-brand-muted text-xs">Credita automaticamente quando o evento é marcado como &ldquo;realizado&rdquo;</p>
+              <p className="text-brand-text text-sm font-medium">Exibir progresso de certificação no portal</p>
+              <p className="text-brand-muted text-xs">Permite ao aluno visualizar sua barra de progresso de horas práticas</p>
             </div>
-            <Toggle value={get('cashback_ativo') || 'true'} onChange={set('cashback_ativo')} label="Cashback ativo" />
+            <Toggle value={get('cashback_ativo') || 'true'} onChange={set('cashback_ativo')} label="Exibir progresso" />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-            <Field label="Percentual de cashback (%)" hint="Ex: 5 = 5% do valor total da festa">
-              <Input value={get('cashback_percentual')} onChange={set('cashback_percentual')} placeholder="5" type="number" />
+            <Field label="Horas de Supervisão Clínica" hint="Total de horas necessárias de supervisão">
+              <Input value={get('roleta_min_cashback')} onChange={set('roleta_min_cashback')} placeholder="100" type="number" />
             </Field>
-            <Field label="Valor mínimo para resgate (R$)" hint="Ex: 20 = precisa de R$ 20 para resgatar">
-              <Input value={get('cashback_min_resgate')} onChange={set('cashback_min_resgate')} placeholder="20" type="number" />
+            <Field label="Horas de Análise Pessoal" hint="Total de horas necessárias de análise própria">
+              <Input value={get('cashback_percentual')} onChange={set('cashback_percentual')} placeholder="50" type="number" />
             </Field>
-            <Field label="Validade (dias)" hint="0 = sem expiração">
-              <Input value={get('cashback_validade_dias')} onChange={set('cashback_validade_dias')} placeholder="365" type="number" />
+            <Field label="Horas de Observação Acadêmica" hint="Total de horas necessárias de observações/estágio">
+              <Input value={get('cashback_validade_dias')} onChange={set('cashback_validade_dias')} placeholder="50" type="number" />
             </Field>
           </div>
           <div className="bg-blue-500/5 border border-blue-500/20 rounded-xl p-4 text-sm text-brand-muted space-y-2">
-            <p className="font-semibold text-brand-text">💡 Como funciona o cashback</p>
+            <p className="font-semibold text-brand-text">🎓 Sobre a Formação e Certificação</p>
             <ul className="text-xs space-y-1 list-disc list-inside">
-              <li>Quando um evento é marcado como <strong>realizado</strong>, o sistema credita automaticamente o cashback.</li>
-              <li>O cliente visualiza o saldo e o histórico na área do cliente.</li>
-              <li>Para resgatar, o cliente fala via WhatsApp e você aplica no próximo evento.</li>
-              <li>O código de acesso é gerado automaticamente e pode ser enviado via WhatsApp na tela do cliente.</li>
-            </ul>
-          </div>
-
-          <Divider />
-          <SectionTitle description="Roleta de prêmios que o cliente pode girar ao acumular cashback suficiente">🎡 Roleta de Prêmios</SectionTitle>
-          <div className="flex items-center justify-between p-4 bg-brand-surface-2 rounded-xl border border-brand-border">
-            <div>
-              <p className="text-brand-text text-sm font-medium">Roleta de prêmios ativa</p>
-              <p className="text-brand-muted text-xs">Exibe a roleta na área do cliente quando o cashback acumulado atinge o mínimo</p>
-            </div>
-            <Toggle value={get('roleta_ativa') || 'false'} onChange={set('roleta_ativa')} label="Roleta ativa" />
-          </div>
-          <Field label="Cashback mínimo para ganhar 1 giro (R$)" hint="A cada múltiplo desse valor em cashback total, o cliente ganha 1 giro. Ex: 200 = a cada R$200 acumulados">
-            <Input value={get('roleta_min_cashback')} onChange={set('roleta_min_cashback')} placeholder="200" type="number" />
-          </Field>
-
-          <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-brand-text">Prêmios da roleta</label>
-            <p className="text-xs text-brand-muted mb-3">Configure os prêmios e seus pesos de probabilidade. Mais peso = mais chance de sair.</p>
-            <PremioEditor
-              value={get('roleta_premios') || '[]'}
-              onChange={set('roleta_premios')}
-            />
-          </div>
-
-          <div className="bg-yellow-500/5 border border-yellow-500/20 rounded-xl p-4 text-sm text-brand-muted space-y-2">
-            <p className="font-semibold text-brand-text">🎡 Como funciona a roleta</p>
-            <ul className="text-xs space-y-1 list-disc list-inside">
-              <li>O cliente ganha 1 giro para cada R${get('roleta_min_cashback') || '200'} de cashback <strong>acumulado total</strong>.</li>
-              <li>Os giros são calculados automaticamente: <code className="text-yellow-600">floor(cashbackTotal / mínimo) − girosJáUsados</code>.</li>
-              <li>O sorteio é ponderado pelo <strong>peso</strong> de cada prêmio.</li>
-              <li>O prêmio é registrado e o cliente vê o histórico na sua área.</li>
+              <li>O aluno registra suas horas práticas diretamente com a secretaria.</li>
+              <li>O painel calcula a evolução de cada categoria comparando com os valores acima.</li>
+              <li>A barra de progresso atinge 100% quando todas as horas requeridas forem preenchidas.</li>
             </ul>
           </div>
         </div>

@@ -10,19 +10,20 @@ interface CourseCardProps {
     nome: string
     slug: string
     categoria: string
-    faixaEtaria: string
-    capacidade: string
     fotos: string[] | null
     fotoDestaque: string | null
     destaque: boolean
-    dimensoes: string
     descricao: string | null
   }
 }
-
 export function CourseCard({ curso }: CourseCardProps) {
   const { nome, slug, categoria, fotos, fotoDestaque, destaque, descricao } = curso
   const imageSrc = fotoDestaque ?? (fotos && fotos.length > 0 ? fotos[0] : null)
+
+  const stripHtml = (html: string) => {
+    if (!html) return ''
+    return html.replace(/<[^>]*>/g, '').trim()
+  }
 
   return (
     <div
@@ -69,7 +70,7 @@ export function CourseCard({ curso }: CourseCardProps) {
 
         {descricao && (
           <p className="text-gray-500 text-sm line-clamp-2 leading-relaxed font-light">
-            {descricao}
+            {stripHtml(descricao)}
           </p>
         )}
 

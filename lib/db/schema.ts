@@ -13,23 +13,41 @@ export const cursos = pgTable('cursos', {
   slug:            text('slug').notNull().unique(),
   descricao:       text('descricao'),
   categoria:       text('categoria').notNull(),
-  faixaEtaria:     text('faixa_etaria').notNull(),
-  capacidade:      text('capacidade').notNull(),
-  dimensoes:       text('dimensoes').notNull(),
-  energia:         text('energia'),
   fotos:           text('fotos').array().default([]),
   fotoDestaque:    text('foto_destaque'),
   ativo:           boolean('ativo').default(true).notNull(),
   destaque:        boolean('destaque').default(false).notNull(),
   ordemDestaque:   integer('ordem_destaque').default(0).notNull(),
   precoReferencia: decimal('preco_referencia', { precision: 10, scale: 2 }),
-  monitoresNecessarios: integer('monitores_necessarios').default(1).notNull(),
+  // LMS: preços
+  precoVenda:      decimal('preco_venda', { precision: 10, scale: 2 }),
+  precoOriginal:   decimal('preco_original', { precision: 10, scale: 2 }),
+  // LMS: tipo e evento
+  tipoCurso:       text('tipo_curso').default('gravado'), // gravado | presencial | aovivo | formacao
+  dataEvento:      date('data_evento'),
+  horarioEvento:   text('horario_evento'),
+  localEvento:     text('local_evento'),
+  // LMS: vagas
+  vagasTotal:      integer('vagas_total'),
+  vagasOcupadas:   integer('vagas_ocupadas').default(0).notNull(),
+  // LMS: acesso
+  acessoVitalicio: boolean('acesso_vitalicio').default(true).notNull(),
+  diasAcesso:      integer('dias_acesso'), // null = vitalicio
+  certificado:     boolean('certificado').default(true).notNull(),
+  cargaHoraria:    text('carga_horaria'),
+  // Docente
+  publicoAlvo:     text('publico_alvo'),
+  docenteNome:     text('docente_nome'),
+  docenteCargo:    text('docente_cargo'),
+  docenteFoto:     text('docente_foto'),
+  docenteDesc:     text('docente_desc'),
   createdAt:       timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updatedAt:       timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 }, (t) => [
   index('idx_cursos_ativo').on(t.ativo),
   index('idx_cursos_destaque').on(t.destaque, t.ordemDestaque),
   index('idx_cursos_categoria').on(t.categoria),
+  index('idx_cursos_tipo').on(t.tipoCurso),
 ])
 
 // ============================================
@@ -291,6 +309,161 @@ export const adminUsers = pgTable('admin_users', {
 })
 
 // ============================================
+// alunos (portal do aluno — separado de adminUsers)
+// ============================================
+export const alunos = pgTable('alunos', {
+  id:               uuid('id').primaryKey().defaultRandom(),
+  nome:             text('nome').notNull(),
+  email:            text('email').notNull().unique(),
+  senhaHash:        text('senha_hash').notNull(),
+  cpf:              text('cpf'),
+  telefone:         text('telefone'),
+  asaasCustomerId:  text('asaas_customer_id').unique(), // ID do cliente no Asaas
+  emailVerificado:  boolean('email_verificado').default(false).notNull(),
+  tokenRecuperacao: text('token_recuperacao'),
+  tokenExpiracao:   timestamp('token_expiracao', { withTimezone: true }),
+  ativo:            boolean('ativo').default(true).notNull(),
+  createdAt:        timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt:        timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+}, (t) => [
+  index('idx_alunos_email').on(t.email),
+  index('idx_alunos_asaas').on(t.asaasCustomerId),
+])
+
+// ============================================
+// pedidos (cada tentativa de compra)
+// ============================================
+export const pedidos = pgTable('pedidos', {
+  id:                   uuid('id').primaryKey().defaultRandom(),
+  alunoId:              uuid('aluno_id').notNull().references(() => alunos.id, { onDelete: 'cascade' }),
+  cursoId:              uuid('curso_id').notNull().references(() => cursos.id, { onDelete: 'restrict' }),
+  valor:                decimal('valor', { precision: 10, scale: 2 }).notNull(),
+  formaPagamento:       text('forma_pagamento').notNull(), // pix | cartao | boleto
+  parcelas:             integer('parcelas').default(1).notNull(),
+  status:               text('status').default('pendente').notNull(), // pendente | pago | cancelado | reembolsado
+  // Asaas
+  asaasPaymentId:       text('asaas_payment_id').unique(),
+  asaasPaymentLink:     text('asaas_payment_link'),
+  // PIX
+  pixQrCode:            text('pix_qr_code'),     // base64 da imagem
+  pixChaveCopiaECola:   text('pix_chave_copia_e_cola'),
+  pixExpiracao:         timestamp('pix_expiracao', { withTimezone: true }),
+  // Boleto
+  boletoUrl:            text('boleto_url'),
+  boletoLinhaDigitavel: text('boleto_linha_digitavel'),
+  boletoBanco:          text('boleto_banco'),
+  // Cartão
+  cartaoBandeira:       text('cartao_bandeira'),
+  cartaoUltimos4:       text('cartao_ultimos4'),
+  // Datas
+  paidAt:               timestamp('paid_at', { withTimezone: true }),
+  createdAt:            timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt:            timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+}, (t) => [
+  index('idx_pedidos_aluno').on(t.alunoId),
+  index('idx_pedidos_curso').on(t.cursoId),
+  index('idx_pedidos_status').on(t.status),
+  index('idx_pedidos_asaas').on(t.asaasPaymentId),
+])
+
+// ============================================
+// matriculas (acesso liberado após pagamento)
+// ============================================
+export const matriculas = pgTable('matriculas', {
+  id:               uuid('id').primaryKey().defaultRandom(),
+  alunoId:          uuid('aluno_id').notNull().references(() => alunos.id, { onDelete: 'cascade' }),
+  cursoId:          uuid('curso_id').notNull().references(() => cursos.id, { onDelete: 'restrict' }),
+  pedidoId:         uuid('pedido_id').references(() => pedidos.id, { onDelete: 'set null' }),
+  status:           text('status').default('ativo').notNull(), // ativo | expirado | cancelado
+  dataExpiracao:    timestamp('data_expiracao', { withTimezone: true }), // null = vitalicio
+  progressoPercent: integer('progresso_percent').default(0).notNull(),
+  certificadoUrl:   text('certificado_url'),
+  certificadoAt:    timestamp('certificado_at', { withTimezone: true }),
+  ultimoAcessoAt:   timestamp('ultimo_acesso_at', { withTimezone: true }),
+  createdAt:        timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+}, (t) => [
+  index('idx_matriculas_aluno').on(t.alunoId),
+  index('idx_matriculas_curso').on(t.cursoId),
+  index('idx_matriculas_status').on(t.status),
+])
+
+// ============================================
+// modulos (capítulos de um curso)
+// ============================================
+export const modulos = pgTable('modulos', {
+  id:        uuid('id').primaryKey().defaultRandom(),
+  cursoId:   uuid('curso_id').notNull().references(() => cursos.id, { onDelete: 'cascade' }),
+  titulo:    text('titulo').notNull(),
+  descricao: text('descricao'),
+  ordem:     integer('ordem').default(0).notNull(),
+  ativo:     boolean('ativo').default(true).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+}, (t) => [
+  index('idx_modulos_curso').on(t.cursoId, t.ordem),
+])
+
+// ============================================
+// aulas (vídeos e materiais de cada módulo)
+// ============================================
+export const aulas = pgTable('aulas', {
+  id:           uuid('id').primaryKey().defaultRandom(),
+  moduloId:     uuid('modulo_id').notNull().references(() => modulos.id, { onDelete: 'cascade' }),
+  cursoId:      uuid('curso_id').notNull().references(() => cursos.id, { onDelete: 'cascade' }),
+  titulo:       text('titulo').notNull(),
+  descricao:    text('descricao'),
+  ordem:        integer('ordem').default(0).notNull(),
+  tipo:         text('tipo').default('video').notNull(), // video | pdf | texto | quiz
+  // Vídeo (YouTube unlisted, Bunny, Vimeo)
+  videoUrl:     text('video_url'),     // URL embed ou ID
+  videoProvider: text('video_provider').default('youtube'), // youtube | bunny | vimeo
+  videoDuracao:  integer('video_duracao'), // em segundos
+  // Material extra
+  materialUrl:  text('material_url'),
+  conteudoTexto: text('conteudo_texto'), // markdown para aulas de texto
+  // Controles
+  gratuita:     boolean('gratuita').default(false).notNull(), // preview público
+  ativo:        boolean('ativo').default(true).notNull(),
+  createdAt:    timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+}, (t) => [
+  index('idx_aulas_modulo').on(t.moduloId, t.ordem),
+  index('idx_aulas_curso').on(t.cursoId),
+])
+
+// ============================================
+// progresso_aluno (tracking de conclusão)
+// ============================================
+export const progressoAluno = pgTable('progresso_aluno', {
+  id:                uuid('id').primaryKey().defaultRandom(),
+  alunoId:           uuid('aluno_id').notNull().references(() => alunos.id, { onDelete: 'cascade' }),
+  aulaId:            uuid('aula_id').notNull().references(() => aulas.id, { onDelete: 'cascade' }),
+  cursoId:           uuid('curso_id').notNull().references(() => cursos.id, { onDelete: 'cascade' }),
+  concluida:         boolean('concluida').default(false).notNull(),
+  percentualAssistido: integer('percentual_assistido').default(0).notNull(),
+  ultimoSegundo:     integer('ultimo_segundo').default(0).notNull(), // para retomar de onde parou
+  concluidaAt:       timestamp('concluida_at', { withTimezone: true }),
+  updatedAt:         timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+}, (t) => [
+  index('idx_progresso_aluno_aula').on(t.alunoId, t.aulaId),
+  index('idx_progresso_aluno_curso').on(t.alunoId, t.cursoId),
+])
+
+// ============================================
+// aluno_registros (supervisões, sessões e observações)
+// ============================================
+export const alunoRegistros = pgTable('aluno_registros', {
+  id:          uuid('id').primaryKey().defaultRandom(),
+  alunoId:     uuid('aluno_id').notNull().references(() => alunos.id, { onDelete: 'cascade' }),
+  tipo:        text('tipo').notNull(), // 'supervisao' | 'analise' | 'observacao'
+  data:        timestamp('data', { withTimezone: true }).defaultNow().notNull(),
+  horas:       integer('horas').default(0).notNull(),
+  supervisor:  text('supervisor'), // supervisor ou analista
+  conteudo:    text('conteudo').notNull(), // parecer/relato do caso/observações
+  createdAt:   timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+}, (t) => [
+  index('idx_aluno_registros_aluno').on(t.alunoId),
+])
+
+// ============================================
 // Relations
 // ============================================
 export const leadsRelations = relations(leads, ({ many }) => ({
@@ -370,4 +543,51 @@ export const datasComecorativasRelations = relations(datasComecorativas, ({ one 
 export const lancamentosFinanceirosRelations = relations(lancamentosFinanceiros, ({ one }) => ({
   evento:  one(eventos,   { fields: [lancamentosFinanceiros.eventoId],  references: [eventos.id] }),
   monitor: one(monitores, { fields: [lancamentosFinanceiros.monitorId], references: [monitores.id] }),
+}))
+
+// ── LMS Relations ────────────────────────────────────────────────────────────
+export const alunosRelations = relations(alunos, ({ many }) => ({
+  pedidos:    many(pedidos),
+  matriculas: many(matriculas),
+  progresso:  many(progressoAluno),
+  registros:  many(alunoRegistros),
+}))
+
+export const cursosRelations = relations(cursos, ({ many }) => ({
+  modulos:    many(modulos),
+  aulas:      many(aulas),
+  pedidos:    many(pedidos),
+  matriculas: many(matriculas),
+}))
+
+export const pedidosRelations = relations(pedidos, ({ one }) => ({
+  aluno: one(alunos, { fields: [pedidos.alunoId], references: [alunos.id] }),
+  curso: one(cursos, { fields: [pedidos.cursoId], references: [cursos.id] }),
+}))
+
+export const matriculasRelations = relations(matriculas, ({ one }) => ({
+  aluno:  one(alunos,  { fields: [matriculas.alunoId],  references: [alunos.id] }),
+  curso:  one(cursos,  { fields: [matriculas.cursoId],  references: [cursos.id] }),
+  pedido: one(pedidos, { fields: [matriculas.pedidoId], references: [pedidos.id] }),
+}))
+
+export const modulosRelations = relations(modulos, ({ one, many }) => ({
+  curso: one(cursos, { fields: [modulos.cursoId], references: [cursos.id] }),
+  aulas: many(aulas),
+}))
+
+export const aulasRelations = relations(aulas, ({ one, many }) => ({
+  modulo:    one(modulos, { fields: [aulas.moduloId], references: [modulos.id] }),
+  curso:     one(cursos,  { fields: [aulas.cursoId],  references: [cursos.id] }),
+  progresso: many(progressoAluno),
+}))
+
+export const progressoAlunoRelations = relations(progressoAluno, ({ one }) => ({
+  aluno: one(alunos, { fields: [progressoAluno.alunoId], references: [alunos.id] }),
+  aula:  one(aulas,  { fields: [progressoAluno.aulaId],  references: [aulas.id] }),
+  curso: one(cursos, { fields: [progressoAluno.cursoId], references: [cursos.id] }),
+}))
+
+export const alunoRegistrosRelations = relations(alunoRegistros, ({ one }) => ({
+  aluno: one(alunos, { fields: [alunoRegistros.alunoId], references: [alunos.id] }),
 }))

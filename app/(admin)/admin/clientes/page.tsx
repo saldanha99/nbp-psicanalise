@@ -1,19 +1,15 @@
 import { Suspense } from 'react'
 import type { Metadata } from 'next'
-import { getClientes } from '@/lib/db/queries/clientes'
-import { getProximosAniversarios } from '@/lib/db/queries/clientes'
+import { getAlunos } from '@/lib/db/queries/alunos'
 import { ClientesClient } from '@/components/admin/ClientesClient'
 
-export const metadata: Metadata = { title: 'Clientes' }
+export const metadata: Metadata = { title: 'Alunos' }
 export const dynamic = 'force-dynamic'
 
 async function ClientesContent() {
-  const [clientes, aniversarios] = await Promise.all([
-    getClientes(),
-    getProximosAniversarios(30),
-  ])
+  const alunos = await getAlunos()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return <ClientesClient clientes={clientes as any} aniversarios={aniversarios} />
+  return <ClientesClient clientes={alunos as any} />
 }
 
 export default function ClientesPage() {

@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'nbpsicanalise.com.br',
       },
+      {
+        // Vercel Blob — vídeos e imagens hospedados no nosso storage
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      },
     ],
   },
 }

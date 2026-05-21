@@ -1,0 +1,25 @@
+# .htaccess para /public_html/upload/
+# Aumenta os limites de upload do PHP para esta pasta
+
+# Permite execução de PHP
+Options -Indexes
+
+# Limites de upload — ajuste conforme necessário
+php_value upload_max_filesize 500M
+php_value post_max_size       512M
+php_value max_execution_time  600
+php_value max_input_time      600
+php_value memory_limit        256M
+
+# Segurança: não lista os arquivos desta pasta
+Options -Indexes
+
+# Somente o video-upload.php pode ser acessado
+<Files ~ "^(?!video-upload\.php$)">
+    Order allow,deny
+    Deny from all
+</Files>
+<Files "video-upload.php">
+    Order allow,deny
+    Allow from all
+</Files>

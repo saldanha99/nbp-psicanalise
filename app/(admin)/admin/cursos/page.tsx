@@ -67,8 +67,19 @@ async function CursosContent() {
                 )}
               </div>
             </Link>
-            <div className="px-4 pb-4">
-              <CursoToggle id={b.id} ativo={b.ativo} />
+            <div className="px-4 pb-4 flex gap-2">
+              <Link href={`/admin/cursos/${b.id}/aulas`} className="flex-1">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full border-brand-border text-orange-400 hover:bg-orange-500/10 hover:border-orange-500/40"
+                >
+                  📚 Aulas
+                </Button>
+              </Link>
+              <div className="flex-1">
+                <CursoToggle id={b.id} ativo={b.ativo} />
+              </div>
             </div>
           </div>
         ))}

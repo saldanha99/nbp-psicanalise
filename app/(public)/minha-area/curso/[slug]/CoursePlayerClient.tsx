@@ -33,22 +33,71 @@ interface Props {
   modulos: Modulo[]
 }
 
-function getVideoEmbed(aula: Aula): string | null {
+type VideoInfo =
+  | { kind: 'blob'; url: string; ultimoSegundo: number }
+  | { kind: 'iframe'; url: string }
+  | null
+
+function getVideoInfo(aula: Aula): VideoInfo {
   if (!aula.videoUrl) return null
+  if (aula.videoProvider === 'blob') {
+    return { kind: 'blob', url: aula.videoUrl, ultimoSegundo: aula.ultimoSegundo }
+  }
   if (aula.videoProvider === 'youtube') {
-    // Extrai ID do YouTube
     const match = aula.videoUrl.match(/(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
     const id = match?.[1] ?? aula.videoUrl
-    return `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&start=${aula.ultimoSegundo}`
+    return { kind: 'iframe', url: `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&start=${aula.ultimoSegundo}` }
   }
   if (aula.videoProvider === 'vimeo') {
     const id = aula.videoUrl.replace(/\D/g, '')
-    return `https://player.vimeo.com/video/${id}`
+    return { kind: 'iframe', url: `https://player.vimeo.com/video/${id}` }
   }
   if (aula.videoProvider === 'bunny') {
-    return aula.videoUrl // URL direta do Bunny Stream
+    return { kind: 'iframe', url: aula.videoUrl }
   }
-  return aula.videoUrl
+  // Fallback: tenta como blob direto
+  return { kind: 'blob', url: aula.videoUrl, ultimoSegundo: aula.ultimoSegundo }
+}
+
+function VideoPlayer({ info, onProgress }: { info: VideoInfo; onProgress?: (segundos: number) => void }) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    if (info?.kind === 'blob' && videoRef.current && info.ultimoSegundo > 0) {
+      videoRef.current.currentTime = info.ultimoSegundo
+    }
+  }, [info])
+
+  if (!info) return null
+
+  if (info.kind === 'blob') {
+    return (
+      <video
+        ref={videoRef}
+        src={info.url}
+        controls
+        className="w-full h-full object-contain"
+        onTimeUpdate={(e) => {
+          const v = e.currentTarget
+          // Salva posição a cada 10 segundos
+          if (Math.round(v.currentTime) % 10 === 0 && v.currentTime > 0) {
+            onProgress?.(Math.round(v.currentTime))
+          }
+        }}
+        onPause={(e) => onProgress?.(Math.round(e.currentTarget.currentTime))}
+        controlsList="nodownload"
+      />
+    )
+  }
+
+  return (
+    <iframe
+      src={info.url}
+      className="w-full h-full"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+  )
 }
 
 function formatDuracao(segundos: number): string {
@@ -97,7 +146,22 @@ export function CoursePlayerClient({ aluno, curso, matricula, modulos }: Props) 
     })
   }
 
-  const embedUrl = aulaAtual ? getVideoEmbed(aulaAtual) : null
+  const videoInfo = aulaAtual ? getVideoInfo(aulaAtual) : null
+
+  async function salvarProgresso(segundos: number) {
+    if (!aulaAtual) return
+    await fetch('/api/aluno/progresso', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        aulaId: aulaAtual.id,
+        cursoId: curso.id,
+        concluida: false,
+        percentualAssistido: 0,
+        ultimoSegundo: segundos,
+      }),
+    }).catch(() => { /* silently fail */ })
+  }
 
   return (
     <div className="min-h-screen bg-[#0f0e17] text-white flex flex-col">
@@ -124,13 +188,8 @@ export function CoursePlayerClient({ aluno, curso, matricula, modulos }: Props) 
         <main className="flex-1 flex flex-col overflow-y-auto">
           {/* Vídeo */}
           <div className="bg-black aspect-video w-full">
-            {embedUrl ? (
-              <iframe
-                src={embedUrl}
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+            {videoInfo ? (
+              <VideoPlayer info={videoInfo} onProgress={salvarProgresso} />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-500">
                 {aulaAtual?.tipo === 'texto' ? (

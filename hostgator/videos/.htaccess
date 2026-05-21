@@ -1,0 +1,31 @@
+# .htaccess para /public_html/videos/
+# Configura servimento correto de arquivos de vídeo
+
+# Não lista o conteúdo da pasta
+Options -Indexes
+
+# MIME types corretos para vídeo (para streaming funcionar)
+AddType video/mp4       .mp4
+AddType video/webm      .webm
+AddType video/quicktime .mov
+AddType video/x-msvideo .avi
+AddType video/x-matroska .mkv
+AddType video/mpeg      .mpg .mpeg
+
+# Headers para streaming de vídeo (Range requests)
+<IfModule mod_headers.c>
+    Header always set Accept-Ranges bytes
+
+    # Cache de 7 dias para vídeos (economiza bandwidth)
+    <FilesMatch "\.(mp4|webm|mov|avi|mkv|mpg|mpeg)$">
+        Header set Cache-Control "public, max-age=604800"
+    </FilesMatch>
+
+    # CORS — permite que o site sirva os vídeos
+    Header always set Access-Control-Allow-Origin "https://nbpsicanalise.com.br"
+</IfModule>
+
+# Compressão (não comprime vídeo — já é comprimido)
+<IfModule mod_deflate.c>
+    SetEnvIfNoCase Request_URI \.(?:mp4|webm|mov|avi|mkv)$ no-gzip dont-vary
+</IfModule>

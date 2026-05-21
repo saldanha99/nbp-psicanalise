@@ -39,6 +39,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={`${display.variable} ${body.variable} h-full antialiased`} suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="https://nbpsicanalise.com.br/wp-content/uploads/2021/03/Logo-NBP-Oficial-min.png" type="image/png" />
+        <link rel="shortcut icon" href="https://nbpsicanalise.com.br/wp-content/uploads/2021/03/Logo-NBP-Oficial-min.png" type="image/png" />
+        <link rel="apple-touch-icon" href="https://nbpsicanalise.com.br/wp-content/uploads/2021/03/Logo-NBP-Oficial-min.png" type="image/png" />
+      </head>
       <body className="min-h-full flex flex-col bg-brand-bg text-brand-text">
         <ThemeProvider
           attribute="class"

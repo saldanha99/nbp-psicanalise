@@ -420,7 +420,7 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
               <Input value={get('site_nome')} onChange={set('site_nome')} placeholder="NBP Psicanálise" />
             </Field>
             <Field label="Telefone / WhatsApp" required>
-              <Input value={get('site_telefone')} onChange={set('site_telefone')} placeholder="5512996498725" mono />
+              <Input value={get('site_telefone')} onChange={set('site_telefone')} placeholder="5511961695163" mono />
             </Field>
           </div>
           <Field label="Descrição curta" hint="Usada como meta description padrão">
@@ -545,7 +545,7 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
           <SectionTitle description="Número e mensagem usados nos botões de contato do site">WhatsApp Público</SectionTitle>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <Field label="Número do WhatsApp" hint="Formato internacional sem + ou espaços: 5512999990000" required>
-              <Input value={get('whatsapp_numero')} onChange={set('whatsapp_numero')} placeholder="5512996498725" mono />
+              <Input value={get('whatsapp_numero')} onChange={set('whatsapp_numero')} placeholder="5511961695163" mono />
             </Field>
             <div className="flex items-center gap-3 pt-6">
               <Toggle value={get('whatsapp_ativo') || 'true'} onChange={set('whatsapp_ativo')} label="WhatsApp ativo" />

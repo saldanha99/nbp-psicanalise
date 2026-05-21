@@ -33,7 +33,7 @@ export function whatsappLink(number: string, message: string) {
   return `https://wa.me/${number.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`
 }
 
-export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '5512996498725'
+export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '5511961695163'
 
 export const CATEGORIAS = [
   { value: 'todos',     label: 'Todos' },

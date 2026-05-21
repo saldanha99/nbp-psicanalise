@@ -130,7 +130,7 @@ export function AreaClienteLogin() {
             <p className="text-center text-brand-muted text-xs mt-6">
               Não tem seu código?{' '}
               <a
-                href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '5512996498725'}?text=${encodeURIComponent('Olá! Preciso do meu código de acesso à Área do Cliente.')}`}
+                href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '5511961695163'}?text=${encodeURIComponent('Olá! Preciso do meu código de acesso à Área do Cliente.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-brand-accent hover:underline"

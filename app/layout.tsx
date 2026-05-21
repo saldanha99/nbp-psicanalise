@@ -29,6 +29,11 @@ export const metadata: Metadata = {
     url: 'https://nbpsicanalise.com.br',
     siteName: 'NBP Psicanálise',
   },
+  icons: {
+    icon: 'https://nbpsicanalise.com.br/wp-content/uploads/2021/03/Logo-NBP-Oficial-min.png',
+    shortcut: 'https://nbpsicanalise.com.br/wp-content/uploads/2021/03/Logo-NBP-Oficial-min.png',
+    apple: 'https://nbpsicanalise.com.br/wp-content/uploads/2021/03/Logo-NBP-Oficial-min.png',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

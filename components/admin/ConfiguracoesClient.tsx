@@ -61,7 +61,7 @@ function Input({ value, onChange, placeholder, type = 'text', mono = false }: {
       onChange={e => onChange(e.target.value)}
       placeholder={placeholder}
       className={cn(
-        'w-full bg-brand-surface border border-brand-border rounded-lg px-3 py-2.5 text-brand-text placeholder:text-brand-muted text-sm focus:outline-none focus:border-brand-accent transition-colors',
+        'w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-brand-text dark:text-white placeholder:text-brand-muted/70 text-sm focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all',
         mono && 'font-mono'
       )}
     />
@@ -77,7 +77,7 @@ function Textarea({ value, onChange, placeholder, rows = 3 }: {
       onChange={e => onChange(e.target.value)}
       placeholder={placeholder}
       rows={rows}
-      className="w-full bg-brand-surface border border-brand-border rounded-lg px-3 py-2.5 text-brand-text placeholder:text-brand-muted text-sm focus:outline-none focus:border-brand-accent transition-colors resize-none"
+      className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-brand-text dark:text-white placeholder:text-brand-muted/70 text-sm focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all resize-none"
     />
   )
 }
@@ -113,7 +113,7 @@ function SecretInput({ value, onChange, placeholder }: {
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full bg-brand-surface border border-brand-border rounded-lg px-3 py-2.5 pr-10 text-brand-text placeholder:text-brand-muted text-sm font-mono focus:outline-none focus:border-brand-accent transition-colors"
+        className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-lg px-3 py-2.5 pr-10 text-brand-text dark:text-white placeholder:text-brand-muted/70 text-sm font-mono focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
       />
       <button
         type="button"
@@ -479,7 +479,7 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
             <Textarea value={get('seo_descricao_padrao')} onChange={set('seo_descricao_padrao')} placeholder="Formação de psicanalistas clínicos e cursos de especialização..." />
             <p className="text-xs text-brand-muted text-right mt-1">{get('seo_descricao_padrao').length}/160 chars</p>
           </Field>
-          <Field label="Palavras-chave" hint="Separadas por vírgula. Ex: cursos infláveis, locação SJC, festa infantil">
+          <Field label="Palavras-chave" hint="Separadas por vírgula. Ex: psicanálise, formação clínica, curso de psicanálise">
             <Textarea value={get('seo_palavras_chave')} onChange={set('seo_palavras_chave')} placeholder="psicanalise, curso de psicanalise, formação psicanalítica..." rows={2} />
           </Field>
 
@@ -553,13 +553,13 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
             </div>
           </div>
           <Field label="Mensagem padrão" hint="Texto pré-preenchido ao abrir o WhatsApp">
-            <Textarea value={get('whatsapp_mensagem_padrao')} onChange={set('whatsapp_mensagem_padrao')} placeholder="Olá! Gostaria de reservar um curso para meu evento." rows={2} />
+            <Textarea value={get('whatsapp_mensagem_padrao')} onChange={set('whatsapp_mensagem_padrao')} placeholder="Olá! Gostaria de mais informações sobre a formação em psicanálise." rows={2} />
           </Field>
 
           <Divider />
           <SectionTitle description="Integração com a plataforma 0API para automações e notificações via WhatsApp">Integração 0API / Z-API</SectionTitle>
           <div className="p-3 bg-blue-500/8 border border-blue-500/20 rounded-lg text-xs text-blue-600 dark:text-blue-400 mb-4">
-            Estas credenciais são usadas para envio automático de confirmações, lembretes de eventos e follow-ups de leads pelo WhatsApp.
+            Estas credenciais são usadas para envio automático de confirmações, lembretes de aulas e follow-ups de alunos pelo WhatsApp.
           </div>
           <Field label="URL base da API" hint="Ex: https://api.z-api.io/instances/SEU_ID/token/SEU_TOKEN">
             <Input value={get('zapi_url')} onChange={set('zapi_url')} placeholder="https://api.z-api.io/instances/…" mono />
@@ -635,10 +635,10 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
           <Divider />
           <SectionTitle description="Textos da seção principal (Hero) da página inicial">Hero da Página Inicial</SectionTitle>
           <Field label="Título principal" hint="Texto grande em destaque">
-            <Input value={get('hero_titulo')} onChange={set('hero_titulo')} placeholder="DIVERSÃO GARANTIDA PARA O SEU EVENTO" />
+            <Input value={get('hero_titulo')} onChange={set('hero_titulo')} placeholder="FORMAÇÃO COMPLETA EM PSICANÁLISE CLÍNICA" />
           </Field>
           <Field label="Subtítulo / descrição">
-            <Textarea value={get('hero_subtitulo')} onChange={set('hero_subtitulo')} placeholder="Mais de 24 cursos infláveis e eletrônicos para festas…" rows={2} />
+            <Textarea value={get('hero_subtitulo')} onChange={set('hero_subtitulo')} placeholder="Cursos de especialização, seminários teóricos e supervisão clínica com corpo docente altamente qualificado." rows={2} />
           </Field>
         </div>
       ),
@@ -708,17 +708,17 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
           </Field>
 
           <Divider />
-          <SectionTitle description="Pesquisa automática enviada após realização dos eventos">⭐ Pesquisa Pós-Evento</SectionTitle>
+          <SectionTitle description="Pesquisa automática enviada após início ou conclusão dos cursos">⭐ Pesquisa Pós-Curso</SectionTitle>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <Field label="Ativar pesquisa pós-evento">
+            <Field label="Ativar pesquisa pós-curso">
               <Toggle value={get('pesquisa_ativo') || 'false'} onChange={set('pesquisa_ativo')} label="Pesquisa ativa" />
             </Field>
-            <Field label="Horas após o evento" hint="Quantas horas após o evento enviar a pesquisa">
+            <Field label="Horas após início" hint="Quantas horas após o início do curso enviar a pesquisa">
               <Input value={get('pesquisa_horas_apos')} onChange={set('pesquisa_horas_apos')} placeholder="24" type="number" />
             </Field>
             <Field label="Nota mínima para Google Review" hint="Se a resposta for maior ou igual, envia link do Google">
               <input type="number" min="1" max="5" value={get('pesquisa_nota_minima')} onChange={e => set('pesquisa_nota_minima')(e.target.value)} placeholder="4"
-                className="w-full bg-brand-bg border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/40 focus:outline-none focus:ring-2 focus:ring-brand-accent/40 focus:border-brand-accent transition"
+                className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text dark:text-white placeholder:text-brand-muted/40 focus:outline-none focus:ring-2 focus:ring-brand-accent/20 focus:border-brand-accent transition-all"
               />
             </Field>
             <Field label="Link do Google Meu Negócio">
@@ -790,25 +790,25 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
                 <select
                   value={get('sitemap_frequencia') || 'weekly'}
                   onChange={e => set('sitemap_frequencia')(e.target.value)}
-                  className="w-full bg-brand-surface border border-brand-border rounded-lg px-3 py-2.5 text-brand-text text-sm focus:outline-none focus:border-brand-accent transition-colors"
+                  className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-brand-text dark:text-white text-sm focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
                 >
-                  <option value="always">Sempre (always)</option>
-                  <option value="hourly">Por hora (hourly)</option>
-                  <option value="daily">Diário (daily)</option>
-                  <option value="weekly">Semanal (weekly)</option>
-                  <option value="monthly">Mensal (monthly)</option>
-                  <option value="yearly">Anual (yearly)</option>
-                  <option value="never">Nunca (never)</option>
+                  <option className="bg-white dark:bg-zinc-950 text-brand-text" value="always">Sempre (always)</option>
+                  <option className="bg-white dark:bg-zinc-950 text-brand-text" value="hourly">Por hora (hourly)</option>
+                  <option className="bg-white dark:bg-zinc-950 text-brand-text" value="daily">Diário (daily)</option>
+                  <option className="bg-white dark:bg-zinc-950 text-brand-text" value="weekly">Semanal (weekly)</option>
+                  <option className="bg-white dark:bg-zinc-950 text-brand-text" value="monthly">Mensal (monthly)</option>
+                  <option className="bg-white dark:bg-zinc-950 text-brand-text" value="yearly">Anual (yearly)</option>
+                  <option className="bg-white dark:bg-zinc-950 text-brand-text" value="never">Nunca (never)</option>
                 </select>
               </Field>
               <Field label="Prioridade padrão" hint="Valor entre 0.0 e 1.0 para páginas de cursos">
                 <select
                   value={get('sitemap_prioridade') || '0.8'}
                   onChange={e => set('sitemap_prioridade')(e.target.value)}
-                  className="w-full bg-brand-surface border border-brand-border rounded-lg px-3 py-2.5 text-brand-text text-sm focus:outline-none focus:border-brand-accent transition-colors"
+                  className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-brand-text dark:text-white text-sm focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
                 >
                   {['1.0','0.9','0.8','0.7','0.6','0.5','0.4','0.3','0.2','0.1'].map(v => (
-                    <option key={v} value={v}>{v}</option>
+                    <option className="bg-white dark:bg-zinc-950 text-brand-text" key={v} value={v}>{v}</option>
                   ))}
                 </select>
               </Field>
@@ -968,10 +968,10 @@ export function ConfiguracoesClient({ initialConfigs }: { initialConfigs: Config
             <Field label="SLA de Follow-up (horas)" hint="Horas sem interação para gerar alerta de atenção no lead">
               <Input value={get('sla_followup_horas')} onChange={set('sla_followup_horas')} placeholder="24" type="number" />
             </Field>
-            <Field label="Antecedência de eventos (dias)" hint="Dias antes do evento para alertas no dashboard">
+            <Field label="Alerta de inatividade (dias)" hint="Dias sem atividade do aluno para alertas no dashboard">
               <Input value={get('eventos_antecedencia_dias')} onChange={set('eventos_antecedencia_dias')} placeholder="7" type="number" />
             </Field>
-            <Field label="Máx. cursos por orçamento" hint="Limite de itens no carrinho de cotação">
+            <Field label="Máx. cursos selecionados" hint="Limite de itens de interesse simultâneo">
               <Input value={get('max_cursos_orcamento')} onChange={set('max_cursos_orcamento')} placeholder="10" type="number" />
             </Field>
           </div>

@@ -166,7 +166,7 @@ function ReservaCard({ reserva, delay = 0 }: { reserva: Reserva; delay?: number 
           </p>
 
           {reserva.cursos_nomes && (
-            <p className="text-white/30 text-xs mt-1 line-clamp-1">🎪 {reserva.cursos_nomes}</p>
+            <p className="text-white/30 text-xs mt-1 line-clamp-1">🎓 {reserva.cursos_nomes}</p>
           )}
 
           <div className="flex items-center gap-3 mt-2.5 flex-wrap">
@@ -250,7 +250,7 @@ export function AreaClienteDashboard({ cliente, reservas, historicoCashback, his
                     style={{ color: tier.color, backgroundColor: tier.color + '18', borderColor: tier.color + '35' }}>
                     <TierIcon className="size-3" /> {tier.label}
                   </span>
-                  <span className="text-white/30 text-xs">{cliente.totalEventos} {cliente.totalEventos === 1 ? 'festa' : 'festas'}</span>
+                  <span className="text-white/30 text-xs">{cliente.totalEventos} {cliente.totalEventos === 1 ? 'matrícula' : 'matrículas'}</span>
                 </div>
               </div>
 
@@ -271,7 +271,7 @@ export function AreaClienteDashboard({ cliente, reservas, historicoCashback, his
             {/* KPI row */}
             <div className="grid grid-cols-3 gap-2 mt-5">
               {[
-                { label: 'Festas', val: String(cliente.totalEventos), color: 'white' },
+                { label: 'Cursos', val: String(cliente.totalEventos), color: 'white' },
                 { label: 'Próximas', val: String(proximas.length), color: '#818CF8' },
                 { label: 'Cashback', val: fmtBRL(cliente.cashbackSaldo).replace('R$ ', 'R$'), color: '#34D399' },
               ].map(k => (
@@ -311,7 +311,7 @@ export function AreaClienteDashboard({ cliente, reservas, historicoCashback, his
                 <p className="text-3xl font-black text-white mt-1 tabular-nums">
                   <AnimNum value={cliente.cashbackSaldo} prefix="R$ " />
                 </p>
-                <p className="text-white/30 text-xs mt-1">{fmtBRL(cliente.cashbackTotal)} acumulado total · {config.cashbackPct}% por festa</p>
+                <p className="text-white/30 text-xs mt-1">{fmtBRL(cliente.cashbackTotal)} acumulado total · {config.cashbackPct}% por curso</p>
               </div>
               <div className="w-12 h-12 rounded-2xl flex items-center justify-center border"
                 style={{ backgroundColor: canResgate ? 'rgba(52,211,153,0.15)' : 'rgba(59,130,246,0.15)', borderColor: canResgate ? 'rgba(52,211,153,0.3)' : 'rgba(59,130,246,0.3)' }}>
@@ -338,12 +338,12 @@ export function AreaClienteDashboard({ cliente, reservas, historicoCashback, his
                 <Gift className="size-5 text-emerald-400 shrink-0" />
                 <div>
                   <p className="text-emerald-400 font-bold text-sm">Saldo disponível para resgate!</p>
-                  <p className="text-emerald-400/60 text-xs mt-0.5">Fale via WhatsApp e use seu cashback na próxima festa.</p>
+                  <p className="text-emerald-400/60 text-xs mt-0.5">Fale via WhatsApp e use seu cashback no seu próximo curso ou módulo.</p>
                 </div>
               </div>
             ) : (
               <p className="text-white/30 text-xs">
-                A cada festa realizada você ganha <span className="text-brand-accent font-semibold">{config.cashbackPct}%</span> de volta. Mínimo para resgate: <span className="text-white/60">{fmtBRL(config.cashbackMin)}</span>.
+                A cada curso contratado você ganha <span className="text-brand-accent font-semibold">{config.cashbackPct}%</span> de volta. Mínimo para resgate: <span className="text-white/60">{fmtBRL(config.cashbackMin)}</span>.
               </p>
             )}
           </div>
@@ -352,7 +352,7 @@ export function AreaClienteDashboard({ cliente, reservas, historicoCashback, his
         {/* Tabs */}
         <div className="area-card flex gap-1 bg-white/4 border border-white/8 rounded-2xl p-1">
           {([
-            { id: 'reservas', label: 'Reservas',  icon: Calendar    },
+            { id: 'reservas', label: 'Cursos',  icon: Calendar    },
             { id: 'cashback', label: 'Cashback',  icon: TrendingUp  },
             ...(config.roletaAtiva ? [{ id: 'roleta', label: `Roleta${girosLeft > 0 ? ` (${girosLeft})` : ''}`, icon: Star }] : []),
           ] as const).map(t => (
@@ -380,7 +380,7 @@ export function AreaClienteDashboard({ cliente, reservas, historicoCashback, his
             {proximas.length > 0 && (
               <div>
                 <p className="text-white/60 font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
-                  <PartyPopper className="size-3.5 text-brand-accent" /> Próximas festas ({proximas.length})
+                  <PartyPopper className="size-3.5 text-brand-accent" /> Próximos cursos ({proximas.length})
                 </p>
                 <div className="space-y-3">
                   {proximas.map((r, i) => <ReservaCard key={r.id} reserva={r} delay={i} />)}
@@ -402,8 +402,8 @@ export function AreaClienteDashboard({ cliente, reservas, historicoCashback, his
                 <div className="w-16 h-16 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4">
                   <Calendar className="size-7 text-white/30" />
                 </div>
-                <p className="text-white font-semibold">Nenhuma reserva ainda</p>
-                <p className="text-white/40 text-sm mt-1">Faça sua primeira reserva e ganhe cashback!</p>
+                <p className="text-white font-semibold">Nenhum curso contratado ainda</p>
+                <p className="text-white/40 text-sm mt-1">Inscreva-se no seu primeiro curso e ganhe cashback!</p>
                 <Link href="/cursos"
                   className="inline-flex items-center gap-2 mt-5 bg-brand-accent text-white font-bold px-6 py-3 rounded-2xl hover:bg-brand-accent-hover transition-colors">
                   Ver cursos <ChevronRight className="size-4" />
@@ -435,9 +435,9 @@ export function AreaClienteDashboard({ cliente, reservas, historicoCashback, his
               <p className="text-white font-bold text-sm mb-3">Como funciona?</p>
               <div className="space-y-2.5">
                 {[
-                  { n: 1, text: <>Cada festa <strong className="text-white">realizada</strong> gera <strong className="text-brand-accent">{config.cashbackPct}%</strong> de cashback.</> },
+                  { n: 1, text: <>Cada curso/módulo <strong className="text-white">realizado</strong> gera <strong className="text-brand-accent">{config.cashbackPct}%</strong> de cashback.</> },
                   { n: 2, text: <>Saldo mínimo para resgate: <strong className="text-white">{fmtBRL(config.cashbackMin)}</strong>.</> },
-                  { n: 3, text: 'Fale via WhatsApp e aplique como desconto no próximo evento.' },
+                  { n: 3, text: 'Fale via WhatsApp e aplique como desconto na contratação do próximo curso ou módulo.' },
                   ...(config.roletaAtiva ? [{ n: 4, text: <>A cada <strong className="text-yellow-400">{fmtBRL(config.roletaMin)}</strong> acumulados ganhe 1 giro na roleta de prêmios! 🎡</> }] : []),
                 ].map(s => (
                   <div key={s.n} className="flex items-start gap-2.5">

@@ -433,6 +433,7 @@ export function KanbanBoard({ initialLeads, stats }: Props) {
         open={novoLeadOpen}
         onClose={() => setNovoLeadOpen(false)}
         onCreated={(lead) => setLeads(prev => [lead, ...prev])}
+        todosCursos={stats.todosCursos}
       />
     </>
   )

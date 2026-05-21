@@ -150,8 +150,8 @@ export function CourseForm({ curso, onSuccess }: Props) {
           <label className="text-sm font-medium text-zinc-300">Nome *</label>
           <input
             {...register('nome')}
-            placeholder="Pula-Pula Profissional"
-            className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500"
+            placeholder="Ex: Formação em Psicanálise"
+            className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70"
           />
           {errors.nome && <p className="text-xs text-red-400">{errors.nome.message}</p>}
         </div>
@@ -160,8 +160,8 @@ export function CourseForm({ curso, onSuccess }: Props) {
           <label className="text-sm font-medium text-zinc-300">Slug *</label>
           <input
             {...register('slug')}
-            placeholder="pula-pula-profissional"
-            className="rounded-lg border px-3 py-2 text-sm text-zinc-400 bg-zinc-900/50 border-zinc-700 focus:outline-none focus:border-orange-500"
+            placeholder="ex-formacao-em-psicanalise"
+            className="rounded-lg border px-3 py-2 text-sm text-brand-muted/80 bg-white/10 dark:bg-black/10 backdrop-blur-sm border-brand-border/40 focus:outline-none cursor-not-allowed"
           />
           {errors.slug && <p className="text-xs text-red-400">{errors.slug.message}</p>}
         </div>
@@ -173,7 +173,7 @@ export function CourseForm({ curso, onSuccess }: Props) {
           <label className="text-sm font-medium text-zinc-300">Categoria *</label>
           <select
             {...register('categoria')}
-            className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500"
+            className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
           >
             <option value="">Selecione...</option>
             {CATEGORIAS_FORM.map((c) => (
@@ -192,7 +192,7 @@ export function CourseForm({ curso, onSuccess }: Props) {
             placeholder="350.00"
             type="number"
             step="0.01"
-            className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500"
+            className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70"
           />
         </div>
       </div>
@@ -204,7 +204,7 @@ export function CourseForm({ curso, onSuccess }: Props) {
           {...register('descricao')}
           rows={4}
           placeholder="Descreva o curso, suas características e diferenciais..."
-          className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500 resize-none"
+          className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70 resize-none"
         />
       </div>
 
@@ -217,12 +217,12 @@ export function CourseForm({ curso, onSuccess }: Props) {
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-300">Preço de Venda (R$)</label>
             <input {...register('precoVenda')} type="number" step="0.01" placeholder="180.00"
-              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+              className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70" />
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-300">Preço Original / Riscado (R$)</label>
             <input {...register('precoOriginal')} type="number" step="0.01" placeholder="250.00"
-              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+              className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70" />
           </div>
         </div>
 
@@ -231,7 +231,7 @@ export function CourseForm({ curso, onSuccess }: Props) {
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-300">Tipo do Curso</label>
             <select {...register('tipoCurso')}
-              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500">
+              className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all">
               <option value="gravado">Gravado (EAD)</option>
               <option value="presencial">Presencial</option>
               <option value="aovivo">Ao Vivo (Online)</option>
@@ -241,7 +241,7 @@ export function CourseForm({ curso, onSuccess }: Props) {
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-300">Carga Horária</label>
             <input {...register('cargaHoraria')} placeholder="Ex: 40h" 
-              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+              className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70" />
           </div>
         </div>
 
@@ -250,12 +250,12 @@ export function CourseForm({ curso, onSuccess }: Props) {
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-300">Vagas Totais (0 = ilimitado)</label>
             <input {...register('vagasTotal')} type="number" placeholder="0"
-              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+              className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70" />
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-300">Dias de Acesso (0 = vitalício)</label>
             <input {...register('diasAcesso')} type="number" placeholder="0"
-              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+              className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70" />
           </div>
         </div>
 
@@ -264,28 +264,28 @@ export function CourseForm({ curso, onSuccess }: Props) {
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-300">Data do Evento</label>
             <input {...register('dataEvento')} type="date"
-              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+              className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all" />
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-300">Horário</label>
             <input {...register('horarioEvento')} placeholder="9h às 18h"
-              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+              className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70" />
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-300">Local</label>
             <input {...register('localEvento')} placeholder="Tatuapé, SP"
-              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+              className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70" />
           </div>
         </div>
 
         {/* Checkboxes LMS */}
         <div className="flex gap-6 mb-4">
           <label className="flex items-center gap-2 cursor-pointer">
-            <input {...register('certificado')} type="checkbox" className="w-4 h-4 rounded accent-orange-500" />
+            <input {...register('certificado')} type="checkbox" className="w-4 h-4 rounded accent-brand-accent" />
             <span className="text-sm text-zinc-300">Gera certificado</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
-            <input {...register('acessoVitalicio')} type="checkbox" className="w-4 h-4 rounded accent-orange-500" />
+            <input {...register('acessoVitalicio')} type="checkbox" className="w-4 h-4 rounded accent-brand-accent" />
             <span className="text-sm text-zinc-300">Acesso vitalício</span>
           </label>
         </div>
@@ -298,19 +298,19 @@ export function CourseForm({ curso, onSuccess }: Props) {
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-300">Nome do Docente</label>
             <input {...register('docenteNome')} placeholder="Ex: Aurélio Gonzales"
-              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+              className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70" />
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-zinc-300">Cargo do Docente</label>
             <input {...register('docenteCargo')} placeholder="Ex: Psicanalista, Diretor do NBP"
-              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+              className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70" />
           </div>
         </div>
 
         <div className="flex flex-col gap-1.5">
           <label className="text-sm font-medium text-zinc-300">Descrição do Docente</label>
           <textarea {...register('docenteDesc')} rows={3} placeholder="Breve biografia ou currículo do docente..."
-            className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500 resize-none" />
+            className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70 resize-none" />
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -335,7 +335,7 @@ export function CourseForm({ curso, onSuccess }: Props) {
         <p className="text-xs text-zinc-500 uppercase tracking-widest">Público Alvo</p>
         <div className="flex flex-col gap-1.5">
           <textarea {...register('publicoAlvo')} rows={3} placeholder="Descreva o público alvo deste curso..."
-            className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500 resize-none" />
+            className="rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70 resize-none" />
         </div>
       </div>
 
@@ -345,7 +345,7 @@ export function CourseForm({ curso, onSuccess }: Props) {
           <input
             {...register('ativo')}
             type="checkbox"
-            className="w-4 h-4 rounded accent-orange-500"
+            className="w-4 h-4 rounded accent-brand-accent"
           />
           <span className="text-sm text-zinc-300">Ativo (visível no site)</span>
         </label>
@@ -354,7 +354,7 @@ export function CourseForm({ curso, onSuccess }: Props) {
           <input
             {...register('destaque')}
             type="checkbox"
-            className="w-4 h-4 rounded accent-orange-500"
+            className="w-4 h-4 rounded accent-brand-accent"
           />
           <span className="text-sm text-zinc-300">Em destaque</span>
         </label>
@@ -384,8 +384,7 @@ export function CourseForm({ curso, onSuccess }: Props) {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="flex-1 text-white font-semibold"
-          style={{ backgroundColor: '#F97316' }}
+          className="flex-1 text-white font-semibold bg-brand-accent hover:bg-brand-accent/90 transition-colors"
         >
           {isSubmitting
             ? 'Salvando...'

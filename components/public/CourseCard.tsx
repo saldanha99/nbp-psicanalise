@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { cn } from '@/lib/utils'
+import { cn, CATEGORIAS } from '@/lib/utils'
 
 interface CourseCardProps {
   curso: {
@@ -24,6 +24,8 @@ export function CourseCard({ curso }: CourseCardProps) {
     if (!html) return ''
     return html.replace(/<[^>]*>/g, '').trim()
   }
+
+  const categoriaLabel = CATEGORIAS.find(c => c.value === categoria)?.label ?? categoria
 
   return (
     <div
@@ -47,7 +49,7 @@ export function CourseCard({ curso }: CourseCardProps) {
 
         <div className="absolute top-3 left-3 z-10">
           <span className="bg-white/90 backdrop-blur-sm text-[#6a5a98] text-[10px] uppercase font-bold px-2 py-0.5 rounded border border-gray-200">
-            {categoria}
+            {categoriaLabel}
           </span>
         </div>
 

@@ -159,7 +159,7 @@ export function VideoUpload({ value, onChange, onClear }: VideoUploadProps) {
   // ── Vídeo já hospedado (tem URL) ──────────────────────────
   if (value && state !== 'uploading' && state !== 'authorizing') {
     return (
-      <div className="rounded-xl border border-zinc-700 bg-zinc-900 overflow-hidden">
+      <div className="rounded-xl border border-brand-border/60 dark:border-zinc-800 bg-white/40 dark:bg-black/20 backdrop-blur-md overflow-hidden">
         {/* Preview do vídeo */}
         <div className="relative bg-black aspect-video">
           <video
@@ -171,11 +171,11 @@ export function VideoUpload({ value, onChange, onClear }: VideoUploadProps) {
         </div>
 
         {/* Rodapé */}
-        <div className="flex items-center justify-between px-4 py-3 bg-zinc-900/80 border-t border-zinc-800">
-          <div className="flex items-center gap-2 text-sm text-emerald-400">
+        <div className="flex items-center justify-between px-4 py-3 bg-white/20 dark:bg-black/40 backdrop-blur-md border-t border-brand-border/40 dark:border-zinc-800/80">
+          <div className="flex items-center gap-2 text-sm text-emerald-500 font-medium">
             <CheckCircle className="w-4 h-4" />
             <span>Vídeo no servidor</span>
-            <div className="flex items-center gap-1 text-xs text-zinc-500">
+            <div className="flex items-center gap-1 text-xs text-brand-muted">
               <Server className="w-3 h-3" />
               <span>HostGator</span>
             </div>
@@ -184,14 +184,14 @@ export function VideoUpload({ value, onChange, onClear }: VideoUploadProps) {
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
-              className="text-xs px-3 py-1.5 rounded-lg border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 transition-colors"
+              className="text-xs px-3 py-1.5 rounded-lg border border-brand-border/60 dark:border-zinc-700 text-brand-text dark:text-zinc-300 hover:text-brand-text dark:hover:text-white hover:bg-brand-surface-2 dark:hover:bg-zinc-800 transition-colors"
             >
               Substituir
             </button>
             <button
               type="button"
               onClick={handleClear}
-              className="text-xs px-3 py-1.5 rounded-lg border border-red-800 text-red-400 hover:bg-red-950/40 transition-colors"
+              className="text-xs px-3 py-1.5 rounded-lg border border-red-800/60 text-red-500 hover:bg-red-950/25 dark:hover:bg-red-950/40 transition-colors"
             >
               Remover
             </button>
@@ -212,12 +212,12 @@ export function VideoUpload({ value, onChange, onClear }: VideoUploadProps) {
   // ── Autorizando (aguarda token do Next.js) ────────────────
   if (state === 'authorizing') {
     return (
-      <div className="rounded-xl border border-zinc-700 bg-zinc-900 p-6">
+      <div className="rounded-xl border border-brand-border/60 dark:border-zinc-800 bg-white/40 dark:bg-black/20 backdrop-blur-md p-6">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg border-2 border-orange-500/30 border-t-orange-500 animate-spin" />
+          <div className="w-8 h-8 rounded-lg border-2 border-brand-accent/30 border-t-brand-accent animate-spin" />
           <div>
-            <p className="text-sm font-medium text-white">Autorizando upload…</p>
-            <p className="text-xs text-zinc-500 mt-0.5">Verificando permissões de admin</p>
+            <p className="text-sm font-medium text-brand-text dark:text-white">Autorizando upload…</p>
+            <p className="text-xs text-brand-muted dark:text-zinc-500 mt-0.5">Verificando permissões de admin</p>
           </div>
         </div>
       </div>
@@ -227,19 +227,19 @@ export function VideoUpload({ value, onChange, onClear }: VideoUploadProps) {
   // ── Uploading ─────────────────────────────────────────────
   if (state === 'uploading') {
     return (
-      <div className="rounded-xl border border-zinc-700 bg-zinc-900 p-6">
+      <div className="rounded-xl border border-brand-border/60 dark:border-zinc-800 bg-white/40 dark:bg-black/20 backdrop-blur-md p-6">
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center shrink-0">
-            <FileVideo className="w-5 h-5 text-orange-400" />
+          <div className="w-10 h-10 rounded-lg bg-brand-accent/10 flex items-center justify-center shrink-0">
+            <FileVideo className="w-5 h-5 text-brand-accent" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-white truncate">{fileInfo?.name}</p>
-            <p className="text-xs text-zinc-500">{fileInfo ? formatBytes(fileInfo.size) : ''}</p>
+            <p className="text-sm font-medium text-brand-text dark:text-white truncate">{fileInfo?.name}</p>
+            <p className="text-xs text-brand-muted dark:text-zinc-500">{fileInfo ? formatBytes(fileInfo.size) : ''}</p>
           </div>
           <button
             type="button"
             onClick={handleCancel}
-            className="text-zinc-500 hover:text-zinc-300 transition-colors p-1"
+            className="text-brand-muted hover:text-brand-text dark:hover:text-zinc-300 transition-colors p-1"
             title="Cancelar"
           >
             <X className="w-4 h-4" />
@@ -248,18 +248,18 @@ export function VideoUpload({ value, onChange, onClear }: VideoUploadProps) {
 
         {/* Barra de progresso */}
         <div className="space-y-2">
-          <div className="h-2 rounded-full bg-zinc-800 overflow-hidden">
+          <div className="h-2 rounded-full bg-brand-border/40 dark:bg-zinc-800 overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-orange-500 to-amber-400 rounded-full transition-all duration-300"
+              className="h-full bg-gradient-to-r from-brand-accent to-purple-400 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <div className="flex justify-between text-xs text-zinc-500">
+          <div className="flex justify-between text-xs text-brand-muted">
             <span className="flex items-center gap-1">
               <Server className="w-3 h-3" />
               Enviando para o HostGator…
             </span>
-            <span>{progress}%</span>
+            <span className="font-semibold">{progress}%</span>
           </div>
         </div>
       </div>
@@ -271,15 +271,15 @@ export function VideoUpload({ value, onChange, onClear }: VideoUploadProps) {
     return (
       <div className="rounded-xl border border-red-800/50 bg-red-950/20 p-6">
         <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 shrink-0" />
+          <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
           <div className="flex-1">
-            <p className="text-sm font-medium text-red-300">Falha no upload</p>
-            <p className="text-xs text-red-400/80 mt-0.5 whitespace-pre-line">{errorMsg}</p>
+            <p className="text-sm font-medium text-red-700 dark:text-red-300">Falha no upload</p>
+            <p className="text-xs text-red-600 dark:text-red-400/80 mt-0.5 whitespace-pre-line">{errorMsg}</p>
           </div>
           <button
             type="button"
             onClick={handleClear}
-            className="text-zinc-500 hover:text-zinc-300 transition-colors"
+            className="text-brand-muted hover:text-brand-text dark:hover:text-zinc-300 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -287,7 +287,7 @@ export function VideoUpload({ value, onChange, onClear }: VideoUploadProps) {
         <button
           type="button"
           onClick={() => { setState('idle'); setErrorMsg(''); inputRef.current?.click() }}
-          className="mt-4 w-full py-2 rounded-lg border border-zinc-700 text-sm text-zinc-300 hover:text-white hover:border-zinc-500 transition-colors"
+          className="mt-4 w-full py-2 rounded-lg border border-brand-border/60 dark:border-zinc-700 text-sm text-brand-text dark:text-zinc-300 hover:text-brand-text dark:hover:text-white hover:border-brand-border dark:hover:border-zinc-500 transition-colors"
         >
           Tentar novamente
         </button>
@@ -313,33 +313,33 @@ export function VideoUpload({ value, onChange, onClear }: VideoUploadProps) {
         relative rounded-xl border-2 border-dashed p-8 text-center cursor-pointer
         transition-all duration-200 group
         ${isDragging
-          ? 'border-orange-500 bg-orange-500/5'
-          : 'border-zinc-700 hover:border-zinc-500 bg-zinc-900/50 hover:bg-zinc-900'
+          ? 'border-brand-accent bg-brand-accent/5'
+          : 'border-brand-border/60 dark:border-zinc-800 hover:border-brand-accent bg-white/20 dark:bg-black/10 backdrop-blur-md hover:bg-white/40 dark:hover:bg-black/20'
         }
       `}
     >
       <div className="flex flex-col items-center gap-3">
         <div className={`
           w-14 h-14 rounded-2xl flex items-center justify-center transition-colors
-          ${isDragging ? 'bg-orange-500/20' : 'bg-zinc-800 group-hover:bg-zinc-700'}
+          ${isDragging ? 'bg-brand-accent/20' : 'bg-white/50 dark:bg-zinc-800 group-hover:bg-white/70 dark:group-hover:bg-zinc-700'}
         `}>
           {isDragging
-            ? <Video className="w-7 h-7 text-orange-400" />
-            : <Upload className="w-7 h-7 text-zinc-400 group-hover:text-zinc-200" />
+            ? <Video className="w-7 h-7 text-brand-accent" />
+            : <Upload className="w-7 h-7 text-brand-muted dark:text-zinc-400 group-hover:text-brand-text dark:group-hover:text-zinc-200" />
           }
         </div>
 
         <div>
-          <p className="text-sm font-medium text-zinc-200">
+          <p className="text-sm font-medium text-brand-text dark:text-zinc-200">
             {isDragging ? 'Solte o vídeo aqui' : 'Clique ou arraste um vídeo'}
           </p>
-          <p className="text-xs text-zinc-500 mt-1">
+          <p className="text-xs text-brand-muted dark:text-zinc-500 mt-1">
             MP4, WebM, MOV, AVI ou MKV · Até 500 MB
           </p>
         </div>
 
         {/* Badge indicando onde será salvo */}
-        <div className="flex items-center gap-1.5 text-[11px] text-zinc-600 bg-zinc-800/60 px-2.5 py-1 rounded-full border border-zinc-700/50">
+        <div className="flex items-center gap-1.5 text-[11px] text-brand-muted/80 bg-white/30 dark:bg-zinc-800/60 px-2.5 py-1 rounded-full border border-brand-border/40 dark:border-zinc-700/50">
           <Server className="w-3 h-3" />
           <span>Salvo no seu servidor HostGator</span>
         </div>

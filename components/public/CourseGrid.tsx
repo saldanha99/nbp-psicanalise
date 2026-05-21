@@ -4,14 +4,15 @@ import { useState, useMemo } from 'react'
 import { type Curso } from '@/types'
 import { CategoryFilter } from './CategoryFilter'
 import { CourseCard } from './CourseCard'
+import { CATEGORIAS } from '@/lib/utils'
 
 interface Props {
   cursos: Curso[]
 }
 
 function formatCategoryLabel(value: string) {
-  if (value === 'todos') return 'Todos'
-  // Format slug-like categories or keep as is
+  const found = CATEGORIAS.find((c) => c.value === value)
+  if (found) return found.label
   return value
     .split('-')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))

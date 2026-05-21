@@ -102,17 +102,17 @@ export function ClientesClient({ clientes: inicial }: Props) {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Buscar nome, e-mail, telefone ou CPF..."
-            className="w-full pl-8 pr-3 py-2 bg-brand-surface-2 border border-brand-border rounded-xl text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-brand-accent/50"
+            className="w-full pl-8 pr-3 py-2.5 bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl text-sm text-brand-text dark:text-white placeholder:text-brand-muted/70 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
           />
         </div>
         <select
           value={statusFiltro}
           onChange={e => setStatusFiltro(e.target.value)}
-          className="bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2 text-sm text-brand-text focus:outline-none"
+          className="bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
         >
-          <option value="">Todos os status</option>
-          <option value="true">Ativos</option>
-          <option value="false">Inativos</option>
+          <option value="" className="bg-white dark:bg-zinc-950 text-brand-text">Todos os status</option>
+          <option value="true" className="bg-white dark:bg-zinc-950 text-brand-text">Ativos</option>
+          <option value="false" className="bg-white dark:bg-zinc-950 text-brand-text">Inativos</option>
         </select>
         {(search || statusFiltro) && (
           <button
@@ -210,7 +210,7 @@ export function ClientesClient({ clientes: inicial }: Props) {
                   onChange={set('nome')}
                   required
                   placeholder="Ex: Sigmund Freud"
-                  className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-brand-accent/50 transition-colors"
+                  className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text dark:text-white placeholder:text-brand-muted/70 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
                 />
               </div>
               <div>
@@ -221,7 +221,7 @@ export function ClientesClient({ clientes: inicial }: Props) {
                   onChange={set('email')}
                   required
                   placeholder="exemplo@email.com"
-                  className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-brand-accent/50 transition-colors"
+                  className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text dark:text-white placeholder:text-brand-muted/70 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -231,7 +231,7 @@ export function ClientesClient({ clientes: inicial }: Props) {
                     value={form.telefone}
                     onChange={set('telefone')}
                     placeholder="(11) 99999-9999"
-                    className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-brand-accent/50 transition-colors"
+                    className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text dark:text-white placeholder:text-brand-muted/70 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
                   />
                 </div>
                 <div>
@@ -240,7 +240,7 @@ export function ClientesClient({ clientes: inicial }: Props) {
                     value={form.cpf}
                     onChange={set('cpf')}
                     placeholder="000.000.000-00"
-                    className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-brand-accent/50 transition-colors"
+                    className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text dark:text-white placeholder:text-brand-muted/70 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
                   />
                 </div>
               </div>
@@ -249,18 +249,18 @@ export function ClientesClient({ clientes: inicial }: Props) {
                 <select
                   value={form.ativo}
                   onChange={set('ativo')}
-                  className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none focus:border-brand-accent/50"
+                  className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
                 >
-                  <option value="true">Ativo</option>
-                  <option value="false">Inativo</option>
+                  <option value="true" className="bg-white dark:bg-zinc-950 text-brand-text">Ativo</option>
+                  <option value="false" className="bg-white dark:bg-zinc-950 text-brand-text">Inativo</option>
                 </select>
               </div>
 
               <div className="flex gap-3 pt-1">
-                <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-2.5 rounded-xl border border-brand-border text-brand-muted hover:bg-brand-surface-2 text-sm font-medium transition-colors">
+                <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-2.5 rounded-xl border border-brand-border/60 dark:border-zinc-800 text-brand-muted hover:bg-white/10 dark:hover:bg-white/5 text-sm font-medium transition-colors">
                   Cancelar
                 </button>
-                <button type="submit" disabled={saving} className="flex-1 py-2.5 rounded-xl bg-brand-accent hover:bg-brand-accent-hover disabled:opacity-50 text-white text-sm font-semibold flex items-center justify-center gap-2 transition-colors">
+                <button type="submit" disabled={saving} className="flex-1 py-2.5 rounded-xl bg-brand-accent hover:bg-brand-accent/90 disabled:opacity-50 text-white text-sm font-semibold flex items-center justify-center gap-2 transition-colors">
                   {saving ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
                   Cadastrar
                 </button>

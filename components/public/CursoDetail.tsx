@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { X, BookOpen, User, Clock, Award, CheckCircle, Share2, MessageCircle, FileText, Loader2 } from 'lucide-react'
-import { whatsappLink, cn } from '@/lib/utils'
+import { whatsappLink, cn, CATEGORIAS } from '@/lib/utils'
 import { toast } from 'sonner'
 import { Curso } from '@/types'
 
@@ -29,7 +29,8 @@ export function CursoDetail({ curso }: { curso: Curso }) {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(false)
 
-  const isAulasGravadas = curso.categoria.toLowerCase().includes('gravada') || curso.nome.toLowerCase().includes('aulas gravadas')
+  const categoriaLabel = CATEGORIAS.find(c => c.value === curso.categoria)?.label ?? curso.categoria
+  const isAulasGravadas = curso.categoria.toLowerCase().includes('gravad') || curso.nome.toLowerCase().includes('aulas gravadas')
   const options = isAulasGravadas
     ? Array.from({ length: 18 }, (_, i) => `Aula ${18 - i} Gravada`)
     : []
@@ -141,12 +142,12 @@ ${formData.email.trim() ? `- *E-mail:* ${formData.email}` : ''}`
           <span>/</span>
           <Link href="/cursos" className="hover:text-[#5B1A82] transition-colors">Cursos</Link>
           <span>/</span>
-          <span className="text-gray-700 font-medium capitalize">{curso.categoria}</span>
+          <span className="text-gray-700 font-medium capitalize">{categoriaLabel}</span>
         </div>
         
         <div className="flex flex-wrap gap-2 mb-4">
           <span className="bg-[#5B1A82] text-white text-[10px] px-2.5 py-0.5 rounded-full uppercase font-bold tracking-wider">
-            {curso.categoria}
+            {categoriaLabel}
           </span>
           {curso.destaque && (
             <span className="bg-amber-500 text-white text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">

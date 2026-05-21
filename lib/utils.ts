@@ -37,12 +37,10 @@ export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '55129
 
 export const CATEGORIAS = [
   { value: 'todos',     label: 'Todos' },
-  { value: 'inflaveis', label: 'Infláveis' },
-  { value: 'toboshark', label: 'Toboshark' },
-  { value: 'radicais',  label: 'Radicais' },
-  { value: 'batalhas',  label: 'Batalhas' },
-  { value: 'tematicos', label: 'Temáticos' },
-  { value: 'aquaticos', label: 'Aquáticos' },
+  { value: 'formacao',  label: 'Formação' },
+  { value: 'presencial', label: 'Presencial' },
+  { value: 'aovivo',    label: 'Ao Vivo' },
+  { value: 'gravado',   label: 'Gravado' },
 ]
 
 export const STATUS_KANBAN = [

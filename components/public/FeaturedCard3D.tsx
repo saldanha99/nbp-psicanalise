@@ -8,12 +8,10 @@ import { useCart } from '@/lib/store/cart'
 import { useEffect, useState, useRef, useCallback } from 'react'
 
 const CATEGORY_LABELS: Record<string, string> = {
-  inflaveis: 'Inflável',
-  toboshark: 'Toboshark',
-  radicais: 'Radical',
-  batalhas: 'Batalha',
-  tematicos: 'Temático',
-  aquaticos: 'Aquático',
+  formacao: 'Formação',
+  presencial: 'Presencial',
+  aovivo: 'Ao Vivo',
+  gravado: 'Gravado',
 }
 
 interface FeaturedCard3DProps {

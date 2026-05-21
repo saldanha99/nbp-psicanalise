@@ -45,7 +45,7 @@ interface AulasEditorProps {
 function TipoIcon({ tipo }: { tipo: string }) {
   if (tipo === 'pdf') return <FileText className="w-3.5 h-3.5 text-blue-400" />
   if (tipo === 'texto') return <BookOpen className="w-3.5 h-3.5 text-purple-400" />
-  return <Video className="w-3.5 h-3.5 text-orange-400" />
+  return <Video className="w-3.5 h-3.5 text-brand-accent" />
 }
 
 // ── Item de Aula ─────────────────────────────────────────
@@ -76,9 +76,9 @@ function AulaItem({
   }
 
   return (
-    <div className="group flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-zinc-800/60 transition-colors border border-transparent hover:border-zinc-700/50">
+    <div className="group flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/20 dark:hover:bg-black/20 backdrop-blur-md transition-all border border-transparent hover:border-brand-border/60 dark:hover:border-zinc-800">
       {/* Grip (drag — visual only por ora) */}
-      <GripVertical className="w-4 h-4 text-zinc-700 cursor-grab shrink-0" />
+      <GripVertical className="w-4 h-4 text-brand-muted cursor-grab shrink-0" />
 
       {/* Tipo */}
       <TipoIcon tipo={aula.tipo} />
@@ -99,7 +99,7 @@ function AulaItem({
           </span>
         )}
         {aula.videoUrl && aula.videoProvider === 'blob' && (
-          <span className="inline-flex text-[10px] px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-400 border border-orange-500/20">
+          <span className="inline-flex text-[10px] px-1.5 py-0.5 rounded bg-brand-accent/10 text-brand-accent border border-brand-accent/20">
             Blob
           </span>
         )}
@@ -167,20 +167,20 @@ function ModuloCard({
   }
 
   return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 overflow-hidden">
+    <div className="rounded-xl border border-brand-border/60 dark:border-zinc-800 bg-white/40 dark:bg-black/20 backdrop-blur-md overflow-hidden">
       {/* Header do módulo */}
-      <div className="flex items-center gap-3 px-4 py-3 bg-zinc-800/40 border-b border-zinc-800">
-        <GripVertical className="w-4 h-4 text-zinc-600 cursor-grab shrink-0" />
+      <div className="flex items-center gap-3 px-4 py-3 bg-white/20 dark:bg-black/20 backdrop-blur-sm border-b border-brand-border/60 dark:border-zinc-800/80">
+        <GripVertical className="w-4 h-4 text-brand-muted cursor-grab shrink-0" />
 
         <button
           onClick={() => setExpanded(e => !e)}
           className="flex items-center gap-2 flex-1 min-w-0 text-left"
         >
           {expanded
-            ? <ChevronDown className="w-4 h-4 text-zinc-400 shrink-0" />
-            : <ChevronRight className="w-4 h-4 text-zinc-400 shrink-0" />
+            ? <ChevronDown className="w-4 h-4 text-brand-muted shrink-0" />
+            : <ChevronRight className="w-4 h-4 text-brand-muted shrink-0" />
           }
-          <FolderOpen className="w-4 h-4 text-orange-400 shrink-0" />
+          <FolderOpen className="w-4 h-4 text-brand-accent shrink-0" />
           <span className="text-sm font-semibold text-zinc-100 truncate">{modulo.titulo}</span>
           <span className="text-xs text-zinc-500 shrink-0">
             {modulo.aulas.length} {modulo.aulas.length === 1 ? 'aula' : 'aulas'}
@@ -190,7 +190,7 @@ function ModuloCard({
         <div className="flex items-center gap-1 shrink-0">
           <button
             onClick={() => onAddAula(modulo.id)}
-            className="flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg bg-orange-500/10 text-orange-400 border border-orange-500/20 hover:bg-orange-500/20 transition-colors"
+            className="flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg bg-brand-accent/10 text-brand-accent border border-brand-accent/20 hover:bg-brand-accent/20 transition-colors"
           >
             <Plus className="w-3 h-3" /> Aula
           </button>
@@ -351,8 +351,7 @@ export function AulasEditor({ cursoId, cursoNome, modulosIniciais }: AulasEditor
             setNovoModuloTitulo('')
             setModuloModal({ open: true, moduloParaEditar: null })
           }}
-          className="flex items-center gap-2 text-white font-medium"
-          style={{ backgroundColor: '#F97316' }}
+          className="flex items-center gap-2 text-white font-medium bg-brand-accent hover:bg-brand-accent/90 transition-colors"
         >
           <Plus className="w-4 h-4" />
           Novo Módulo
@@ -408,30 +407,29 @@ export function AulasEditor({ cursoId, cursoNome, modulosIniciais }: AulasEditor
       {moduloModal.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setModuloModal({ open: false })} />
-          <div className="relative w-full max-w-md rounded-2xl bg-zinc-950 border border-zinc-800 shadow-2xl p-6 space-y-4">
-            <h3 className="text-base font-semibold text-white">
+          <div className="relative w-full max-w-md rounded-2xl bg-brand-surface dark:bg-zinc-950 border border-brand-border/60 dark:border-zinc-800 shadow-2xl p-6 space-y-4">
+            <h3 className="text-base font-semibold text-brand-text dark:text-white">
               {moduloModal.moduloParaEditar ? 'Editar Módulo' : 'Novo Módulo'}
             </h3>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-zinc-300">Título do módulo *</label>
+              <label className="text-sm font-medium text-brand-text/90 dark:text-zinc-300">Título do módulo *</label>
               <input
                 autoFocus
                 value={novoModuloTitulo}
                 onChange={e => setNovoModuloTitulo(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSaveModulo()}
                 placeholder="Ex: Módulo 1 — Introdução"
-                className="w-full rounded-lg border border-zinc-700 px-3 py-2 text-sm text-white bg-zinc-900 focus:outline-none focus:border-orange-500 transition-colors"
+                className="w-full rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all placeholder:text-brand-muted/70"
               />
             </div>
             <div className="flex gap-3">
-              <Button variant="outline" onClick={() => setModuloModal({ open: false })} className="flex-1 border-zinc-700 text-zinc-300">
+              <Button variant="outline" onClick={() => setModuloModal({ open: false })} className="flex-1 border-brand-border/60 dark:border-zinc-700 text-brand-text dark:text-zinc-300 hover:bg-brand-surface-2 dark:hover:bg-zinc-800 hover:text-brand-text dark:hover:text-white">
                 Cancelar
               </Button>
               <Button
                 onClick={handleSaveModulo}
                 disabled={savingModulo || !novoModuloTitulo.trim()}
-                className="flex-1 text-white font-semibold"
-                style={{ backgroundColor: '#F97316' }}
+                className="flex-1 text-white font-semibold bg-brand-accent hover:bg-brand-accent/90 transition-colors"
               >
                 {savingModulo ? 'Salvando…' : 'Salvar'}
               </Button>

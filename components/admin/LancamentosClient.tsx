@@ -28,10 +28,22 @@ const TIPO_CONFIG: Record<string, { label: string; icon: React.ElementType; colo
   pagamento_monitor:{ label: 'Pgto Monitor',     icon: DollarSign,    color: '#8B5CF6', bg: '#8B5CF615' },
 }
 
-const CATEGORIAS = [
-  'combustivel', 'alimentacao', 'material', 'manutencao',
-  'marketing', 'aluguel', 'folha', 'impostos', 'outros',
-]
+const CATEGORIAS_MAP: Record<string, string> = {
+  mensalidades: 'Mensalidades',
+  venda_cursos: 'Venda de Cursos',
+  clinica_social: 'Clínica Social',
+  supervisao: 'Supervisão',
+  atendimentos: 'Atendimentos Clínicos',
+  marketing: 'Marketing / Divulgação',
+  aluguel: 'Aluguel / Infraestrutura',
+  impostos: 'Impostos e Taxas',
+  plataformas: 'Plataformas e Sistemas',
+  docentes: 'Docentes / Professores',
+  outros: 'Outros / Diversos',
+}
+
+const CATEGORIAS = Object.keys(CATEGORIAS_MAP)
+
 
 const FORMAS = ['pix', 'dinheiro', 'transferencia', 'cartao_debito', 'cartao_credito']
 
@@ -130,17 +142,17 @@ export function LancamentosClient({ lancamentos: inicial, mes, ano, onRefresh }:
       {/* Header + filtros */}
       <div className="flex flex-wrap items-center gap-2">
         <div className="flex gap-1.5 overflow-x-auto">
-          <button onClick={() => setFiltroTipo('')} className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${!filtroTipo ? 'bg-blue-500/20 border-blue-500/40 text-blue-300' : 'bg-brand-surface-2 border-brand-border text-brand-muted'}`}>
+          <button onClick={() => setFiltroTipo('')} className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${!filtroTipo ? 'bg-brand-accent/20 border-brand-accent/40 text-brand-accent' : 'bg-white/40 dark:bg-black/20 border-brand-border/60 dark:border-zinc-800 text-brand-muted'}`}>
             Todos
           </button>
           {Object.entries(TIPO_CONFIG).map(([tipo, cfg]) => (
             <button key={tipo} onClick={() => setFiltroTipo(tipo === filtroTipo ? '' : tipo)} style={filtroTipo === tipo ? { backgroundColor: cfg.bg, borderColor: cfg.color + '60', color: cfg.color } : {}}
-              className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${filtroTipo === tipo ? '' : 'bg-brand-surface-2 border-brand-border text-brand-muted'}`}>
+              className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${filtroTipo === tipo ? '' : 'bg-white/40 dark:bg-black/20 border-brand-border/60 dark:border-zinc-800 text-brand-muted'}`}>
               {cfg.label}
             </button>
           ))}
         </div>
-        <button onClick={() => setShowModal(true)} className="ml-auto flex-shrink-0 inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
+        <button onClick={() => setShowModal(true)} className="ml-auto flex-shrink-0 inline-flex items-center gap-1.5 bg-brand-accent hover:bg-brand-accent/90 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors">
           <Plus size={14} /> Novo lançamento
         </button>
       </div>
@@ -186,7 +198,7 @@ export function LancamentosClient({ lancamentos: inicial, mes, ano, onRefresh }:
                         {l.nomeEvento && <p className="text-xs text-brand-muted truncate">Evento: {l.nomeEvento}</p>}
                         {l.nomeMonitor && <p className="text-xs text-brand-muted truncate">Monitor: {l.nomeMonitor}</p>}
                       </td>
-                      <td className="px-4 py-3 text-brand-muted text-xs capitalize">{l.categoria ?? '—'}</td>
+                      <td className="px-4 py-3 text-brand-muted text-xs capitalize">{l.categoria ? (CATEGORIAS_MAP[l.categoria] ?? l.categoria) : '—'}</td>
                       <td className="px-4 py-3 text-brand-muted text-xs capitalize whitespace-nowrap">{l.forma ?? '—'}</td>
                       <td className="px-4 py-3 text-right font-bold whitespace-nowrap" style={{ color: isReceita ? '#10B981' : '#EF4444' }}>
                         {isReceita ? '+' : '-'}{formatCurrency(Number(l.valor))}
@@ -216,8 +228,8 @@ export function LancamentosClient({ lancamentos: inicial, mes, ano, onRefresh }:
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowModal(false)} />
           <div className="relative bg-brand-surface border border-brand-border rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-5 border-b border-brand-border sticky top-0 bg-brand-surface z-10">
-              <h2 className="font-semibold text-brand-text flex items-center gap-2"><Plus size={16} className="text-blue-400" /> Novo Lançamento</h2>
-              <button onClick={() => setShowModal(false)} className="w-8 h-8 rounded-lg bg-brand-surface-2 text-brand-muted hover:text-red-400 flex items-center justify-center transition-colors">
+              <h2 className="font-semibold text-brand-text flex items-center gap-2"><Plus size={16} className="text-brand-accent" /> Novo Lançamento</h2>
+              <button onClick={() => setShowModal(false)} className="w-8 h-8 rounded-lg bg-white/40 dark:bg-black/20 text-brand-muted hover:text-red-400 flex items-center justify-center transition-colors">
                 <X size={16} />
               </button>
             </div>
@@ -240,7 +252,7 @@ export function LancamentosClient({ lancamentos: inicial, mes, ano, onRefresh }:
               <div>
                 <label className="block text-xs font-medium text-brand-muted mb-1.5">Descrição *</label>
                 <input value={form.descricao} onChange={set('descricao')} required placeholder="Descrição do lançamento"
-                  className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-blue-500/50"
+                  className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
                 />
               </div>
 
@@ -249,13 +261,13 @@ export function LancamentosClient({ lancamentos: inicial, mes, ano, onRefresh }:
                 <div>
                   <label className="block text-xs font-medium text-brand-muted mb-1.5">Valor (R$) *</label>
                   <input type="number" min="0" step="0.01" value={form.valor} onChange={set('valor')} required placeholder="0,00"
-                    className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-blue-500/50"
+                    className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-brand-muted mb-1.5">Data *</label>
                   <input type="date" value={form.data} onChange={set('data')} required
-                    className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none focus:border-blue-500/50"
+                    className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
                   />
                 </div>
               </div>
@@ -264,16 +276,16 @@ export function LancamentosClient({ lancamentos: inicial, mes, ano, onRefresh }:
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-brand-muted mb-1.5">Forma de pagamento</label>
-                  <select value={form.forma} onChange={set('forma')} className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none">
-                    {FORMAS.map(f => <option key={f} value={f}>{f.replace('_', ' ')}</option>)}
+                  <select value={form.forma} onChange={set('forma')} className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all">
+                    {FORMAS.map(f => <option key={f} value={f} className="bg-white dark:bg-zinc-950 text-brand-text">{f.replace('_', ' ')}</option>)}
                   </select>
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-brand-muted mb-1.5">Status</label>
-                  <select value={form.status} onChange={set('status')} className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none">
-                    <option value="pago">Pago</option>
-                    <option value="pendente">Pendente</option>
-                    <option value="cancelado">Cancelado</option>
+                  <select value={form.status} onChange={set('status')} className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all">
+                    <option value="pago" className="bg-white dark:bg-zinc-950 text-brand-text">Pago</option>
+                    <option value="pendente" className="bg-white dark:bg-zinc-950 text-brand-text">Pendente</option>
+                    <option value="cancelado" className="bg-white dark:bg-zinc-950 text-brand-text">Cancelado</option>
                   </select>
                 </div>
               </div>
@@ -281,9 +293,13 @@ export function LancamentosClient({ lancamentos: inicial, mes, ano, onRefresh }:
               {/* Categoria */}
               <div>
                 <label className="block text-xs font-medium text-brand-muted mb-1.5">Categoria</label>
-                <select value={form.categoria} onChange={set('categoria')} className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none">
-                  <option value="">Sem categoria</option>
-                  {CATEGORIAS.map(c => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
+                <select value={form.categoria} onChange={set('categoria')} className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all">
+                  <option value="" className="bg-white dark:bg-zinc-950 text-brand-text">Sem categoria</option>
+                  {CATEGORIAS.map(c => (
+                    <option key={c} value={c} className="bg-white dark:bg-zinc-950 text-brand-text">
+                      {CATEGORIAS_MAP[c] ?? c}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -291,15 +307,15 @@ export function LancamentosClient({ lancamentos: inicial, mes, ano, onRefresh }:
               <div>
                 <label className="block text-xs font-medium text-brand-muted mb-1.5">Observações</label>
                 <textarea value={form.observacoes} onChange={set('observacoes')} rows={2} placeholder="Detalhes adicionais..."
-                  className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-blue-500/50 resize-none"
+                  className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all resize-none"
                 />
               </div>
 
               <div className="flex gap-3 pt-1">
-                <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-2.5 rounded-xl border border-brand-border text-brand-muted hover:bg-brand-surface-2 text-sm font-medium transition-colors">
+                <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-2.5 rounded-xl border border-brand-border/60 dark:border-zinc-800 text-brand-muted hover:bg-white/10 dark:hover:bg-white/5 text-sm font-medium transition-colors">
                   Cancelar
                 </button>
-                <button type="submit" disabled={saving} className="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-sm font-semibold flex items-center justify-center gap-2 transition-colors">
+                <button type="submit" disabled={saving} className="flex-1 py-2.5 rounded-xl bg-brand-accent hover:bg-brand-accent/90 disabled:opacity-50 text-white text-sm font-semibold flex items-center justify-center gap-2 transition-colors">
                   {saving ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />} Criar
                 </button>
               </div>

@@ -9,6 +9,7 @@ interface Props {
   open: boolean
   onClose: () => void
   onCreated: (lead: Lead) => void
+  todosCursos?: string[]
 }
 
 const ORIGENS = [
@@ -28,14 +29,17 @@ const PRIORIDADES = [
   { value: 'urgente', label: 'Urgente' },
 ]
 
-export function NovoLeadModal({ open, onClose, onCreated }: Props) {
+export function NovoLeadModal({ open, onClose, onCreated, todosCursos = [] }: Props) {
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
-    nome: '', telefone: '', email: '',
-    dataEvento: '', horarioEvento: '',
-    enderecoEvento: '', regiaoEvento: '',
-    mensagem: '', origem: 'manual',
-    valorProposto: '', prioridade: 'normal',
+    nome: '',
+    telefone: '',
+    email: '',
+    cursosInteresse: [] as string[],
+    mensagem: '',
+    origem: 'manual',
+    valorProposto: '',
+    prioridade: 'normal',
     status: 'novo',
   })
 
@@ -63,7 +67,17 @@ export function NovoLeadModal({ open, onClose, onCreated }: Props) {
       toast.success('Lead criado com sucesso!')
       onCreated(lead)
       onClose()
-      setForm({ nome: '', telefone: '', email: '', dataEvento: '', horarioEvento: '', enderecoEvento: '', regiaoEvento: '', mensagem: '', origem: 'manual', valorProposto: '', prioridade: 'normal', status: 'novo' })
+      setForm({
+        nome: '',
+        telefone: '',
+        email: '',
+        cursosInteresse: [],
+        mensagem: '',
+        origem: 'manual',
+        valorProposto: '',
+        prioridade: 'normal',
+        status: 'novo',
+      })
     } catch {
       toast.error('Erro ao criar lead')
     } finally {
@@ -80,8 +94,8 @@ export function NovoLeadModal({ open, onClose, onCreated }: Props) {
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-brand-border sticky top-0 bg-brand-surface z-10">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-              <Plus className="size-4 text-blue-400" />
+            <div className="w-9 h-9 rounded-xl bg-brand-accent/10 border border-brand-accent/20 flex items-center justify-center">
+              <Plus className="size-4 text-brand-accent" />
             </div>
             <div>
               <h2 className="font-semibold text-brand-text text-base">Novo Lead</h2>
@@ -101,7 +115,7 @@ export function NovoLeadModal({ open, onClose, onCreated }: Props) {
               <input
                 value={form.nome} onChange={set('nome')} required
                 placeholder="Nome do cliente"
-                className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-blue-500/50 transition-colors"
+                className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text dark:text-white placeholder:text-brand-muted/70 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
               />
             </div>
             <div className="col-span-2 sm:col-span-1">
@@ -109,7 +123,7 @@ export function NovoLeadModal({ open, onClose, onCreated }: Props) {
               <input
                 value={form.telefone} onChange={set('telefone')} required
                 placeholder="(12) 99999-9999"
-                className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-blue-500/50 transition-colors"
+                className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text dark:text-white placeholder:text-brand-muted/70 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
               />
             </div>
           </div>
@@ -120,50 +134,56 @@ export function NovoLeadModal({ open, onClose, onCreated }: Props) {
             <input
               type="email" value={form.email} onChange={set('email')}
               placeholder="email@exemplo.com"
-              className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-blue-500/50 transition-colors"
+              className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text dark:text-white placeholder:text-brand-muted/70 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
             />
           </div>
 
-          {/* Data + Horário */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* Cursos de Interesse */}
+          {todosCursos.length > 0 && (
             <div>
-              <label className="block text-xs font-medium text-brand-muted mb-1.5">Data do evento</label>
-              <input
-                type="date" value={form.dataEvento} onChange={set('dataEvento')}
-                className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none focus:border-blue-500/50 transition-colors"
-              />
+              <label className="block text-xs font-medium text-brand-muted mb-1.5">Cursos de Interesse</label>
+              <div className="flex flex-wrap gap-2">
+                {todosCursos.map(curso => {
+                  const selected = form.cursosInteresse.includes(curso)
+                  return (
+                    <button
+                      key={curso}
+                      type="button"
+                      onClick={() => {
+                        setForm(f => {
+                          const current = f.cursosInteresse
+                          const next = current.includes(curso)
+                            ? current.filter(c => c !== curso)
+                            : [...current, curso]
+                          return { ...f, cursosInteresse: next }
+                        })
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                        selected
+                          ? 'bg-brand-accent/20 border-brand-accent/40 text-brand-accent'
+                          : 'bg-white/40 dark:bg-black/20 border-brand-border/60 dark:border-zinc-800 text-brand-muted hover:border-brand-border/80'
+                      }`}
+                    >
+                      {curso}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
-            <div>
-              <label className="block text-xs font-medium text-brand-muted mb-1.5">Horário</label>
-              <input
-                type="time" value={form.horarioEvento} onChange={set('horarioEvento')}
-                className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none focus:border-blue-500/50 transition-colors"
-              />
-            </div>
-          </div>
-
-          {/* Endereço */}
-          <div>
-            <label className="block text-xs font-medium text-brand-muted mb-1.5">Endereço do evento</label>
-            <input
-              value={form.enderecoEvento} onChange={set('enderecoEvento')}
-              placeholder="Rua, número, bairro"
-              className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-blue-500/50 transition-colors"
-            />
-          </div>
+          )}
 
           {/* Origem + Prioridade + Valor */}
           <div className="grid grid-cols-3 gap-3">
             <div>
               <label className="block text-xs font-medium text-brand-muted mb-1.5">Origem</label>
-              <select value={form.origem} onChange={set('origem')} className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none focus:border-blue-500/50 transition-colors">
-                {ORIGENS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+              <select value={form.origem} onChange={set('origem')} className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all">
+                {ORIGENS.map(o => <option key={o.value} value={o.value} className="bg-white dark:bg-zinc-950 text-brand-text">{o.label}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-xs font-medium text-brand-muted mb-1.5">Prioridade</label>
-              <select value={form.prioridade} onChange={set('prioridade')} className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none focus:border-blue-500/50 transition-colors">
-                {PRIORIDADES.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
+              <select value={form.prioridade} onChange={set('prioridade')} className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all">
+                {PRIORIDADES.map(p => <option key={p.value} value={p.value} className="bg-white dark:bg-zinc-950 text-brand-text">{p.label}</option>)}
               </select>
             </div>
             <div>
@@ -172,7 +192,7 @@ export function NovoLeadModal({ open, onClose, onCreated }: Props) {
                 type="number" min="0" step="0.01"
                 value={form.valorProposto} onChange={set('valorProposto')}
                 placeholder="0,00"
-                className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-blue-500/50 transition-colors"
+                className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text dark:text-white placeholder:text-brand-muted/70 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
               />
             </div>
           </div>
@@ -190,7 +210,7 @@ export function NovoLeadModal({ open, onClose, onCreated }: Props) {
                 <button
                   key={s.v} type="button"
                   onClick={() => setForm(f => ({ ...f, status: s.v }))}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${form.status === s.v ? 'bg-blue-500/20 border-blue-500/40 text-blue-300' : 'bg-brand-surface-2 border-brand-border text-brand-muted hover:border-brand-border/80'}`}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${form.status === s.v ? 'bg-brand-accent/20 border-brand-accent/40 text-brand-accent' : 'bg-white/40 dark:bg-black/20 border-brand-border/60 dark:border-zinc-800 text-brand-muted hover:border-brand-border/80'}`}
                 >
                   {s.l}
                 </button>
@@ -204,16 +224,16 @@ export function NovoLeadModal({ open, onClose, onCreated }: Props) {
             <textarea
               value={form.mensagem} onChange={set('mensagem')} rows={3}
               placeholder="Detalhes do interesse, observações..."
-              className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3 py-2.5 text-sm text-brand-text placeholder:text-brand-muted/50 focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
+              className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-brand-text dark:text-white placeholder:text-brand-muted/70 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all resize-none"
             />
           </div>
 
           {/* Actions */}
           <div className="flex gap-3 pt-1">
-            <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-xl border border-brand-border text-brand-muted hover:bg-brand-surface-2 text-sm font-medium transition-colors">
+            <button type="button" onClick={onClose} className="flex-1 py-2.5 rounded-xl border border-brand-border/60 dark:border-zinc-800 text-brand-muted hover:bg-white/10 dark:hover:bg-white/5 text-sm font-medium transition-colors">
               Cancelar
             </button>
-            <button type="submit" disabled={loading} className="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-sm font-semibold flex items-center justify-center gap-2 transition-colors">
+            <button type="submit" disabled={loading} className="flex-1 py-2.5 rounded-xl bg-brand-accent hover:bg-brand-accent/90 disabled:opacity-50 text-white text-sm font-semibold flex items-center justify-center gap-2 transition-colors">
               {loading ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
               Criar Lead
             </button>

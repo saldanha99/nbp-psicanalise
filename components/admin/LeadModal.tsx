@@ -7,13 +7,10 @@ import {
   X,
   Phone,
   Mail,
-  MapPin,
-  Calendar,
   Tag,
   DollarSign,
   Package,
   MessageCircle,
-  CalendarCheck,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { cn, whatsappLink, STATUS_KANBAN, formatCurrency, formatPhone } from '@/lib/utils'
@@ -38,7 +35,6 @@ export function LeadModal({ lead, onClose, onUpdate }: Props) {
   const [novoTipo, setNovoTipo] = useState('whatsapp')
   const [novoConteudo, setNovoConteudo] = useState('')
   const [sending, setSending] = useState(false)
-  const [convertendo, setConvertendo] = useState(false)
 
   if (!lead) return null
 
@@ -72,27 +68,6 @@ export function LeadModal({ lead, onClose, onUpdate }: Props) {
       toast.error('Erro ao registrar interação')
     } finally {
       setSending(false)
-    }
-  }
-
-  const handleConverterEvento = async () => {
-    setConvertendo(true)
-    try {
-      const res = await fetch('/api/admin/eventos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ leadId: lead.id }),
-      })
-
-      if (!res.ok) throw new Error()
-
-      toast.success('Lead convertido em evento com sucesso!')
-      onUpdate()
-      onClose()
-    } catch {
-      toast.error('Erro ao converter em evento')
-    } finally {
-      setConvertendo(false)
     }
   }
 
@@ -141,36 +116,27 @@ export function LeadModal({ lead, onClose, onUpdate }: Props) {
         <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-6">
           {/* Action buttons */}
           <div className="flex gap-2">
-            <a href={waLink} target="_blank" rel="noopener noreferrer" className="flex-1">
-              <Button className="w-full gap-2 bg-green-600 hover:bg-green-700 text-white">
+            <a href={waLink} target="_blank" rel="noopener noreferrer" className="w-full">
+              <Button className="w-full gap-2 bg-green-600 hover:bg-green-700 text-white py-2.5 rounded-xl">
                 <MessageCircle size={16} />
                 Enviar WhatsApp
               </Button>
             </a>
-            <Button
-              onClick={handleConverterEvento}
-              disabled={convertendo}
-              variant="outline"
-              className="flex-1 gap-2 border-orange-500/50 text-orange-400 hover:bg-orange-500/10"
-            >
-              <CalendarCheck size={16} />
-              {convertendo ? 'Convertendo...' : 'Converter em Evento'}
-            </Button>
           </div>
 
           {/* Lead data */}
           <div
-            className="rounded-xl border p-4 flex flex-col gap-3"
+            className="rounded-xl border p-4 flex flex-col gap-3 bg-white/40 dark:bg-black/20 backdrop-blur-md"
             style={{ borderColor: 'var(--brand-border)' }}
           >
-            <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Dados do Lead</h3>
+            <h3 className="text-xs font-semibold text-brand-muted uppercase tracking-wider">Dados do Lead</h3>
 
             <InfoRow icon={<Phone size={14} />} label="Telefone">
               <a
                 href={waLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-green-400 hover:underline"
+                className="text-green-600 dark:text-green-400 hover:underline font-medium"
               >
                 {formatPhone(lead.telefone)}
               </a>
@@ -178,34 +144,19 @@ export function LeadModal({ lead, onClose, onUpdate }: Props) {
 
             {lead.email && (
               <InfoRow icon={<Mail size={14} />} label="E-mail">
-                <a href={`mailto:${lead.email}`} className="text-blue-400 hover:underline">
+                <a href={`mailto:${lead.email}`} className="text-brand-accent hover:underline font-medium">
                   {lead.email}
                 </a>
               </InfoRow>
             )}
 
-            {lead.dataEvento && (
-              <InfoRow icon={<Calendar size={14} />} label="Data do Evento">
-                <span className="text-zinc-200">{lead.dataEvento}</span>
-                {lead.horarioEvento && (
-                  <span className="text-zinc-500 ml-1">às {lead.horarioEvento}</span>
-                )}
-              </InfoRow>
-            )}
-
-            {lead.enderecoEvento && (
-              <InfoRow icon={<MapPin size={14} />} label="Endereço">
-                <span className="text-zinc-200">{lead.enderecoEvento}</span>
-              </InfoRow>
-            )}
-
             <InfoRow icon={<Tag size={14} />} label="Origem">
-              <span className="text-zinc-200 capitalize">{lead.origem}</span>
+              <span className="text-brand-text dark:text-zinc-200 capitalize">{lead.origem}</span>
             </InfoRow>
 
             {lead.valorProposto && (
               <InfoRow icon={<DollarSign size={14} />} label="Valor Proposto">
-                <span className="text-emerald-400 font-semibold">
+                <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
                   {formatCurrency(lead.valorProposto)}
                 </span>
               </InfoRow>
@@ -213,7 +164,7 @@ export function LeadModal({ lead, onClose, onUpdate }: Props) {
 
             {lead.valorSinal && (
               <InfoRow icon={<DollarSign size={14} />} label="Sinal">
-                <span className="text-zinc-200">{formatCurrency(lead.valorSinal)}</span>
+                <span className="text-brand-text dark:text-zinc-200">{formatCurrency(lead.valorSinal)}</span>
               </InfoRow>
             )}
 
@@ -223,12 +174,12 @@ export function LeadModal({ lead, onClose, onUpdate }: Props) {
                   <Package size={14} />
                 </span>
                 <div className="flex flex-col gap-1">
-                  <span className="text-xs text-zinc-500">Cursos</span>
+                  <span className="text-xs text-brand-muted">Cursos</span>
                   <div className="flex flex-wrap gap-1">
                     {lead.cursosInteresse.map((b) => (
                       <span
                         key={b}
-                        className="px-2 py-0.5 rounded-md bg-zinc-800 text-zinc-300 text-xs"
+                        className="px-2 py-0.5 rounded-md bg-white/40 dark:bg-zinc-800 text-brand-text dark:text-zinc-300 border border-brand-border/40 text-xs font-medium"
                       >
                         {b}
                       </span>
@@ -239,7 +190,7 @@ export function LeadModal({ lead, onClose, onUpdate }: Props) {
             )}
 
             {lead.mensagem && (
-              <div className="mt-1 p-3 rounded-lg bg-zinc-900 text-sm text-zinc-300 leading-relaxed border border-zinc-800">
+              <div className="mt-1 p-3 rounded-lg bg-white/40 dark:bg-black/20 backdrop-blur-md text-sm text-brand-text dark:text-zinc-300 leading-relaxed border border-brand-border/60 dark:border-zinc-800">
                 &ldquo;{lead.mensagem}&rdquo;
               </div>
             )}
@@ -247,7 +198,7 @@ export function LeadModal({ lead, onClose, onUpdate }: Props) {
 
           {/* Timeline */}
           <div className="flex flex-col gap-3">
-            <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+            <h3 className="text-xs font-semibold text-brand-muted uppercase tracking-wider">
               Histórico de Interações
             </h3>
             <InteractionTimeline interacoes={lead.interacoes} />
@@ -258,24 +209,24 @@ export function LeadModal({ lead, onClose, onUpdate }: Props) {
             className="rounded-xl border p-4 flex flex-col gap-3"
             style={{ borderColor: 'var(--brand-border)' }}
           >
-            <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+            <h3 className="text-xs font-semibold text-brand-muted uppercase tracking-wider">
               Nova Interação
             </h3>
 
             <select
               value={novoTipo}
               onChange={(e) => setNovoTipo(e.target.value)}
-              className="w-full rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500"
+              className="w-full rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
             >
               {TIPO_INTERACAO.map((t) => (
-                <option key={t.value} value={t.value}>
+                <option key={t.value} value={t.value} className="bg-brand-surface dark:bg-zinc-950 text-brand-text">
                   {t.label}
                 </option>
               ))}
             </select>
 
             <textarea
-              className="w-full rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500 resize-none"
+              className="w-full rounded-lg border px-3 py-2 text-sm text-brand-text dark:text-white bg-white/40 dark:bg-black/20 backdrop-blur-md border-brand-border/60 dark:border-zinc-800 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all resize-none placeholder:text-brand-muted/70"
               rows={3}
               placeholder="Descreva o que aconteceu nessa interação..."
               value={novoConteudo}
@@ -285,7 +236,7 @@ export function LeadModal({ lead, onClose, onUpdate }: Props) {
             <Button
               onClick={handleEnviarInteracao}
               disabled={sending}
-              className="self-end"
+              className="self-end text-white font-semibold"
               style={{ backgroundColor: 'var(--brand-accent)' }}
             >
               {sending ? 'Salvando...' : 'Registrar'}

@@ -109,7 +109,7 @@ function UsuarioModal({
               required
               value={form.nome}
               onChange={e => setForm(f => ({ ...f, nome: e.target.value }))}
-              className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3.5 py-2.5 text-brand-text text-sm focus:outline-none focus:border-brand-accent transition-colors"
+              className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3.5 py-2.5 text-brand-text dark:text-white placeholder:text-brand-muted/70 text-sm focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
               placeholder="Nome completo"
             />
           </div>
@@ -121,7 +121,7 @@ function UsuarioModal({
               type="email"
               value={form.email}
               onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-              className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3.5 py-2.5 text-brand-text text-sm focus:outline-none focus:border-brand-accent transition-colors"
+              className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3.5 py-2.5 text-brand-text dark:text-white placeholder:text-brand-muted/70 text-sm focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
               placeholder="email@empresa.com"
             />
           </div>
@@ -131,8 +131,8 @@ function UsuarioModal({
             <input
               value={form.cargo}
               onChange={e => setForm(f => ({ ...f, cargo: e.target.value }))}
-              className="w-full bg-brand-surface-2 border border-brand-border rounded-xl px-3.5 py-2.5 text-brand-text text-sm focus:outline-none focus:border-brand-accent transition-colors"
-              placeholder="Ex: Gerente de Eventos"
+              className="w-full bg-white/40 dark:bg-black/20 backdrop-blur-md border border-brand-border/60 dark:border-zinc-800 rounded-xl px-3.5 py-2.5 text-brand-text dark:text-white placeholder:text-brand-muted/70 text-sm focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all"
+              placeholder="Ex: Coordenador Pedagógico"
             />
           </div>
 

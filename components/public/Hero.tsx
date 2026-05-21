@@ -10,7 +10,7 @@ type Direction = 'next' | 'prev'
 
 /* ─── Fallback hardcoded (sem slides cadastrados) ─── */
 function HeroFallback() {
-  const waLink = whatsappLink(WHATSAPP_NUMBER, 'Olá! Gostaria de reservar um curso para meu evento.')
+  const waLink = whatsappLink(WHATSAPP_NUMBER, 'Olá! Gostaria de mais informações sobre os cursos da NBP Psicanálise.')
   return (
     <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-[#020617] pt-20">
       <div className="absolute inset-0 pointer-events-none opacity-[0.15]">
@@ -24,18 +24,18 @@ function HeroFallback() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
           </span>
-          Locação de Cursos em SJC
+          Formação e Especialização
         </div>
         <h1 className="font-[family-name:var(--font-display)] font-black text-white leading-[0.9] tracking-tighter mb-8" style={{ fontSize: 'clamp(3.5rem, 8vw, 7rem)' }}>
-          DIVERSÃO <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-cyan-400">INESQUECÍVEL</span>
+          FORMAÇÃO <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-cyan-400">EM PSICANÁLISE</span>
         </h1>
         <p className="text-slate-400 text-lg sm:text-xl leading-relaxed max-w-2xl mb-12 font-light">
-          Transforme seu evento com a melhor seleção de cursos infláveis e eletrônicos. Montagem profissional, segurança garantida e alegria sem limites.
+          Estude psicanálise com uma formação clínica completa, seminários teóricos, e supervisão com profissionais experientes.
         </p>
         <div className="flex flex-col sm:flex-row gap-5">
           <a href={waLink} target="_blank" rel="noopener noreferrer" className="group relative inline-flex items-center justify-center gap-3 bg-white text-slate-950 font-semibold px-8 py-4 rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95">
-            Reservar Agora <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
+            Fale Conosco <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
           </a>
           <Link href="/cursos" className="group inline-flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white hover:bg-white/10 font-medium px-8 py-4 rounded-full transition-all hover:scale-105">
             Ver Catálogo
@@ -97,7 +97,7 @@ function SlideBackground({ slide, active }: { slide: HeroSlide; active: boolean 
 
 /* ─── Slide content (text + CTAs) ─── */
 function SlideContent({ slide, animKey }: { slide: HeroSlide; animKey: number }) {
-  const waLink = whatsappLink(WHATSAPP_NUMBER, 'Olá! Gostaria de reservar um curso para meu evento.')
+  const waLink = whatsappLink(WHATSAPP_NUMBER, 'Olá! Gostaria de mais informações sobre os cursos da NBP Psicanálise.')
   const cta1Link = slide.ctaLink || waLink
   const cta2Link = slide.ctaLink2 || '/cursos'
   const isExternalCta1 = cta1Link.startsWith('http')

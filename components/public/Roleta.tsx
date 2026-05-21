@@ -123,7 +123,7 @@ function PrizeModal({ premio, valorCreditado, onClose }: { premio: Premio; valor
             <div className="bg-emerald-400/10 border border-emerald-400/30 rounded-2xl p-4 mb-6 text-left">
               <p className="text-emerald-400 text-xs font-semibold mb-1">✅ Creditado automaticamente!</p>
               <p className="text-white/80 text-sm">
-                <span className="text-emerald-400 font-bold text-lg">{fmtR(valorCreditado)}</span> foram adicionados ao seu saldo de cashback agora mesmo. Use na próxima festa!
+                <span className="text-emerald-400 font-bold text-lg">{fmtR(valorCreditado)}</span> foram adicionados ao seu saldo de cashback agora mesmo. Use na contratação do seu próximo curso ou módulo!
               </p>
             </div>
           ) : (

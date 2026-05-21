@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import { slugify, CATEGORIAS } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { ImageUpload } from './ImageUpload'
+import { SingleImageUpload } from './SingleImageUpload'
 import type { Curso } from '@/types'
 
 interface Props {
@@ -36,6 +37,11 @@ const schema = z.object({
   destaque: z.boolean(),
   fotos: z.array(z.string()),
   fotoDestaque: z.string().nullable(),
+  docenteNome: z.string().optional(),
+  docenteCargo: z.string().optional(),
+  docenteFoto: z.string().optional(),
+  docenteDesc: z.string().optional(),
+  publicoAlvo: z.string().optional(),
 })
 
 type FormData = z.infer<typeof schema>
@@ -60,21 +66,26 @@ export function CourseForm({ curso, onSuccess }: Props) {
       categoria: curso?.categoria ?? '',
       descricao: curso?.descricao ?? '',
       precoReferencia: curso?.precoReferencia ?? '',
-      precoVenda: (curso as Curso & { precoVenda?: string })?.precoVenda ?? '',
-      precoOriginal: (curso as Curso & { precoOriginal?: string })?.precoOriginal ?? '',
-      tipoCurso: (curso as Curso & { tipoCurso?: string })?.tipoCurso ?? 'gravado',
-      cargaHoraria: (curso as Curso & { cargaHoraria?: string })?.cargaHoraria ?? '',
-      certificado: (curso as Curso & { certificado?: boolean })?.certificado ?? true,
-      acessoVitalicio: (curso as Curso & { acessoVitalicio?: boolean })?.acessoVitalicio ?? true,
-      diasAcesso: '',
-      vagasTotal: '',
-      dataEvento: '',
-      horarioEvento: '',
-      localEvento: '',
+      precoVenda: (curso as any)?.precoVenda ?? '',
+      precoOriginal: (curso as any)?.precoOriginal ?? '',
+      tipoCurso: (curso as any)?.tipoCurso ?? 'gravado',
+      cargaHoraria: (curso as any)?.cargaHoraria ?? '',
+      certificado: (curso as any)?.certificado ?? true,
+      acessoVitalicio: (curso as any)?.acessoVitalicio ?? true,
+      diasAcesso: (curso as any)?.diasAcesso?.toString() ?? '',
+      vagasTotal: (curso as any)?.vagasTotal?.toString() ?? '',
+      dataEvento: (curso as any)?.dataEvento ?? '',
+      horarioEvento: (curso as any)?.horarioEvento ?? '',
+      localEvento: (curso as any)?.localEvento ?? '',
       ativo: curso?.ativo ?? true,
       destaque: curso?.destaque ?? false,
       fotos: curso?.fotos ?? [],
       fotoDestaque: curso?.fotoDestaque ?? null,
+      docenteNome: (curso as any)?.docenteNome ?? '',
+      docenteCargo: (curso as any)?.docenteCargo ?? '',
+      docenteFoto: (curso as any)?.docenteFoto ?? '',
+      docenteDesc: (curso as any)?.docenteDesc ?? '',
+      publicoAlvo: (curso as any)?.publicoAlvo ?? '',
     },
   })
 
@@ -95,8 +106,21 @@ export function CourseForm({ curso, onSuccess }: Props) {
     // Limpa campos opcionais para evitar erro no banco
     const payload = {
       ...data,
-      precoReferencia: data.precoReferencia?.trim() || null,
       descricao: data.descricao?.trim() || null,
+      precoReferencia: data.precoReferencia?.trim() || null,
+      precoVenda: data.precoVenda?.trim() || null,
+      precoOriginal: data.precoOriginal?.trim() || null,
+      cargaHoraria: data.cargaHoraria?.trim() || null,
+      dataEvento: data.dataEvento?.trim() || null,
+      horarioEvento: data.horarioEvento?.trim() || null,
+      localEvento: data.localEvento?.trim() || null,
+      vagasTotal: data.vagasTotal?.trim() ? parseInt(data.vagasTotal.trim()) : null,
+      diasAcesso: data.diasAcesso?.trim() ? parseInt(data.diasAcesso.trim()) : null,
+      docenteNome: data.docenteNome?.trim() || null,
+      docenteCargo: data.docenteCargo?.trim() || null,
+      docenteFoto: data.docenteFoto?.trim() || null,
+      docenteDesc: data.docenteDesc?.trim() || null,
+      publicoAlvo: data.publicoAlvo?.trim() || null,
     }
 
     try {
@@ -264,6 +288,54 @@ export function CourseForm({ curso, onSuccess }: Props) {
             <input {...register('acessoVitalicio')} type="checkbox" className="w-4 h-4 rounded accent-orange-500" />
             <span className="text-sm text-zinc-300">Acesso vitalício</span>
           </label>
+        </div>
+      </div>
+
+      {/* Docente Info */}
+      <div className="border-t border-zinc-800 pt-4 flex flex-col gap-4">
+        <p className="text-xs text-zinc-500 uppercase tracking-widest">Informações do Docente</p>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-zinc-300">Nome do Docente</label>
+            <input {...register('docenteNome')} placeholder="Ex: Aurélio Gonzales"
+              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-zinc-300">Cargo do Docente</label>
+            <input {...register('docenteCargo')} placeholder="Ex: Psicanalista, Diretor do NBP"
+              className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500" />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-medium text-zinc-300">Descrição do Docente</label>
+          <textarea {...register('docenteDesc')} rows={3} placeholder="Breve biografia ou currículo do docente..."
+            className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500 resize-none" />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-medium text-zinc-300">Foto do Docente</label>
+          <Controller
+            name="docenteFoto"
+            control={control}
+            render={({ field: { value, onChange } }) => (
+              <SingleImageUpload
+                value={value || ''}
+                onChange={onChange}
+                onRemove={() => onChange('')}
+                label="Clique ou arraste a foto do docente aqui"
+              />
+            )}
+          />
+        </div>
+      </div>
+
+      {/* Público Alvo */}
+      <div className="border-t border-zinc-800 pt-4 flex flex-col gap-4">
+        <p className="text-xs text-zinc-500 uppercase tracking-widest">Público Alvo</p>
+        <div className="flex flex-col gap-1.5">
+          <textarea {...register('publicoAlvo')} rows={3} placeholder="Descreva o público alvo deste curso..."
+            className="rounded-lg border px-3 py-2 text-sm text-white bg-zinc-900 border-zinc-700 focus:outline-none focus:border-orange-500 resize-none" />
         </div>
       </div>
 

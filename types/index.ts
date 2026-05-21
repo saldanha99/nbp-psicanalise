@@ -10,6 +10,23 @@ export type Curso = {
   destaque: boolean
   ordemDestaque: number
   precoReferencia: string | null
+  precoVenda: string | null
+  precoOriginal: string | null
+  tipoCurso: string | null
+  dataEvento: string | null
+  horarioEvento: string | null
+  localEvento: string | null
+  vagasTotal: number | null
+  vagasOcupadas: number | null
+  acessoVitalicio: boolean
+  diasAcesso: number | null
+  certificado: boolean
+  cargaHoraria: string | null
+  publicoAlvo: string | null
+  docenteNome: string | null
+  docenteCargo: string | null
+  docenteFoto: string | null
+  docenteDesc: string | null
   createdAt: Date
   updatedAt: Date
 }

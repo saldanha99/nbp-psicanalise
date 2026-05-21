@@ -55,9 +55,15 @@ export default function LoginPage() {
       <SmokeyBackground className="absolute inset-0" color="#6a5a98" backdropBlurAmount="sm" />
       
       <div className="relative z-10 w-full max-w-sm p-8 space-y-6 bg-white/10 backdrop-blur-lg rounded-3xl border border-white/20 shadow-2xl mx-4">
-        <div className="text-center">
-          <h2 className="text-3xl font-black text-white tracking-tight uppercase">NBP <span className="text-[#9d8ccf]">PSICANÁLISE</span></h2>
-          <p className="mt-2 text-sm text-gray-300">Painel Administrativo</p>
+        <div className="text-center flex flex-col items-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img 
+            src="https://nbpsicanalise.com.br/wp-content/uploads/2021/03/Logo-NBP-Oficial-min.png" 
+            alt="Logo NBP Psicanálise" 
+            className="h-16 w-auto object-contain mb-4 filter drop-shadow-[0_0_10px_rgba(255,255,255,0.15)]"
+          />
+          <h2 className="text-2xl font-black text-white tracking-tight uppercase">NBP <span className="text-[#9d8ccf]">PSICANÁLISE</span></h2>
+          <p className="mt-1 text-sm text-gray-300">Painel Administrativo</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 pt-4">

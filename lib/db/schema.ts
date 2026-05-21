@@ -591,3 +591,48 @@ export const progressoAlunoRelations = relations(progressoAluno, ({ one }) => ({
 export const alunoRegistrosRelations = relations(alunoRegistros, ({ one }) => ({
   aluno: one(alunos, { fields: [alunoRegistros.alunoId], references: [alunos.id] }),
 }))
+
+// ============================================
+// psicanalistas
+// ============================================
+export const psicanalistas = pgTable('psicanalistas', {
+  id:        uuid('id').primaryKey().defaultRandom(),
+  nome:      text('nome').notNull(),
+  email:     text('email').notNull().unique(),
+  telefone:  text('telefone'),
+  ativo:     boolean('ativo').default(true).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+}, (t) => [
+  index('idx_psicanalistas_email').on(t.email),
+  index('idx_psicanalistas_ativo').on(t.ativo),
+])
+
+// ============================================
+// pacientes
+// ============================================
+export const pacientes = pgTable('pacientes', {
+  id:             uuid('id').primaryKey().defaultRandom(),
+  psicanalistaId: uuid('psicanalista_id').references(() => psicanalistas.id, { onDelete: 'set null' }),
+  nome:           text('nome').notNull(),
+  email:          text('email'),
+  telefone:       text('telefone'),
+  cpf:            text('cpf'),
+  dataNascimento: date('data_nascimento'),
+  status:         text('status').default('ativo').notNull(), // ativo | inativo
+  observacoes:    text('observacoes'),
+  createdAt:      timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  updatedAt:      timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+}, (t) => [
+  index('idx_pacientes_psicanalista').on(t.psicanalistaId),
+  index('idx_pacientes_status').on(t.status),
+])
+
+// Relations
+export const psicanalistasRelations = relations(psicanalistas, ({ many }) => ({
+  pacientes: many(pacientes),
+}))
+
+export const pacientesRelations = relations(pacientes, ({ one }) => ({
+  psicanalista: one(psicanalistas, { fields: [pacientes.psicanalistaId], references: [psicanalistas.id] }),
+}))

@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { href: '/admin',               label: 'Dashboard',   exact: true, icon: LayoutDashboard },
   { href: '/admin/leads',         label: 'Leads',       icon: Users },
   { href: '/admin/clientes',      label: 'Alunos',      icon: Contact },
+  { href: '/admin/psicanalistas', label: 'Psicanalistas', icon: UserCheck },
   { href: '/admin/cursos',        label: 'Cursos',      icon: Package },
   { href: '/admin/matriculas',    label: 'Matrículas',   icon: GraduationCap },
   { href: '/admin/usuarios',      label: 'Usuários',     icon: UserCog },

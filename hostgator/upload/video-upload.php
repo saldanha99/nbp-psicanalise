@@ -10,7 +10,7 @@
  */
 
 // ── Configuração ──────────────────────────────────────────
-define('UPLOAD_SECRET', getenv('NBP_UPLOAD_SECRET') ?: 'TROQUE_POR_UMA_SENHA_FORTE_AQUI');
+define('UPLOAD_SECRET', getenv('NBP_UPLOAD_SECRET') ?: 'nbp_video_upload_secret_7d2f91a');
 define('VIDEOS_DIR',    __DIR__ . '/../videos/');
 define('VIDEOS_URL',    'https://nbpsicanalise.com.br/videos/');
 define('MAX_SIZE_BYTES', 500 * 1024 * 1024); // 500 MB
